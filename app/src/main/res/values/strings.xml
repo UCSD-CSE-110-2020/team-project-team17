@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">WalkWalkRevolution</string>
+    <string name="welcome_prompt">Hello!</string>
+    <string name="feet_hint">ft</string>
+    <string name="inches_hint">in</string>
+    <string name="submit_button">Submit</string>
+    <string name="height_prompt">Please input your height:</string>
 </resources>
