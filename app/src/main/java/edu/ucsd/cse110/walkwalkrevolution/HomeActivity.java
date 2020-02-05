@@ -48,8 +48,8 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-    private String fitnessServiceKey = "GOOGLE_FIT";
-
+    public static final String FITNESS_SERVICE_KEY = "FITNESS_SERVICE_KEY";
+    private static final String TEST_SERVICE = "TEST_SERVICE";
     private static final String TAG = "HomeActivity";
 
     private long steps;
@@ -62,19 +62,16 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         textSteps = findViewById(R.id.steps);
 
-        FitnessServiceFactory.put(fitnessServiceKey, new FitnessServiceFactory.BluePrint() {
-            @Override
-            public FitnessService create(HomeActivity homeActivity) {
-                return new GoogleFitAdapter(homeActivity);
-            }
-        });
+        String fitnessServiceKey = getIntent().getStringExtra(FITNESS_SERVICE_KEY);
 
         fitnessService = FitnessServiceFactory.create(fitnessServiceKey, this);
 
         fitnessService.setup();
 
-        FetchUpdatedStepsAsyncTask updater = new FetchUpdatedStepsAsyncTask();
-        updater.execute(getString(R.string.daily_step_update_delay_sec));
+        if (!fitnessServiceKey.equals(TEST_SERVICE)) {
+            FetchUpdatedStepsAsyncTask updater = new FetchUpdatedStepsAsyncTask();
+            updater.execute(getString(R.string.daily_step_update_delay_sec));
+        }
     }
 
     @Override
@@ -96,7 +93,4 @@ public class HomeActivity extends AppCompatActivity {
         textSteps.setText(String.valueOf(steps));
     }
 
-    public void setFitnessServiceKey(String fitnessServiceKey) {
-        this.fitnessServiceKey = fitnessServiceKey;
-    }
 }

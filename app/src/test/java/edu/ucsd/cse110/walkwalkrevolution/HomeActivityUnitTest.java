@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 
 @RunWith(AndroidJUnit4.class)
 @Config(sdk=28)
-public class StepCountActivityUnitTest {
+public class HomeActivityUnitTest {
     private static final String TEST_SERVICE = "TEST_SERVICE";
 
     private Intent intent;
@@ -42,15 +42,10 @@ public class StepCountActivityUnitTest {
         ActivityScenario<HomeActivity> scenario = ActivityScenario.launch(intent);
         scenario.onActivity(activity -> {
             TextView textSteps = activity.findViewById(R.id.steps);
+            activity.setStepCount(nextStepCount);
             assertThat(textSteps.getText().toString()).isEqualTo("0");
             nextStepCount = 1337;
-
-            try{
-                TimeUnit.SECONDS.sleep(1);
-            } catch(Exception e) {
-
-            }
-
+            activity.setStepCount(nextStepCount);
             assertThat(textSteps.getText().toString()).isEqualTo(String.valueOf(nextStepCount));
         });
 
