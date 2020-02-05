@@ -67,8 +67,8 @@
 
     <Button
         android:id="@+id/start_walk"
-        android:layout_width="211dp"
-        android:layout_height="0dp"
+        android:layout_width="211sp"
+        android:layout_height="100sp"
         android:layout_marginBottom="57dp"
         android:text="@string/start_walk_btn"
         app:layout_constraintBottom_toBottomOf="parent"
