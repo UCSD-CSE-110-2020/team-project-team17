@@ -1,10 +1,8 @@
 <resources>
     <string name="app_name">WalkWalkRevolution</string>
-    <string name="daily_step_update_delay_sec">30</string>
-    <string name="steps">Steps</string>
-    <string name="default_steps">###</string>
-    <string name="start_walk_btn">Start Walk</string>
-    <string name="miles_hint">Miles</string>
-    <string name="default_miles">###</string>
-    <string name="steps_hint">Steps</string>
+    <string name="welcome_prompt">Hello!</string>
+    <string name="feet_hint">ft</string>
+    <string name="inches_hint">in</string>
+    <string name="submit_button">Submit</string>
+    <string name="height_prompt">Please input your height:</string>
 </resources>

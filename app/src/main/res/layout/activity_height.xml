@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HeightActivity">
+
+    <TextView
+        android:id="@+id/welcome_prompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="164dp"
+        android:layout_marginTop="152dp"
+        android:text="@string/welcome_prompt"
+        android:textSize="32sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/height_prompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
+        android:text="@string/height_prompt"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.493"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/welcome_prompt" />
+
+    <EditText
+        android:id="@+id/feet_user_input"
+        android:layout_width="30dp"
+        android:layout_height="60sp"
+        android:layout_marginStart="148dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="numberPassword"
+        android:textSize="30sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/height_prompt"
+        android:importantForAutofill="no" />
+
+    <EditText
+        android:id="@+id/inches_user_input"
+        android:layout_width="30dp"
+        android:layout_height="60sp"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:inputType="numberPassword"
+        android:textSize="30sp"
+        app:layout_constraintStart_toEndOf="@+id/feet_hint"
+        app:layout_constraintTop_toBottomOf="@+id/height_prompt"
+        android:importantForAutofill="no" />
+
+    <TextView
+        android:id="@+id/feet_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:text="@string/feet_hint"
+        android:textSize="30sp"
+        app:layout_constraintStart_toEndOf="@+id/feet_user_input"
+        app:layout_constraintTop_toTopOf="@+id/height_prompt" />
+
+    <TextView
+        android:id="@+id/inches_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="29dp"
+        android:text="@string/inches_hint"
+        android:textSize="30sp"
+        app:layout_constraintStart_toEndOf="@+id/inches_user_input"
+        app:layout_constraintTop_toBottomOf="@+id/height_prompt" />
+
+    <Button
+        android:id="@+id/submit_height"
+        android:layout_width="158dp"
+        android:layout_height="89dp"
+        android:layout_marginStart="124dp"
+        android:layout_marginTop="204dp"
+        android:text="@string/submit_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/height_prompt" />
+</androidx.constraintlayout.widget.ConstraintLayout>
