@@ -12,6 +12,10 @@ import android.widget.TextView;
 
 public class HeightActivity extends AppCompatActivity {
 
+    private final double INCHES_PER_FOOT = 12;
+    private final double CONVERSION_FACTOR = .413;
+    private final double FEET_IN_MILE = 5280;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,14 +37,7 @@ public class HeightActivity extends AppCompatActivity {
                 boolean validHeight = validField(feet) & validField(inches);
 
                 if(validHeight) {
-                    SharedPreferences prefs = getSharedPreferences("USER", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = prefs.edit();
-
-                    editor.putInt("height_feet", Integer.parseInt(feet.getText().toString()));
-                    editor.putInt("height_inches", Integer.parseInt(inches.getText().toString()));
-                    editor.putBoolean("height_set", true);
-                    editor.apply();
-
+                    createUserDataFromFields(feet, inches);
                     finish();
                 } else {
                     TextView error = findViewById(R.id.height_error);
@@ -65,5 +62,21 @@ public class HeightActivity extends AppCompatActivity {
 
     private void setBackgroundTint(EditText field, int color){
         DrawableCompat.setTint(field.getBackground(), getResources().getColor(color));
+    }
+
+    private void createUserDataFromFields(EditText feet, EditText inches){
+        SharedPreferences prefs = getSharedPreferences("USER", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        // https://www.openfit.com/how-many-steps-walk-per-mile
+        double heightFeet = Integer.parseInt(feet.getText().toString());
+        double heightInches = heightFeet * INCHES_PER_FOOT + Integer.parseInt(inches.getText().toString());
+        double stepsPerMile = FEET_IN_MILE / (CONVERSION_FACTOR * heightInches / 12);
+
+        editor.putInt("height_feet", (int) heightFeet);
+        editor.putInt("height_inches", (int) heightInches);
+        editor.putFloat("steps_per_mile", (float) stepsPerMile);
+        editor.putBoolean("height_set", true);
+        editor.apply();
     }
 }

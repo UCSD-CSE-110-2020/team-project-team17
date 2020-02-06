@@ -92,4 +92,15 @@
         app:layout_constraintStart_toEndOf="@+id/steps"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="213dp"
+        android:layout_height="202dp"
+        android:layout_marginTop="475dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.505"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/wwr_squatch" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
