@@ -10,21 +10,12 @@ import edu.ucsd.cse110.walkwalkrevolution.fitness.GoogleFitAdapter;
 
 public class WalkWalkRevolution extends Application {
 
-    public static Context context;
-
-    private String fitnessServiceKey = "GOOGLE_FIT";
+    public static String fitnessServiceKey = "GOOGLE_FIT";
 
     @Override
     public void onCreate() {
         super.onCreate();
-
-        context = getApplicationContext();
         setupGoogleFitnessApi();
-
-        Intent intent = new Intent(context, HomeActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra(HomeActivity.FITNESS_SERVICE_KEY, fitnessServiceKey);
-        startActivity(intent);
     }
 
     private void setupGoogleFitnessApi() {
