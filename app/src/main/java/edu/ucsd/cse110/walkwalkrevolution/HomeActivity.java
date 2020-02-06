@@ -78,6 +78,19 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        SharedPreferences sharedPreferences = getSharedPreferences("USER", MODE_PRIVATE);
+        boolean heightIsSet = sharedPreferences.getBoolean("height_set", false);
+
+
+        if(!heightIsSet){
+            Intent heightActivity = new Intent(this, HeightActivity.class);
+            startActivity(heightActivity);
+        }
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
