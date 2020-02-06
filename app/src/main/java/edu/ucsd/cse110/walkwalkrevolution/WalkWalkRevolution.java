@@ -24,7 +24,8 @@ public class WalkWalkRevolution extends Application {
         Intent intent = new Intent(context, HomeActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(HomeActivity.FITNESS_SERVICE_KEY, fitnessServiceKey);
-        startActivity(intent);
+        qq
+      :qstartActivity(intent);
     }
 
     private void setupGoogleFitnessApi() {
