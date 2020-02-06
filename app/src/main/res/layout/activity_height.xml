@@ -43,6 +43,7 @@
         android:ems="10"
         android:importantForAutofill="no"
         android:inputType="numberPassword"
+        android:maxLength="1"
         android:textColor="@android:color/white"
         android:textSize="30sp"
         android:translationZ="1sp"
@@ -51,13 +52,14 @@
 
     <EditText
         android:id="@+id/inches_user_input"
-        android:layout_width="30dp"
+        android:layout_width="45dp"
         android:layout_height="60sp"
         android:layout_marginTop="8dp"
         android:backgroundTint="@android:color/white"
         android:ems="10"
         android:importantForAutofill="no"
         android:inputType="numberPassword"
+        android:maxLength="2"
         android:textColor="@android:color/white"
         android:textSize="30sp"
         android:translationZ="1sp"
@@ -110,5 +112,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/rounded_rectangle" />
+
+    <TextView
+        android:id="@+id/height_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:text="Please enter a valid height"
+        android:textColor="@color/red"
+        android:textSize="30sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/submit_height"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
