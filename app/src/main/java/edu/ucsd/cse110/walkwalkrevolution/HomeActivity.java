@@ -86,6 +86,7 @@ public class HomeActivity extends AppCompatActivity {
 
         if(!heightIsSet){
             Intent heightActivity = new Intent(this, HeightActivity.class);
+            heightActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(heightActivity);
         }
     }
