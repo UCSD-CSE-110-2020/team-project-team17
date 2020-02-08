@@ -7,11 +7,12 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessService;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessServiceFactory;
-import edu.ucsd.cse110.walkwalkrevolution.fitness.GoogleFitAdapter;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -55,12 +56,14 @@ public class HomeActivity extends AppCompatActivity {
     private long steps;
     private TextView textSteps;
     private FitnessService fitnessService;
+    private Button routesBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         textSteps = findViewById(R.id.steps);
+        routesBtn = (Button) findViewById(R.id.routesview_button);
 
         String fitnessServiceKey = getIntent().getStringExtra(FITNESS_SERVICE_KEY);
 
@@ -72,6 +75,19 @@ public class HomeActivity extends AppCompatActivity {
             FetchUpdatedStepsAsyncTask updater = new FetchUpdatedStepsAsyncTask();
             updater.execute(getString(R.string.daily_step_update_delay_sec));
         }
+
+        routesBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startRoutesViewActivity();
+            }
+        });
+
+    }
+
+    public void startRoutesViewActivity() {
+        Intent intent = new Intent(this, RouteViewActivity.class);
+        startActivity(intent);
     }
 
     @Override

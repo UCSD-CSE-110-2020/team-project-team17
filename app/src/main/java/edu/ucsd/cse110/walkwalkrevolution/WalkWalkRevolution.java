@@ -1,8 +1,10 @@
 package edu.ucsd.cse110.walkwalkrevolution;
 
 import android.app.Application;
-import android.content.Context;
-import android.content.Intent;
+import android.os.Bundle;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessService;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessServiceFactory;
@@ -30,5 +32,6 @@ public class WalkWalkRevolution extends Application {
     public void setFitnessServiceKey(String fitnessServiceKey) {
         this.fitnessServiceKey = fitnessServiceKey;
     }
+
 
 }
