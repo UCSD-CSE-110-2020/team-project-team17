@@ -31,9 +31,9 @@ public class RouteSharedPreferenceDao implements BaseRouteDao {
         Context context = WalkWalkRevolution.getContext();
         SharedPreferences sp = context.getSharedPreferences(SP_ROUTE, MODE_PRIVATE);
 
-        String identifier = sp.getString(Long.toString(routeId), "");
+        long identifier = sp.getLong(Long.toString(routeId), -1);
 
-        return new Route(Long.parseLong(identifier));
+        return identifier == -1 ? null : new Route(identifier);
     }
 
     @Override
