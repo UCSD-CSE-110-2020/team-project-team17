@@ -7,6 +7,7 @@ import java.util.Map;
 
 import edu.ucsd.cse110.walkwalkrevolution.WalkWalkRevolution;
 import edu.ucsd.cse110.walkwalkrevolution.route.Route;
+import edu.ucsd.cse110.walkwalkrevolution.route.RouteUtils;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -20,8 +21,15 @@ public class RouteSharedPreferenceDao implements BaseRouteDao {
         SharedPreferences sp = context.getSharedPreferences(SP_ROUTE, MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
 
-        //TODO: REPLACE VALUE WITH TITLE OF ROUTE -> USED AS NAME FOR SEPARATE SHARED PREF
-        editor.putLong(Long.toString(route.getId()), route.getId());
+        String jsonString;
+
+        try {
+            jsonString = RouteUtils.serialize(route);
+        } catch (Exception e) {
+            throw new RuntimeException("Invalid Route");
+        }
+
+        editor.putString(Long.toString(route.getId()), jsonString);
 
         editor.apply();
     }
@@ -31,9 +39,15 @@ public class RouteSharedPreferenceDao implements BaseRouteDao {
         Context context = WalkWalkRevolution.getContext();
         SharedPreferences sp = context.getSharedPreferences(SP_ROUTE, MODE_PRIVATE);
 
-        long identifier = sp.getLong(Long.toString(routeId), -1);
+        String jsonString = sp.getString(Long.toString(routeId), "");
 
-        return identifier == -1 ? null : new Route(identifier);
+        if(jsonString == "") return null;
+
+        try {
+            return RouteUtils.deserialize(jsonString);
+        } catch (Exception e) {
+            throw new RuntimeException("Invalid Route JsonString");
+        }
     }
 
     @Override
