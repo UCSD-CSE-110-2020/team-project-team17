@@ -13,23 +13,16 @@ public class WalkWalkRevolution extends Application {
 
     public static String fitnessServiceKey = "GOOGLE_FIT";
 
-<<<<<<< HEAD
-    public static Context context;
-=======
     private static Context context;
 
     private static BaseRouteDao routeDao;
->>>>>>> ae13d98c96003884d9ae37e85bb51a04363fa43d
 
     @Override
     public void onCreate() {
         super.onCreate();
         setupGoogleFitnessApi();
         WalkWalkRevolution.context = getApplicationContext();
-<<<<<<< HEAD
-=======
         routeDao = new RouteSharedPreferenceDao();
->>>>>>> ae13d98c96003884d9ae37e85bb51a04363fa43d
     }
 
     private void setupGoogleFitnessApi() {
@@ -49,8 +42,6 @@ public class WalkWalkRevolution extends Application {
         return context;
     }
 
-<<<<<<< HEAD
-=======
     public static BaseRouteDao getRouteDao() {
         return routeDao;
     }
@@ -59,5 +50,4 @@ public class WalkWalkRevolution extends Application {
         routeDao = rD;
     }
 
->>>>>>> ae13d98c96003884d9ae37e85bb51a04363fa43d
 }
