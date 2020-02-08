@@ -19,7 +19,7 @@ public class RoutePersistence {
         SharedPreferences.Editor editor = sp.edit();
 
         //TODO: REPLACE VALUE WITH TITLE OF ROUTE -> USED AS NAME FOR SEPERATE SHARED PREF
-        editor.putString(Long.toString(route.id), Long.toString(route.id));
+        editor.putString(Long.toString(route.getId()), Long.toString(route.getId()));
 
         editor.apply();
     }
