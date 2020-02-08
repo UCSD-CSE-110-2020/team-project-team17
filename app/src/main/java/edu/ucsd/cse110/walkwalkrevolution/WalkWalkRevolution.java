@@ -2,23 +2,34 @@ package edu.ucsd.cse110.walkwalkrevolution;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
 
 import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessService;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessServiceFactory;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.GoogleFitAdapter;
+import edu.ucsd.cse110.walkwalkrevolution.route.persistence.BaseRouteDao;
+import edu.ucsd.cse110.walkwalkrevolution.route.persistence.RouteSharedPreferenceDao;
 
 public class WalkWalkRevolution extends Application {
 
     public static String fitnessServiceKey = "GOOGLE_FIT";
 
+<<<<<<< HEAD
     public static Context context;
+=======
+    private static Context context;
+
+    private static BaseRouteDao routeDao;
+>>>>>>> ae13d98c96003884d9ae37e85bb51a04363fa43d
 
     @Override
     public void onCreate() {
         super.onCreate();
         setupGoogleFitnessApi();
         WalkWalkRevolution.context = getApplicationContext();
+<<<<<<< HEAD
+=======
+        routeDao = new RouteSharedPreferenceDao();
+>>>>>>> ae13d98c96003884d9ae37e85bb51a04363fa43d
     }
 
     private void setupGoogleFitnessApi() {
@@ -38,4 +49,15 @@ public class WalkWalkRevolution extends Application {
         return context;
     }
 
+<<<<<<< HEAD
+=======
+    public static BaseRouteDao getRouteDao() {
+        return routeDao;
+    }
+
+    public static void setRouteDao(BaseRouteDao rD) {
+        routeDao = rD;
+    }
+
+>>>>>>> ae13d98c96003884d9ae37e85bb51a04363fa43d
 }
