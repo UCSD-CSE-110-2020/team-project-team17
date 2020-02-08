@@ -1,15 +1,17 @@
 package edu.ucsd.cse110.walkwalkrevolution.route;
 
+import edu.ucsd.cse110.walkwalkrevolution.WalkWalkRevolution;
+
 public class Route {
 
-    long id;
+    private long id;
 
     public Route(long id){
         this.id = id;
     }
 
-    public void save() {
-        RoutePersistence.addRoute(this);
+    public long getId(){
+        return this.id;
     }
 
 }
