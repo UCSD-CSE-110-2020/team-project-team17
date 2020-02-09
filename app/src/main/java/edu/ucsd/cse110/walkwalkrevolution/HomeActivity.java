@@ -8,6 +8,8 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -78,14 +80,6 @@ public class HomeActivity extends AppCompatActivity {
             updater.execute(getString(R.string.daily_step_update_delay_sec));
         }
 
-        Button createRouteBtn  = (Button) findViewById(R.id.add_route_btn);
-        createRouteBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                createRouteActivity();
-            }
-        });
-
     }
 
     public void createRouteActivity() {
@@ -131,5 +125,26 @@ public class HomeActivity extends AppCompatActivity {
         // Round miles to 2 decimal places.
         textMiles.setText(String.valueOf(Math.round((steps / stepsPerMile) * 100) / 100.0));
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.home_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    // handle button activities
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.list_button) {
+            Intent intent = new Intent(this, RoutesActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.add_button) {
+            createRouteActivity();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
 }

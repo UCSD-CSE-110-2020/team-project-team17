@@ -2,7 +2,10 @@ package edu.ucsd.cse110.walkwalkrevolution.activity;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,8 +13,11 @@ public class Activity {
 
     private Map<String, String> details;
 
+    public static final String DATE = "DATE";
+
     public Activity() {
         this.details = new HashMap<>();
+        setDate();
     }
 
     public Activity(Map<String, String> details){
@@ -34,6 +40,14 @@ public class Activity {
     @JsonAnySetter
     public void setDetail(String key, String value){
         details.put(key, value);
+    }
+
+    public void setDate(){
+        setDate(LocalDateTime.now());
+    }
+
+    public void setDate(LocalDateTime dt){
+        setDetail(DATE, ActivityUtils.timeToString(dt));
     }
 
 }

@@ -1,5 +1,7 @@
 package edu.ucsd.cse110.walkwalkrevolution.route;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
@@ -28,6 +30,10 @@ public class Route {
 
     public long getId(){
         return id;
+    }
+
+    private void setId(){
+        this.id = id;
     }
 
     public Activity getActivity(){
