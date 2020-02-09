@@ -1,12 +1,13 @@
 package edu.ucsd.cse110.walkwalkrevolution;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.junit.Test;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+import edu.ucsd.cse110.walkwalkrevolution.activity.Activity;
+import edu.ucsd.cse110.walkwalkrevolution.activity.ActivityUtils;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
 import edu.ucsd.cse110.walkwalkrevolution.route.Route;
 import edu.ucsd.cse110.walkwalkrevolution.route.RouteUtils;
@@ -17,7 +18,12 @@ public class RouteSerializationTest {
 
     @Test
     public void serializeRouteWithNoActivity() throws Exception{
-        Route route = new Route(1, "Route1", new Walk());
+        Activity activity = new Walk();
+        LocalDateTime time = LocalDateTime.of(2020, 01, 01, 0, 0);
+        activity.setDate(time);
+
+        Route route = new Route(1, "Route1", activity);
+
 
         String jsonString = RouteUtils.serialize(route);
         System.err.println(jsonString);
@@ -25,18 +31,21 @@ public class RouteSerializationTest {
         Route deserial = RouteUtils.deserialize(jsonString);
         assertEquals(1, deserial.getId());
         assertEquals("Route1", deserial.getTitle());
-        assertEquals(3, deserial.getActivity().getDetails().size());
+        assertEquals(4, deserial.getActivity().getDetails().size());
         assertEquals("0", deserial.getActivity().getDetail(Walk.STEP_COUNT));
         assertEquals("0", deserial.getActivity().getDetail(Walk.DURATION));
         assertEquals("0", deserial.getActivity().getDetail(Walk.MILES));
+        assertEquals(time, ActivityUtils.stringToTime(deserial.getActivity().getDetail(Activity.DATE)));
     }
 
     @Test
     public void serializeRouteWithActivity() throws Exception{
+        LocalDateTime time = LocalDateTime.of(2020, 01, 01, 0, 0);
         Map<String, String> data = new HashMap<String, String>() {{
             put(Walk.STEP_COUNT, "500");
             put(Walk.MILES, "0.25");
             put(Walk.DURATION, "5:00");
+            put(Activity.DATE, ActivityUtils.timeToString(time));
         }};
         Route route = new Route(1, "Route1", new Walk(data));
 
@@ -45,9 +54,10 @@ public class RouteSerializationTest {
         Route deserial = RouteUtils.deserialize(jsonString);
         assertEquals(1, deserial.getId());
         assertEquals("Route1", deserial.getTitle());
-        assertEquals(3, deserial.getActivity().getDetails().size());
+        assertEquals(4, deserial.getActivity().getDetails().size());
         assertEquals("500", deserial.getActivity().getDetail(Walk.STEP_COUNT));
         assertEquals("5:00", deserial.getActivity().getDetail(Walk.DURATION));
         assertEquals("0.25", deserial.getActivity().getDetail(Walk.MILES));
+        assertEquals(time, ActivityUtils.stringToTime(deserial.getActivity().getDetail(Activity.DATE)));
     }
 }

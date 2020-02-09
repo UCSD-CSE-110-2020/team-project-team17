@@ -15,6 +15,8 @@ import android.widget.TextView;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
+
 public class WalkActivity extends AppCompatActivity {
     private static final String TAG = "WalkActivity";
 
@@ -70,6 +72,7 @@ public class WalkActivity extends AppCompatActivity {
         stopWalk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                createRouteActivity();
                 finish();
             }
         });
@@ -79,6 +82,14 @@ public class WalkActivity extends AppCompatActivity {
 
         SetWalkStepsAsync updater = new SetWalkStepsAsync();
         updater.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    public void createRouteActivity() {
+        Intent createRoute = new Intent(this, CreateRouteActivity.class);
+        createRoute.putExtra(Walk.STEP_COUNT, steps.getText().toString());
+        createRoute.putExtra(Walk.MILES, miles.getText().toString());
+        createRoute.putExtra(Walk.DURATION, timer.getText().toString());
+        startActivity(createRoute);
     }
 
     private class SetWalkStepsAsync extends AsyncTask<String, String, String> {

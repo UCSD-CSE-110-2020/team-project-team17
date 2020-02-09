@@ -10,6 +10,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".RoutesActivity"></activity>
         <activity android:name=".CreateRouteActivity"></activity>
         <activity android:name=".HeightActivity" android:exported="true"></activity>
         <activity android:name=".HomeActivity" />

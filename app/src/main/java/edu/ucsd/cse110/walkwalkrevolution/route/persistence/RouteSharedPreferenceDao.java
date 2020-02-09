@@ -3,6 +3,7 @@ package edu.ucsd.cse110.walkwalkrevolution.route.persistence;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import edu.ucsd.cse110.walkwalkrevolution.WalkWalkRevolution;
@@ -55,8 +56,12 @@ public class RouteSharedPreferenceDao implements BaseRouteDao {
     public Map<String, ?> getAllRoutes() {
         Context context = WalkWalkRevolution.getContext();
         SharedPreferences sp = context.getSharedPreferences(SP_ROUTE, MODE_PRIVATE);
-        Map<String, ?> Routes = sp.getAll();
-        return Routes;
+        Map<String, String> routes = new HashMap<>();
+        for(Map.Entry<String, ?> entry: sp.getAll().entrySet()){
+            if(entry.getKey().toString().equals(NEXT_ID_KEY)) continue;
+            routes.put(entry.getKey().toString(), entry.getValue().toString());
+        }
+        return routes;
     }
 
     @Override
