@@ -86,4 +86,9 @@ public class RoutesAdapter extends
     public int getItemCount() {
         return routes.getSize();
     }
+
+    public void updateList() {
+        routes = new Routes();
+        notifyDataSetChanged();
+    }
 }

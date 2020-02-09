@@ -80,14 +80,6 @@ public class HomeActivity extends AppCompatActivity {
             updater.execute(getString(R.string.daily_step_update_delay_sec));
         }
 
-        Button createRouteBtn  = (Button) findViewById(R.id.add_route_btn);
-        createRouteBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                createRouteActivity();
-            }
-        });
-
     }
 
     public void createRouteActivity() {
@@ -148,6 +140,8 @@ public class HomeActivity extends AppCompatActivity {
         if (id == R.id.list_button) {
             Intent intent = new Intent(this, RoutesActivity.class);
             startActivity(intent);
+        } else if (id == R.id.add_button) {
+            createRouteActivity();
         }
         return super.onOptionsItemSelected(item);
     }

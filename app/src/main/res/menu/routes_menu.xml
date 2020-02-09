@@ -8,10 +8,4 @@
         app:showAsAction="always"
         android:icon="@drawable/ic_add_white_48dp"
         />
-    <item
-        android:id="@+id/list_button"
-        android:title=""
-        app:showAsAction="always"
-        android:icon="@drawable/ic_format_list_bulleted_white_48dp"
-        />
 </menu>
