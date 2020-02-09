@@ -8,9 +8,11 @@ import edu.ucsd.cse110.walkwalkrevolution.route.RouteUtils;
 public class MockRouteDao implements BaseRouteDao {
 
     Map<Long, String> persisted;
+    long nextId;
 
     public MockRouteDao(){
         this.persisted = new HashMap<>();
+        this.nextId = 1;
     }
 
     @Override
@@ -43,6 +45,11 @@ public class MockRouteDao implements BaseRouteDao {
             map.put(Long.toString(e.getKey()), e.getValue());
         }
         return map;
+    }
+
+    @Override
+    public long getNextId(){
+        return nextId++;
     }
 
 }

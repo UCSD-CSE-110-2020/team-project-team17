@@ -3,6 +3,7 @@ package edu.ucsd.cse110.walkwalkrevolution.route;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import edu.ucsd.cse110.walkwalkrevolution.WalkWalkRevolution;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Activity;
 
 @JsonPropertyOrder({"id", "title", "activity"})
@@ -15,6 +16,12 @@ public class Route {
     public Route(@JsonProperty("id") long id, @JsonProperty("title") String title,
                  @JsonProperty("activity") Activity activity){
         this.id = id;
+        this.title = title;
+        this.activity = activity;
+    }
+
+    public Route(String title, Activity activity){
+        this.id = WalkWalkRevolution.getRouteDao().getNextId();
         this.title = title;
         this.activity = activity;
     }
