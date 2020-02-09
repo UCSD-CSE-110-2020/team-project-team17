@@ -40,10 +40,7 @@ public class WalkActivity extends AppCompatActivity {
 
         findViewById(R.id.route_title).setVisibility(View.INVISIBLE);
 
-        // Activity history can be used to get the current number of steps.
         activityHistory = getSharedPreferences("activity_history", MODE_PRIVATE);
-
-        // User Info can be used to get the steps / mile of the user.
         userInfo        = getSharedPreferences("USER", MODE_PRIVATE);
 
         //  How many steps we begin with.
@@ -90,17 +87,24 @@ public class WalkActivity extends AppCompatActivity {
         protected String doInBackground(String... params) {
             Log.d(TAG, "doInBackground: Entering");
 
-            long waitTime = 1000*(Integer.parseInt(getString(R.string.daily_step_update_delay_sec)));
+            long waitTime = 1000*((R.string.daily_step_update_delay_sec));
             while(true){
                 try {
                     Log.d(TAG, "doInBackground: Updating steps");
-                    updateWalkSteps();
+                    publishProgress();
 
                     Thread.sleep(waitTime);
                 } catch (Exception e) {
-                    //ignore
+                    Log.d(TAG, "doInBackground: ERROR BIG ERROR");
+                    e.printStackTrace();
+                    while(true){}
                 }
             }
+        }
+
+        @Override
+        public void onProgressUpdate(String... text){
+            updateWalkSteps();
         }
     }
 
@@ -108,20 +112,22 @@ public class WalkActivity extends AppCompatActivity {
         Log.d(TAG, "updateWalkSteps: Entering");
 
         long newTotal = activityHistory.getLong("current_steps", 0);
-        long userStepsPerMile = userInfo.getInt("steps_per_mile", 0);
-
-        Log.d(TAG, "updateWalkSteps: Updated Walk Specific stats!");
-        Log.d(TAG, "updateWalkSteps: " + newTotal + ", " + currentTotalSteps);
+        float userStepsPerMile = userInfo.getFloat("steps_per_mile", 0);
 
         if(newTotal < currentTotalSteps){
             walkSteps += newTotal;
         } else {
-            walkSteps += currentTotalSteps - newTotal;
+            walkSteps += newTotal  - currentTotalSteps;
         }
+
+        Log.d(TAG, "updateWalkSteps: Updated Walk Specific stats!");
+        Log.d(TAG, "updateWalkSteps: Current total " + currentTotalSteps);
+        Log.d(TAG, "updateWalkSteps: New total " + newTotal);
+        Log.d(TAG, "updateWalkSteps: walkSteps " + walkSteps);
 
         currentTotalSteps =  newTotal;
 
         steps.setText(String.valueOf(walkSteps));
-        miles.setText(String.valueOf(Math.round(walkSteps / userStepsPerMile * 100) / 100));
+        miles.setText(String.valueOf(Math.round(walkSteps / userStepsPerMile * 100.0) / 100.0));
     }
 }

@@ -22,7 +22,8 @@ public class HomeActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            long waitTime = 1000*(Integer.parseInt(params[0]));
+            Log.d(TAG, "HomeActivity: doInBackground: ");
+            long waitTime = 1000*(R.string.daily_step_update_delay_sec);
             while(true){
                 fitnessService.updateStepCount();
                 try {
@@ -76,7 +77,7 @@ public class HomeActivity extends AppCompatActivity {
 
         if (!fitnessServiceKey.equals(TEST_SERVICE)) {
             FetchUpdatedStepsAsyncTask updater = new FetchUpdatedStepsAsyncTask();
-            updater.execute(getString(R.string.daily_step_update_delay_sec));
+            updater.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
 
         startWalk = findViewById(R.id.start_walk);
