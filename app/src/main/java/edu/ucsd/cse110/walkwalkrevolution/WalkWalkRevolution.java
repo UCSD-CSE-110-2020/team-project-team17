@@ -21,6 +21,7 @@ public class WalkWalkRevolution extends Application {
     public void onCreate() {
         super.onCreate();
         setupGoogleFitnessApi();
+
         WalkWalkRevolution.context = getApplicationContext();
         routeDao = new RouteSharedPreferenceDao();
     }

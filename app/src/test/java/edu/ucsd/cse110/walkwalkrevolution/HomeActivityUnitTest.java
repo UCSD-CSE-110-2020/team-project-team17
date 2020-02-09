@@ -1,6 +1,8 @@
 package edu.ucsd.cse110.walkwalkrevolution;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.widget.TextView;
 
 import androidx.test.core.app.ActivityScenario;
@@ -49,6 +51,92 @@ public class HomeActivityUnitTest {
             assertThat(textSteps.getText().toString()).isEqualTo(String.valueOf(nextStepCount));
         });
 
+    }
+
+    @Test
+    public void testStepsResetToZero(){
+        nextStepCount = 1000;
+
+        // Hangs here:
+        ActivityScenario<HomeActivity> scenario = ActivityScenario.launch(intent);
+        scenario.onActivity(activity -> {
+            TextView textSteps = activity.findViewById(R.id.steps);
+            activity.setStepCount(nextStepCount);
+            assertThat(textSteps.getText().toString()).isEqualTo(String.valueOf(nextStepCount));
+            nextStepCount = 0;
+            activity.setStepCount(nextStepCount);
+            assertThat(textSteps.getText().toString()).isEqualTo(String.valueOf(nextStepCount));
+        });
+
+    }
+
+    @Test
+    public void testMilesStory(){
+        nextStepCount = 0;
+
+        ActivityScenario<HomeActivity> scenario = ActivityScenario.launch(intent);
+        scenario.onActivity(activity -> {
+            TextView textMiles = activity.findViewById(R.id.miles);
+            activity.setStepCount(nextStepCount);
+            assertThat(textMiles.getText().toString()).isEqualTo("0.0");
+
+            nextStepCount = 1337;
+
+            SharedPreferences sharedPreferences = androidx.test.core.app.ApplicationProvider.getApplicationContext().getSharedPreferences(
+                    "USER", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+
+            editor.putFloat("steps_per_mile", 100);
+            editor.apply();
+
+            activity.setStepCount(nextStepCount);
+            assertThat(textMiles.getText().toString()).isEqualTo("13.37");
+        });
+    }
+
+    @Test
+    public void testUpdateMiles() {
+        nextStepCount = 0;
+
+        ActivityScenario<HomeActivity> scenario = ActivityScenario.launch(intent);
+        scenario.onActivity(activity -> {
+            TextView textMiles = activity.findViewById(R.id.miles);
+            activity.setStepCount(nextStepCount);
+            assertThat(textMiles.getText().toString()).isEqualTo("0.0");
+
+            nextStepCount = 1337;
+
+            SharedPreferences sharedPreferences = androidx.test.core.app.ApplicationProvider.getApplicationContext().getSharedPreferences(
+                    "USER", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+
+            editor.putFloat("steps_per_mile", 100);
+            editor.apply();
+
+            activity.setStepCount(nextStepCount);
+            assertThat(textMiles.getText().toString()).isEqualTo("13.37");
+        });
+    }
+
+    @Test
+    public void testMilesResetToZero(){
+        nextStepCount = 1000;
+
+        ActivityScenario<HomeActivity> scenario = ActivityScenario.launch(intent);
+        scenario.onActivity(activity -> {
+            SharedPreferences sharedPreferences = androidx.test.core.app.ApplicationProvider.getApplicationContext().getSharedPreferences("USER", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putFloat("steps_per_mile", 100);
+            editor.apply();
+
+            TextView textMiles = activity.findViewById(R.id.miles);
+            activity.setStepCount(nextStepCount);
+            assertThat(textMiles.getText().toString()).isEqualTo("10.0");
+
+            nextStepCount = 0;
+            activity.setStepCount(nextStepCount);
+            assertThat(textMiles.getText().toString()).isEqualTo("0.0");
+        });
     }
 
     private class TestFitnessService implements FitnessService {
