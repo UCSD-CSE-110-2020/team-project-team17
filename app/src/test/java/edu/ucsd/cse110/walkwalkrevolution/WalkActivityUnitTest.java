@@ -85,6 +85,8 @@ public class WalkActivityUnitTest {
         editActivityHistory.putLong("current_steps",  100);
         editActivityHistory.apply();
 
+        walkActivity.updateWalkSteps();
+
         assertThat(steps.getText().toString()).isEqualTo("1100");
         assertThat(miles.getText().toString()).isEqualTo("11.0");
     }
