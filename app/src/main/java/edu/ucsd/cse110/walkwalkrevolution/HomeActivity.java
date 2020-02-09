@@ -23,7 +23,7 @@ public class HomeActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
             Log.d(TAG, "HomeActivity: doInBackground: ");
-            long waitTime = 1000*(R.string.daily_step_update_delay_sec);
+            long waitTime = 1000*Integer.parseInt(getString(R.string.daily_step_update_delay_sec));
             while(true){
                 fitnessService.updateStepCount();
                 try {

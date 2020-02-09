@@ -87,7 +87,7 @@ public class WalkActivity extends AppCompatActivity {
         protected String doInBackground(String... params) {
             Log.d(TAG, "doInBackground: Entering");
 
-            long waitTime = 1000*((R.string.daily_step_update_delay_sec));
+            long waitTime = 1000*Integer.parseInt(getString(R.string.daily_step_update_delay_sec));
             while(true){
                 try {
                     Log.d(TAG, "doInBackground: Updating steps");
