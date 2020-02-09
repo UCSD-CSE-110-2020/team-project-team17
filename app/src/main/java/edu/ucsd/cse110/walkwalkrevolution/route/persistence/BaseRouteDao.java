@@ -12,4 +12,6 @@ public interface BaseRouteDao {
 
     Map<String, ?> getAllRoutes();
 
+    long getNextId();
+
 }

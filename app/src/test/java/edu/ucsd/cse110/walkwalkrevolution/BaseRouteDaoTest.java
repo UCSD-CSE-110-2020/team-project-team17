@@ -73,7 +73,30 @@ public class BaseRouteDaoTest {
         assertEquals(true, allRoutes.containsKey("3"));
     }
 
+    @Test
+    public void testGetNextId() {
+        Route r1 = new Route("Route1", new Walk());
+        Route r2 = new Route("Route2", new Walk());
+        Route r3 = new Route("Route3", new Walk());
+        dao.addRoute(r1);
+        dao.addRoute(r2);
+        dao.addRoute(r3);
 
+        Route persisted = dao.getRoute(1);
+        assertNotNull(persisted);
+        assertEquals(r1.getId(), persisted.getId());
+        persisted = dao.getRoute(2);
+        assertNotNull(persisted);
+        assertEquals(r2.getId(), persisted.getId());
+        persisted = dao.getRoute(3);
+        assertNotNull(persisted);
+        assertEquals(r3.getId(), persisted.getId());
 
+        Map<String, ?> allRoutes = dao.getAllRoutes();
+        assertEquals(3, allRoutes.size());
+        assertEquals(true, allRoutes.containsKey("1"));
+        assertEquals(true, allRoutes.containsKey("2"));
+        assertEquals(true, allRoutes.containsKey("3"));
+    }
 
 }
