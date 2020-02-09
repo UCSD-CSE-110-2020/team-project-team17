@@ -6,10 +6,18 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.TextView;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class WalkActivity extends AppCompatActivity {
+    private static final String TAG = "WalkActivity";
+
     long walkSteps ;
     long currentTotalSteps;
 
@@ -18,8 +26,12 @@ public class WalkActivity extends AppCompatActivity {
     private TextView routeTitle;
     private TextView timer;
 
+    private Button stopWalk;
+
     private SharedPreferences activityHistory;
     private SharedPreferences userInfo;
+
+    private Chronometer chronometer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,16 +68,34 @@ public class WalkActivity extends AppCompatActivity {
             routeTitle.setVisibility(View.VISIBLE);
         }
 
+        //  Exit when stop walk clicked.
+        stopWalk = findViewById(R.id.stop_walk);
+        stopWalk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        chronometer = findViewById(R.id.timer);
+        chronometer.start();
+
+        SetWalkStepsAsync updater = new SetWalkStepsAsync();
+        updater.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     private class SetWalkStepsAsync extends AsyncTask<String, String, String> {
 
         @Override
         protected String doInBackground(String... params) {
-            long waitTime = 1000*(Integer.parseInt(params[0]));
+            Log.d(TAG, "doInBackground: Entering");
+
+            long waitTime = 1000*(Integer.parseInt(getString(R.string.daily_step_update_delay_sec)));
             while(true){
-                updateWalkSteps();
                 try {
+                    Log.d(TAG, "doInBackground: Updating steps");
+                    updateWalkSteps();
+
                     Thread.sleep(waitTime);
                 } catch (Exception e) {
                     //ignore
@@ -75,8 +105,13 @@ public class WalkActivity extends AppCompatActivity {
     }
 
     public void updateWalkSteps(){
+        Log.d(TAG, "updateWalkSteps: Entering");
+
         long newTotal = activityHistory.getLong("current_steps", 0);
         long userStepsPerMile = userInfo.getInt("steps_per_mile", 0);
+
+        Log.d(TAG, "updateWalkSteps: Updated Walk Specific stats!");
+        Log.d(TAG, "updateWalkSteps: " + newTotal + ", " + currentTotalSteps);
 
         if(newTotal < currentTotalSteps){
             walkSteps += newTotal;

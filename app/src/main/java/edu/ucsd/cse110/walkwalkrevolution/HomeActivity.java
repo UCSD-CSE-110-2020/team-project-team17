@@ -56,7 +56,8 @@ public class HomeActivity extends AppCompatActivity {
     private static final String TAG = "HomeActivity";
 
     private long steps;
-    private TextView textSteps;
+    private double miles;
+    private TextView textSteps, textMiles;
     private FitnessService fitnessService;
     private Button startWalk;
 
@@ -65,6 +66,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         textSteps = findViewById(R.id.steps);
+        textMiles = findViewById(R.id.miles);
 
         String fitnessServiceKey = getIntent().getStringExtra(FITNESS_SERVICE_KEY);
 
@@ -92,6 +94,20 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        SharedPreferences sharedPreferences = getSharedPreferences("USER", MODE_PRIVATE);
+        boolean heightIsSet = sharedPreferences.getBoolean("height_set", false);
+
+
+        if(!heightIsSet){
+            Intent heightActivity = new Intent(this, HeightActivity.class);
+            heightActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            startActivity(heightActivity);
+        }
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -108,12 +124,20 @@ public class HomeActivity extends AppCompatActivity {
     public void setStepCount(long stepCount) {
         this.steps = stepCount;
 
-        SharedPreferences prefs = getSharedPreferences("activity_history", MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
+        Log.d(TAG, "setStepCount: Updated Shared Prefs");
+        
+        SharedPreferences activityHistory = getSharedPreferences("activity_history", MODE_PRIVATE);
+        SharedPreferences.Editor editor = activityHistory.edit();
         editor.putLong("current_steps", steps);
         editor.apply();
 
         textSteps.setText(String.valueOf(steps));
+
+        SharedPreferences userInfo = getSharedPreferences("USER", MODE_PRIVATE);
+        float stepsPerMile = userInfo.getFloat("steps_per_mile", 0);
+
+        // Round miles to 2 decimal places.
+        textMiles.setText(String.valueOf(Math.round((steps / stepsPerMile) * 100) / 100.0));
     }
 
 }

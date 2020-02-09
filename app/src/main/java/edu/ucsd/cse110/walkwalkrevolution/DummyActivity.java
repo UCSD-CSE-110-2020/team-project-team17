@@ -3,6 +3,7 @@ package edu.ucsd.cse110.walkwalkrevolution;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+
 import android.os.Bundle;
 
 import static edu.ucsd.cse110.walkwalkrevolution.WalkWalkRevolution.fitnessServiceKey;

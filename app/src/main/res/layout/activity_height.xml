@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HeightActivity">
+
+    <TextView
+        android:id="@+id/welcome_prompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="164dp"
+        android:layout_marginTop="152dp"
+        android:text="@string/welcome_prompt"
+        android:textColor="@android:color/white"
+        android:textSize="32sp"
+        android:translationZ="1sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/height_prompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
+        android:text="@string/height_prompt"
+        android:textColor="@android:color/white"
+        android:textSize="30sp"
+        android:translationZ="1sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.493"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/welcome_prompt" />
+
+    <EditText
+        android:id="@+id/feet_user_input"
+        android:layout_width="30dp"
+        android:layout_height="60sp"
+        android:layout_marginStart="148dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@android:color/white"
+        android:ems="10"
+        android:importantForAutofill="no"
+        android:inputType="numberPassword"
+        android:maxLength="1"
+        android:textColor="@android:color/white"
+        android:textSize="30sp"
+        android:translationZ="1sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/height_prompt" />
+
+    <EditText
+        android:id="@+id/inches_user_input"
+        android:layout_width="45dp"
+        android:layout_height="60sp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@android:color/white"
+        android:ems="10"
+        android:importantForAutofill="no"
+        android:inputType="numberPassword"
+        android:maxLength="2"
+        android:textColor="@android:color/white"
+        android:textSize="30sp"
+        android:translationZ="1sp"
+        app:layout_constraintEnd_toStartOf="@+id/inches_hint"
+        app:layout_constraintStart_toEndOf="@+id/feet_hint"
+        app:layout_constraintTop_toBottomOf="@+id/height_prompt" />
+
+    <TextView
+        android:id="@+id/feet_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/feet_hint"
+        android:textColor="@android:color/white"
+        android:textSize="30sp"
+        android:translationZ="1sp"
+        app:layout_constraintEnd_toStartOf="@+id/inches_user_input"
+        app:layout_constraintStart_toEndOf="@+id/feet_user_input"
+        app:layout_constraintTop_toTopOf="@+id/height_prompt" />
+
+    <TextView
+        android:id="@+id/inches_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="29dp"
+        android:text="@string/inches_hint"
+        android:textColor="@android:color/white"
+        android:textSize="30sp"
+        android:translationZ="1sp"
+        app:layout_constraintStart_toEndOf="@+id/inches_user_input"
+        app:layout_constraintTop_toBottomOf="@+id/height_prompt" />
+
+    <Button
+        android:id="@+id/submit_height"
+        android:layout_width="211sp"
+        android:layout_height="100sp"
+        android:layout_marginTop="268dp"
+        android:fontFamily="sans-serif-light"
+        android:text="@string/submit_button"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/height_prompt" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="358dp"
+        android:layout_height="248dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="128dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/rounded_rectangle" />
+
+    <TextView
+        android:id="@+id/height_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:fontFamily="sans-serif-light"
+        android:text="Please enter a valid height"
+        android:textColor="@color/red"
+        android:textSize="30sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/submit_height"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
