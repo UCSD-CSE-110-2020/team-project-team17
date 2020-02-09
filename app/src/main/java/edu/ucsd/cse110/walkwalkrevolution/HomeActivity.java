@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessService;
@@ -72,6 +74,20 @@ public class HomeActivity extends AppCompatActivity {
             FetchUpdatedStepsAsyncTask updater = new FetchUpdatedStepsAsyncTask();
             updater.execute(getString(R.string.daily_step_update_delay_sec));
         }
+
+        Button createRouteBtn  = (Button) findViewById(R.id.add_route_btn);
+        createRouteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createRouteActivity();
+            }
+        });
+
+    }
+
+    public void createRouteActivity() {
+        Intent createRoute = new Intent(this, CreateRouteActivity.class);
+        startActivity(createRoute);
     }
 
     @Override
