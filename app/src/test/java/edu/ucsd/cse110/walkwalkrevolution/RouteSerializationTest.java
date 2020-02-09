@@ -17,12 +17,14 @@ public class RouteSerializationTest {
 
     @Test
     public void serializeRouteWithNoActivity() throws Exception{
-        Route route = new Route(1, new Walk());
+        Route route = new Route(1, "Route1", new Walk());
 
         String jsonString = RouteUtils.serialize(route);
+        System.err.println(jsonString);
 
         Route deserial = RouteUtils.deserialize(jsonString);
         assertEquals(1, deserial.getId());
+        assertEquals("Route1", deserial.getTitle());
         assertEquals(3, deserial.getActivity().getDetails().size());
         assertEquals("0", deserial.getActivity().getDetail(Walk.STEP_COUNT));
         assertEquals("0", deserial.getActivity().getDetail(Walk.DURATION));
@@ -36,12 +38,13 @@ public class RouteSerializationTest {
             put(Walk.MILES, "0.25");
             put(Walk.DURATION, "5:00");
         }};
-        Route route = new Route(1, new Walk(data));
+        Route route = new Route(1, "Route1", new Walk(data));
 
         String jsonString = RouteUtils.serialize(route);
 
         Route deserial = RouteUtils.deserialize(jsonString);
         assertEquals(1, deserial.getId());
+        assertEquals("Route1", deserial.getTitle());
         assertEquals(3, deserial.getActivity().getDetails().size());
         assertEquals("500", deserial.getActivity().getDetail(Walk.STEP_COUNT));
         assertEquals("5:00", deserial.getActivity().getDetail(Walk.DURATION));
