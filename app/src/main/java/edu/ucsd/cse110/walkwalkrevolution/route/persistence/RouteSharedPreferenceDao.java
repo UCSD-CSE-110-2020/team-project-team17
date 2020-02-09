@@ -14,6 +14,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class RouteSharedPreferenceDao implements BaseRouteDao {
 
     private static final String SP_ROUTE = "ROUTE";
+    private static final String NEXT_ID_KEY = "NEXT_ID";
 
     @Override
     public void addRoute(Route route) {
@@ -56,5 +57,19 @@ public class RouteSharedPreferenceDao implements BaseRouteDao {
         SharedPreferences sp = context.getSharedPreferences(SP_ROUTE, MODE_PRIVATE);
         Map<String, ?> Routes = sp.getAll();
         return Routes;
+    }
+
+    @Override
+    public long getNextId(){
+        Context context = WalkWalkRevolution.getContext();
+        SharedPreferences sp = context.getSharedPreferences(SP_ROUTE, MODE_PRIVATE);
+
+        long nextId = sp.getLong(NEXT_ID_KEY, 1);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putLong(NEXT_ID_KEY, nextId+1);
+
+        editor.apply();
+
+        return nextId;
     }
 }
