@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.test.core.app.ActivityScenario;
@@ -13,6 +15,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
@@ -27,64 +30,60 @@ import java.util.concurrent.TimeUnit;
 @Config(sdk=28)
 public class HeightActivityUnitTest {
     private static final String TAG = "HeightActivityUnitTest";
-    private static final String TEST_SERVICE = "TEST_SERVICE";
-
-    private Intent intent;
-    private long nextStepCount;
+    private HeightActivity heightActivity;
+    private Button submit;
+    private TextView feet;
+    private TextView inches;
+    private TextView error;
 
     @Before
     public void setUp() {
-        FitnessServiceFactory.put(TEST_SERVICE, TestFitnessService::new);
-        intent = new Intent(ApplicationProvider.getApplicationContext(), HomeActivity.class);
-        intent.putExtra("FITNESS_SERVICE_KEY", TEST_SERVICE);
+        heightActivity = Robolectric.buildActivity(HeightActivity.class).create().get();
+        submit = heightActivity.findViewById(R.id.submit_height);
+        error  = heightActivity.findViewById(R.id.height_error);
+        feet   = heightActivity.findViewById(R.id.feet_user_input);
+        inches = heightActivity.findViewById(R.id.inches_user_input);
     }
 
     @Test
-    public void testUpdateMiles() {
-        nextStepCount = 0;
+    public void errorOnBigInches(){
+        assert(error.getVisibility() == View.INVISIBLE);
 
-        ActivityScenario<HomeActivity> scenario = ActivityScenario.launch(intent);
-        scenario.onActivity(activity -> {
-            TextView textMiles = activity.findViewById(R.id.miles);
-            activity.setStepCount(nextStepCount);
-            assertThat(textMiles.getText().toString()).isEqualTo("0.0");
-            Log.d(TAG, "testUpdateMiles: ");
-            nextStepCount = 1337;
+        feet.setText("5");
+        inches.setText("13");
+        submit.performClick();
 
-            SharedPreferences sharedPreferences = androidx.test.core.app.ApplicationProvider.getApplicationContext().getSharedPreferences(
-                            "USER", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-
-            editor.putFloat("steps_per_mile", 100);
-            editor.apply();
-
-            activity.setStepCount(nextStepCount);
-            assertThat(textMiles.getText().toString()).isEqualTo("13.37");
-        });
+        assert(error.getVisibility() == View.VISIBLE);
     }
 
-    private class TestFitnessService implements FitnessService {
-        private static final String TAG = "[TestFitnessService]: ";
-        private HomeActivity homeActivity;
+    @Test
+    public void errorOnNoInput(){
+        assert(error.getVisibility() == View.INVISIBLE);
 
-        public TestFitnessService(HomeActivity homeActivity) {
-            this.homeActivity = homeActivity;
-        }
+        submit.performClick();
 
-        @Override
-        public int getRequestCode() {
-            return 0;
-        }
+        assert(error.getVisibility() == View.VISIBLE);
+    }
 
-        @Override
-        public void setup() {
-            System.out.println(TAG + "setup");
-        }
+    @Test
+    public void noErrorValidInput(){
+        assert(error.getVisibility() == View.INVISIBLE);
 
-        @Override
-        public void updateStepCount() {
-            System.out.println(TAG + "updateStepCount");
-            homeActivity.setStepCount(nextStepCount);
-        }
+        feet.setText("5");
+        inches.setText("6");
+        submit.performClick();
+
+        assert(error.getVisibility() == View.INVISIBLE);
+    }
+
+    @Test
+    public void updateSharedPreferences(){
+        feet.setText("5");
+        inches.setText("6");
+        submit.performClick();
+
+        SharedPreferences sp = heightActivity.getSharedPreferences("USER", Context.MODE_PRIVATE);
+        assert(sp.getInt("height_feet", 0) == 5);
+        assert(sp.getInt("height_inches", 0) == 6);
     }
 }

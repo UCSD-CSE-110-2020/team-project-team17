@@ -77,8 +77,8 @@ public class HeightActivity extends AppCompatActivity {
 
         // https://www.openfit.com/how-many-steps-walk-per-mile
         double heightFeet = Integer.parseInt(feet.getText().toString());
-        double heightInches = heightFeet * INCHES_PER_FOOT + Integer.parseInt(inches.getText().toString());
-        double stepsPerMile = FEET_IN_MILE / (CONVERSION_FACTOR * heightInches / 12);
+        double heightInches = Integer.parseInt(inches.getText().toString());
+        double stepsPerMile = FEET_IN_MILE / (CONVERSION_FACTOR * (heightFeet * INCHES_PER_FOOT + heightInches) / 12);
 
         editor.putInt("height_feet", (int) heightFeet);
         editor.putInt("height_inches", (int) heightInches);
