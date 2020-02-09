@@ -4,9 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessService;
@@ -55,6 +58,7 @@ public class HomeActivity extends AppCompatActivity {
     private long steps;
     private TextView textSteps;
     private FitnessService fitnessService;
+    private Button startWalk;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +76,19 @@ public class HomeActivity extends AppCompatActivity {
             FetchUpdatedStepsAsyncTask updater = new FetchUpdatedStepsAsyncTask();
             updater.execute(getString(R.string.daily_step_update_delay_sec));
         }
+
+        startWalk = findViewById(R.id.start_walk);
+        startWalk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startWalk();
+            }
+        });
+    }
+
+    private void startWalk(){
+        Intent intent = new Intent(this,  WalkActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -90,6 +107,12 @@ public class HomeActivity extends AppCompatActivity {
 
     public void setStepCount(long stepCount) {
         this.steps = stepCount;
+
+        SharedPreferences prefs = getSharedPreferences("activity_history", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putLong("current_steps", steps);
+        editor.apply();
+
         textSteps.setText(String.valueOf(steps));
     }
 
