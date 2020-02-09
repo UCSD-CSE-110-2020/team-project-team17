@@ -22,7 +22,8 @@ public class HomeActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            long waitTime = 1000*(Integer.parseInt(params[0]));
+            Log.d(TAG, "HomeActivity: doInBackground: ");
+            long waitTime = 1000*Integer.parseInt(getString(R.string.daily_step_update_delay_sec));
             while(true){
                 fitnessService.updateStepCount();
                 try {
@@ -59,6 +60,7 @@ public class HomeActivity extends AppCompatActivity {
     private double miles;
     private TextView textSteps, textMiles;
     private FitnessService fitnessService;
+    private Button startWalk;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,8 +77,16 @@ public class HomeActivity extends AppCompatActivity {
 
         if (!fitnessServiceKey.equals(TEST_SERVICE)) {
             FetchUpdatedStepsAsyncTask updater = new FetchUpdatedStepsAsyncTask();
-            updater.execute(getString(R.string.daily_step_update_delay_sec));
+            updater.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
+
+        startWalk = findViewById(R.id.start_walk);
+        startWalk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startWalk();
+            }
+        });
 
         Button createRouteBtn  = (Button) findViewById(R.id.add_route_btn);
         createRouteBtn.setOnClickListener(new View.OnClickListener() {
@@ -91,6 +101,11 @@ public class HomeActivity extends AppCompatActivity {
     public void createRouteActivity() {
         Intent createRoute = new Intent(this, CreateRouteActivity.class);
         startActivity(createRoute);
+    }
+
+    private void startWalk(){
+        Intent intent = new Intent(this,  WalkActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -123,6 +138,14 @@ public class HomeActivity extends AppCompatActivity {
 
     public void setStepCount(long stepCount) {
         this.steps = stepCount;
+
+        Log.d(TAG, "setStepCount: Updated Shared Prefs");
+        
+        SharedPreferences activityHistory = getSharedPreferences("activity_history", MODE_PRIVATE);
+        SharedPreferences.Editor editor = activityHistory.edit();
+        editor.putLong("current_steps", steps);
+        editor.apply();
+
         textSteps.setText(String.valueOf(steps));
 
         SharedPreferences userInfo = getSharedPreferences("USER", MODE_PRIVATE);
