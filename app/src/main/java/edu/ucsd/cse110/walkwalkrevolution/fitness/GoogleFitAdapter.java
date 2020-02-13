@@ -144,7 +144,7 @@ public class GoogleFitAdapter implements FitnessService {
                                         dataSet.isEmpty()
                                                 ? 0
                                                 : dataSet.getDataPoints().get(0).getValue(Field.FIELD_STEPS).asInt();
-
+                                WalkWalkRevolution.getSteps().setDailyTotal(total);
                                 Log.d(TAG, "Total steps: " + total);
                             }
                         })
