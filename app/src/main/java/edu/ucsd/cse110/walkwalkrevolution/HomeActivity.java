@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -14,55 +13,25 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.Observable;
+import java.util.Observer;
+
 import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessService;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessServiceFactory;
-import edu.ucsd.cse110.walkwalkrevolution.fitness.GoogleFitAdapter;
+import edu.ucsd.cse110.walkwalkrevolution.fitness.StepSubject;
+import edu.ucsd.cse110.walkwalkrevolution.fitness.Steps;
 
-public class HomeActivity extends AppCompatActivity {
-
-    private class FetchUpdatedStepsAsyncTask extends AsyncTask<String, String, String> {
-
-        @Override
-        protected String doInBackground(String... params) {
-            Log.d(TAG, "HomeActivity: doInBackground: ");
-            long waitTime = 1000*Integer.parseInt(getString(R.string.daily_step_update_delay_sec));
-            while(true){
-                fitnessService.updateStepCount();
-                try {
-                    Thread.sleep(waitTime);
-                } catch (Exception e) {
-                    //ignore
-                }
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-        }
-
-        @Override
-        protected void onCancelled(String result) {
-        }
-
-        @Override
-        protected void onPreExecute() {
-        }
-
-        @Override
-        protected void onProgressUpdate(String... text) {
-        }
-
-    }
+public class HomeActivity extends AppCompatActivity implements Observer {
 
     public static final String FITNESS_SERVICE_KEY = "FITNESS_SERVICE_KEY";
     private static final String TEST_SERVICE = "TEST_SERVICE";
     private static final String TAG = "HomeActivity";
 
-    private long steps;
-    private double miles;
+    private Steps steps;
     private TextView textSteps, textMiles;
     private FitnessService fitnessService;
     private Button startWalk;
+    private StepSubject stepSubject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,13 +43,13 @@ public class HomeActivity extends AppCompatActivity {
         String fitnessServiceKey = getIntent().getStringExtra(FITNESS_SERVICE_KEY);
 
         fitnessService = FitnessServiceFactory.create(fitnessServiceKey, this);
+        stepSubject = new StepSubject(fitnessService);
+        stepSubject.addObserver(this);
 
         fitnessService.setup();
+        steps = new Steps();
 
-        if (!fitnessServiceKey.equals(TEST_SERVICE)) {
-            FetchUpdatedStepsAsyncTask updater = new FetchUpdatedStepsAsyncTask();
-            updater.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        }
+
 
         startWalk = findViewById(R.id.start_walk);
         startWalk.setOnClickListener(new View.OnClickListener() {
@@ -131,22 +100,15 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void setStepCount(long stepCount) {
-        this.steps = stepCount;
+        steps.setDailyTotal(stepCount);
 
-        Log.d(TAG, "setStepCount: Updated Shared Prefs");
-        
-        SharedPreferences activityHistory = getSharedPreferences("activity_history", MODE_PRIVATE);
-        SharedPreferences.Editor editor = activityHistory.edit();
-        editor.putLong("current_steps", steps);
-        editor.apply();
-
-        textSteps.setText(String.valueOf(steps));
+        textSteps.setText(String.valueOf(steps.getDailyTotal()));
 
         SharedPreferences userInfo = getSharedPreferences("USER", MODE_PRIVATE);
         float stepsPerMile = userInfo.getFloat("steps_per_mile", 0);
 
         // Round miles to 2 decimal places.
-        textMiles.setText(String.valueOf(Math.round((steps / stepsPerMile) * 100) / 100.0));
+        textMiles.setText(String.valueOf(Math.round((steps.getDailyTotal() / stepsPerMile) * 100) / 100.0));
     }
 
     @Override
@@ -169,5 +131,16 @@ public class HomeActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void update(Observable o, Object arg) {
+        steps = (Steps) arg;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                textSteps.setText(String.valueOf(steps.getDailyTotal()));
+            }
+        });
+
+    }
 
 }

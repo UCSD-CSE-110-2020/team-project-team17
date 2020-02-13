@@ -11,8 +11,16 @@ import com.google.android.gms.fitness.FitnessOptions;
 import com.google.android.gms.fitness.data.DataSet;
 import com.google.android.gms.fitness.data.DataType;
 import com.google.android.gms.fitness.data.Field;
+import com.google.android.gms.fitness.request.DataReadRequest;
+import com.google.android.gms.fitness.result.DataReadResponse;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import edu.ucsd.cse110.walkwalkrevolution.HomeActivity;
 
@@ -21,6 +29,7 @@ public class GoogleFitAdapter implements FitnessService {
     private final int GOOGLE_FIT_PERMISSIONS_REQUEST_CODE = System.identityHashCode(this) & 0xFFFF;
     private final String TAG = "GoogleFitAdapter";
     private GoogleSignInAccount account;
+    private LocalDateTime prevTime;
 
     private HomeActivity activity;
 
@@ -103,6 +112,82 @@ public class GoogleFitAdapter implements FitnessService {
                                 Log.d(TAG, "There was a problem getting the step count.", e);
                             }
                         });
+    }
+
+    /**
+     * Reads the current daily step total, computed from midnight of the current day on the device's
+     * current timezone and the latest number of steps taken.
+     */
+
+    public Steps getUpdatedSteps(){
+        return getUpdatedSteps(LocalDateTime.now());
+    }
+
+    public Steps getUpdatedSteps(LocalDateTime currTime) {
+        if (account == null) {
+            return null;
+        }
+
+        if(prevTime == null){
+            prevTime = currTime;
+        }
+
+        Steps steps = new Steps();
+
+        Fitness.getHistoryClient(activity, account)
+                .readDailyTotal(DataType.TYPE_STEP_COUNT_DELTA)
+                .addOnSuccessListener(
+                        new OnSuccessListener<DataSet>() {
+                            @Override
+                            public void onSuccess(DataSet dataSet) {
+                                Log.d(TAG, dataSet.toString());
+                                long total =
+                                        dataSet.isEmpty()
+                                                ? 0
+                                                : dataSet.getDataPoints().get(0).getValue(Field.FIELD_STEPS).asInt();
+
+                                steps.setDailyTotal(total);
+                                Log.d(TAG, "Total steps: " + total);
+                            }
+                        })
+                .addOnFailureListener(
+                        new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.d(TAG, "There was a problem getting the step count.", e);
+                            }
+                        });
+
+        Fitness.getHistoryClient(activity, account)
+                .readData(new DataReadRequest.Builder()
+                        .read(DataType.TYPE_STEP_COUNT_DELTA)
+                        .setTimeRange(prevTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()-1,
+                                currTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli(), TimeUnit.MILLISECONDS)
+                        .build())
+                .addOnSuccessListener(new OnSuccessListener<DataReadResponse>() {
+                    @Override
+                    public void onSuccess(DataReadResponse readResponse) {
+                        List<DataSet> dataSet = readResponse.getDataSets();
+                        Log.d(TAG, dataSet.isEmpty() || dataSet.get(0).isEmpty() ? "0" : dataSet.get(0).toString());
+                        long latest =
+                                dataSet.isEmpty() || dataSet.get(0).isEmpty()
+                                        ? 0
+                                        : dataSet.get(0).getDataPoints().get(0).getValue(Field.FIELD_STEPS).asInt();
+
+                        steps.setLatest(latest);
+                        Log.d(TAG, "Latest steps: " + latest);
+                    }
+                })
+                .addOnFailureListener(
+                        new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.d(TAG, "There was a problem getting the step count.", e);
+                            }
+                        });
+
+
+        return steps;
     }
 
 
