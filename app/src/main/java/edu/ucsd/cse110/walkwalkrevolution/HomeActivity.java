@@ -92,11 +92,15 @@ public class HomeActivity extends AppCompatActivity implements Observer {
 //       If authentication was required during google fit setup, this will be called after the user authenticates
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == fitnessService.getRequestCode()) {
-                fitnessService.updateStepCount();
+                setStepCount(fitnessService.getUpdatedSteps());
             }
         } else {
             Log.e(TAG, "ERROR, google fit result code: " + resultCode);
         }
+    }
+
+    private void setStepCount(Steps steps){
+        setStepCount(steps.getDailyTotal());
     }
 
     public void setStepCount(long stepCount) {
@@ -137,7 +141,7 @@ public class HomeActivity extends AppCompatActivity implements Observer {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                textSteps.setText(String.valueOf(steps.getDailyTotal()));
+                setStepCount(steps);
             }
         });
 
