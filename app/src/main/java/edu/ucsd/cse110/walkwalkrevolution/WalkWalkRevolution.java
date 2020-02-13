@@ -6,6 +6,7 @@ import android.content.Context;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessService;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessServiceFactory;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.GoogleFitAdapter;
+import edu.ucsd.cse110.walkwalkrevolution.fitness.Steps;
 import edu.ucsd.cse110.walkwalkrevolution.route.persistence.BaseRouteDao;
 import edu.ucsd.cse110.walkwalkrevolution.route.persistence.RouteSharedPreferenceDao;
 
@@ -16,6 +17,9 @@ public class WalkWalkRevolution extends Application {
     private static Context context;
 
     private static BaseRouteDao routeDao;
+
+    private static Steps steps = new Steps();
+
 
     @Override
     public void onCreate() {
@@ -48,6 +52,10 @@ public class WalkWalkRevolution extends Application {
 
     public static void setRouteDao(BaseRouteDao rD) {
         routeDao = rD;
+    }
+
+    public static Steps getSteps(){
+        return steps;
     }
 
 }

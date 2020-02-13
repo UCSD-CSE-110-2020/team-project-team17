@@ -27,7 +27,6 @@ public class HomeActivity extends AppCompatActivity implements Observer {
     private static final String TEST_SERVICE = "TEST_SERVICE";
     private static final String TAG = "HomeActivity";
 
-    private Steps steps;
     private TextView textSteps, textMiles;
     private FitnessService fitnessService;
     private Button startWalk;
@@ -47,9 +46,6 @@ public class HomeActivity extends AppCompatActivity implements Observer {
         stepSubject.addObserver(this);
 
         fitnessService.setup();
-        steps = new Steps();
-
-
 
         startWalk = findViewById(R.id.start_walk);
         startWalk.setOnClickListener(new View.OnClickListener() {
@@ -92,7 +88,7 @@ public class HomeActivity extends AppCompatActivity implements Observer {
 //       If authentication was required during google fit setup, this will be called after the user authenticates
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == fitnessService.getRequestCode()) {
-                setStepCount(fitnessService.getUpdatedSteps());
+                setStepCount(WalkWalkRevolution.getSteps());
             }
         } else {
             Log.e(TAG, "ERROR, google fit result code: " + resultCode);
@@ -104,15 +100,13 @@ public class HomeActivity extends AppCompatActivity implements Observer {
     }
 
     public void setStepCount(long stepCount) {
-        steps.setDailyTotal(stepCount);
-
-        textSteps.setText(String.valueOf(steps.getDailyTotal()));
+        textSteps.setText(String.valueOf(stepCount));
 
         SharedPreferences userInfo = getSharedPreferences("USER", MODE_PRIVATE);
         float stepsPerMile = userInfo.getFloat("steps_per_mile", 0);
 
         // Round miles to 2 decimal places.
-        textMiles.setText(String.valueOf(Math.round((steps.getDailyTotal() / stepsPerMile) * 100) / 100.0));
+        textMiles.setText(String.valueOf(Math.round((stepCount / stepsPerMile) * 100) / 100.0));
     }
 
     @Override
@@ -137,11 +131,10 @@ public class HomeActivity extends AppCompatActivity implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        steps = (Steps) arg;
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                setStepCount(steps);
+                setStepCount(WalkWalkRevolution.getSteps());
             }
         });
 

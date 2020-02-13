@@ -11,11 +11,13 @@ public class StepSubject extends Observable {
     FitnessService service;
 
     public StepSubject(FitnessService service) {
+        this.service = service;
         updateStep = new TimerTask() {
             @Override
             public void run() {
-                Steps steps = service.getUpdatedSteps();
-                notifyObservers(steps);
+                service.getUpdatedSteps();
+                setChanged();
+                notifyObservers();
             }
         };
         t = new Timer();

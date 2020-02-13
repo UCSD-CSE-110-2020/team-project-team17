@@ -1,7 +1,6 @@
 package edu.ucsd.cse110.walkwalkrevolution;
 
 import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessService;
-import edu.ucsd.cse110.walkwalkrevolution.fitness.Steps;
 
 public class TestFitnessService implements FitnessService {
     private static final String TAG = "[TestFitnessService]: ";
@@ -29,7 +28,7 @@ public class TestFitnessService implements FitnessService {
     }
 
     @Override
-    public Steps getUpdatedSteps() {
-        return new Steps(nextStepCount, 0);
+    public void getUpdatedSteps() {
+        WalkWalkRevolution.getSteps().setDailyTotal(nextStepCount);
     }
 }

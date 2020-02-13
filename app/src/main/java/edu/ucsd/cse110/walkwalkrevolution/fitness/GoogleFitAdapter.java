@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import edu.ucsd.cse110.walkwalkrevolution.HomeActivity;
+import edu.ucsd.cse110.walkwalkrevolution.WalkWalkRevolution;
 
 //From Lab4
 public class GoogleFitAdapter implements FitnessService {
@@ -119,20 +120,18 @@ public class GoogleFitAdapter implements FitnessService {
      * current timezone and the latest number of steps taken.
      */
 
-    public Steps getUpdatedSteps(){
-        return getUpdatedSteps(LocalDateTime.now());
+    public void getUpdatedSteps(){
+        getUpdatedSteps(LocalDateTime.now());
     }
 
-    public Steps getUpdatedSteps(LocalDateTime currTime) {
+    public void getUpdatedSteps(LocalDateTime currTime) {
         if (account == null) {
-            return null;
+            return;
         }
 
         if(prevTime == null){
             prevTime = currTime;
         }
-
-        Steps steps = new Steps();
 
         Fitness.getHistoryClient(activity, account)
                 .readDailyTotal(DataType.TYPE_STEP_COUNT_DELTA)
@@ -146,7 +145,6 @@ public class GoogleFitAdapter implements FitnessService {
                                                 ? 0
                                                 : dataSet.getDataPoints().get(0).getValue(Field.FIELD_STEPS).asInt();
 
-                                steps.setDailyTotal(total);
                                 Log.d(TAG, "Total steps: " + total);
                             }
                         })
@@ -174,7 +172,7 @@ public class GoogleFitAdapter implements FitnessService {
                                         ? 0
                                         : dataSet.get(0).getDataPoints().get(0).getValue(Field.FIELD_STEPS).asInt();
 
-                        steps.setLatest(latest);
+                        WalkWalkRevolution.getSteps().setLatest(latest);
                         Log.d(TAG, "Latest steps: " + latest);
                     }
                 })
@@ -185,9 +183,6 @@ public class GoogleFitAdapter implements FitnessService {
                                 Log.d(TAG, "There was a problem getting the step count.", e);
                             }
                         });
-
-
-        return steps;
     }
 
 

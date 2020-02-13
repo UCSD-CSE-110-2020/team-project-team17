@@ -7,5 +7,5 @@ public interface FitnessService {
     int getRequestCode();
     void setup();
     void updateStepCount();
-    Steps getUpdatedSteps();
+    void getUpdatedSteps();
 }
