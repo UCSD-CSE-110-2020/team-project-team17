@@ -29,6 +29,6 @@ public class TestFitnessService implements FitnessService {
 
     @Override
     public void getUpdatedSteps() {
-        WalkWalkRevolution.getSteps().setDailyTotal(nextStepCount);
+        WalkWalkRevolution.getSteps().updateStats(nextStepCount);
     }
 }

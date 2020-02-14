@@ -15,7 +15,6 @@ import com.google.android.gms.fitness.request.DataReadRequest;
 import com.google.android.gms.fitness.result.DataReadResponse;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -144,7 +143,7 @@ public class GoogleFitAdapter implements FitnessService {
                                         dataSet.isEmpty()
                                                 ? 0
                                                 : dataSet.getDataPoints().get(0).getValue(Field.FIELD_STEPS).asInt();
-                                WalkWalkRevolution.getSteps().setDailyTotal(total);
+                                WalkWalkRevolution.getSteps().updateStats(total);
                                 Log.d(TAG, "Total steps: " + total);
                             }
                         })

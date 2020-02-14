@@ -1,6 +1,10 @@
 package edu.ucsd.cse110.walkwalkrevolution.fitness;
 
+import android.util.Log;
+
 public class Steps {
+    private static final String TAG = "Steps";
+    private long previousDailyTotal;
     private long dailyTotal;
     private long latest;
 
@@ -10,15 +14,30 @@ public class Steps {
 
     public Steps(long dailyTotal, long latest) {
         this.dailyTotal = dailyTotal;
-        this.latest = latest;
+        this.previousDailyTotal = dailyTotal;
+        this.latest = 0;
     }
 
-    public void setDailyTotal(long dailyTotal) {
+    public void updateStats(long dailyTotal) {
+        previousDailyTotal = this.dailyTotal;
         this.dailyTotal = dailyTotal;
+
+        updateLatest();
+    }
+
+    private void updateLatest(){
+        Log.d(TAG, "updateLatest: Entering");
+
+        latest = dailyTotal  - previousDailyTotal;
+
+        Log.d(TAG, "updateLatest: Updated Walk Specific stats!");
+        Log.d(TAG, "updateLatest: Current total " + previousDailyTotal);
+        Log.d(TAG, "updateLatest: New total " + dailyTotal);
+        Log.d(TAG, "updateLatest: latest " + latest);
     }
 
     public void setLatest(long latest) {
-        this.latest = latest;
+        // this.latest = latest;
     }
 
     public long getDailyTotal() {

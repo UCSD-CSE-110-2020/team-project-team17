@@ -30,7 +30,7 @@ public class HomeActivity extends AppCompatActivity implements Observer {
     private TextView textSteps, textMiles;
     private FitnessService fitnessService;
     private Button startWalk;
-    private StepSubject stepSubject;
+    private static StepSubject stepSubject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,6 +138,10 @@ public class HomeActivity extends AppCompatActivity implements Observer {
             }
         });
 
+    }
+
+    public static StepSubject getStepSubject(){
+        return stepSubject;
     }
 
 }

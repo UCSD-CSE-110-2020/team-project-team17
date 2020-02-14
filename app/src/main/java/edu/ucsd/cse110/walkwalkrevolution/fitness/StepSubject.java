@@ -21,7 +21,7 @@ public class StepSubject extends Observable {
             }
         };
         t = new Timer();
-        t.schedule(updateStep, 0, 5000);
+        t.schedule(updateStep, 0, 2000);
     }
 
 }
