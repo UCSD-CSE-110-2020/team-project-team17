@@ -14,6 +14,7 @@ public class Route {
     private long id;
     private String title;
     private Activity activity;
+    private String location;
 
     public Route(@JsonProperty("id") long id, @JsonProperty("title") String title,
                  @JsonProperty("activity") Activity activity){
@@ -47,5 +48,9 @@ public class Route {
     public void setTitle(String title){
         this.title = title;
     }
+
+    public String getLocation() { return this.location; }
+
+    public void setLocation(String location) { this.location = location; }
 
 }
