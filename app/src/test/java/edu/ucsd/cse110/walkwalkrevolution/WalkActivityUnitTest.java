@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
@@ -16,6 +17,9 @@ import org.robolectric.Robolectric;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowApplication;
 
+
+import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessServiceFactory;
+import edu.ucsd.cse110.walkwalkrevolution.fitness.Steps;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.google.common.truth.Truth.assertThat;
@@ -30,23 +34,36 @@ public class WalkActivityUnitTest {
     private TextView steps;
     private TextView miles;
 
-    private SharedPreferences activityHistory;
-    private SharedPreferences userInfo;
+    private static final String TEST_SERVICE = "TEST_SERVICE";
 
-    private SharedPreferences.Editor editActivityHistory;
-    private SharedPreferences.Editor editUserInfo;
+    private Intent intent;
+    private long nextStepCount;
+
+    private Steps stepTracker;
+
+    private SharedPreferences userInfo;
+    private SharedPreferences.Editor userInfoEditor;
 
     @Before
     public void setUp() {
-        walkActivity = Robolectric.buildActivity(WalkActivity.class).create().get();
+        Bundle bundle = new Bundle();
+        bundle.putString("test", "");
+
+        Intent intent = new Intent();
+        intent.putExtras(bundle);
+
+        walkActivity = Robolectric.buildActivity(WalkActivity.class, intent).create().get();
         steps        = walkActivity.findViewById(R.id.steps);
         miles        = walkActivity.findViewById(R.id.miles);
+        stepTracker  = new Steps();
 
-        activityHistory = walkActivity.getSharedPreferences("activity_history", MODE_PRIVATE);
         userInfo        = walkActivity.getSharedPreferences("USER", MODE_PRIVATE);
+        userInfoEditor  = userInfo.edit();
 
-        editActivityHistory = activityHistory.edit();
-        editUserInfo  = userInfo.edit();
+        userInfoEditor.putFloat("steps_per_mile", 100);
+        userInfoEditor.apply();
+
+        walkActivity.setSteps(stepTracker);
     }
 
     @Test
@@ -54,12 +71,7 @@ public class WalkActivityUnitTest {
         assertThat(steps.getText().toString()).isEqualTo("0");
         assertThat(miles.getText().toString()).isEqualTo("0.0");
 
-        editActivityHistory.putLong("current_steps",  1000);
-        editUserInfo.putFloat("steps_per_mile", 100);
-
-        editActivityHistory.apply();
-        editUserInfo.apply();
-
+        stepTracker.updateStats(1000);
         walkActivity.updateWalkSteps();
 
         assertThat(steps.getText().toString()).isEqualTo("1000");
@@ -71,20 +83,13 @@ public class WalkActivityUnitTest {
         assertThat(steps.getText().toString()).isEqualTo("0");
         assertThat(miles.getText().toString()).isEqualTo("0.0");
 
-        editActivityHistory.putLong("current_steps",  1000);
-        editUserInfo.putFloat("steps_per_mile", 100);
-
-        editActivityHistory.apply();
-        editUserInfo.apply();
-
+        stepTracker.updateStats(1000);
         walkActivity.updateWalkSteps();
 
         assertThat(steps.getText().toString()).isEqualTo("1000");
         assertThat(miles.getText().toString()).isEqualTo("10.0");
 
-        editActivityHistory.putLong("current_steps",  100);
-        editActivityHistory.apply();
-
+        stepTracker.updateStats(100);
         walkActivity.updateWalkSteps();
 
         assertThat(steps.getText().toString()).isEqualTo("1100");
@@ -95,6 +100,7 @@ public class WalkActivityUnitTest {
     public void testRouteTitleExtra(){
         Bundle bundle = new Bundle();
         bundle.putString("route_title", "Blueberry Lane");
+        bundle.putString("test", "");
 
         Intent intent = new Intent();
         intent.putExtras(bundle);
@@ -102,7 +108,6 @@ public class WalkActivityUnitTest {
         walkActivity = Robolectric.buildActivity(WalkActivity.class, intent).create().get();
 
         assertThat(walkActivity.findViewById(R.id.route_title).getVisibility()).isEqualTo(View.VISIBLE);
-
     }
 
 

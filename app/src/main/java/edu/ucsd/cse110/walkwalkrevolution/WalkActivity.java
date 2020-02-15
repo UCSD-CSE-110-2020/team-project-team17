@@ -50,9 +50,11 @@ public class WalkActivity extends AppCompatActivity implements Observer {
         findViewById(R.id.route_title).setVisibility(View.INVISIBLE);
 
         stepTracker = WalkWalkRevolution.getSteps();
-        HomeActivity.getStepSubject().addObserver(this);
+        if(!getIntent().hasExtra("test")){
+            HomeActivity.getStepSubject().addObserver(this);
+        }
 
-        userInfo        = getSharedPreferences("USER", MODE_PRIVATE);
+        userInfo = getSharedPreferences("USER", MODE_PRIVATE);
 
         //  How many steps we begin with.
         walkSteps = 0;
@@ -70,9 +72,8 @@ public class WalkActivity extends AppCompatActivity implements Observer {
 
 
         // Check if a route title was passed in as an extra.
-        Intent intent = getIntent();
-        if(intent.hasExtra("route_title")){
-            routeTitle.setText(intent.getExtras().getString("route_title"));
+        if(getIntent().hasExtra("route_title")){
+            routeTitle.setText(getIntent().getExtras().getString("route_title"));
             routeTitle.setVisibility(View.VISIBLE);
         }
 
@@ -88,9 +89,6 @@ public class WalkActivity extends AppCompatActivity implements Observer {
 
         chronometer = findViewById(R.id.timer);
         chronometer.start();
-
-        SetWalkStepsAsync updater = new SetWalkStepsAsync();
-        updater.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public void createRouteActivity() {
@@ -107,33 +105,6 @@ public class WalkActivity extends AppCompatActivity implements Observer {
         updateWalkSteps();
     }
 
-    private class SetWalkStepsAsync extends AsyncTask<String, String, String> {
-
-        @Override
-        protected String doInBackground(String... params) {
-            Log.d(TAG, "doInBackground: Entering");
-
-            long waitTime = 1000*Integer.parseInt(getString(R.string.daily_step_update_delay_sec));
-            while(true){
-                try {
-                    Log.d(TAG, "doInBackground: Updating steps");
-                    publishProgress();
-
-                    Thread.sleep(waitTime);
-                } catch (Exception e) {
-                    Log.d(TAG, "doInBackground: ERROR BIG ERROR");
-                    e.printStackTrace();
-                    while(true){}
-                }
-            }
-        }
-
-        @Override
-        public void onProgressUpdate(String... text){
-            updateWalkSteps();
-        }
-    }
-
     public void updateWalkSteps(){
         Log.d(TAG, "updateWalkSteps: UPDATING");
         float userStepsPerMile = userInfo.getFloat("steps_per_mile", 0);
@@ -147,5 +118,9 @@ public class WalkActivity extends AppCompatActivity implements Observer {
             }
         });
 
+    }
+
+    public void setSteps(Steps steps){
+        this.stepTracker = steps;
     }
 }
