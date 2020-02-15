@@ -13,13 +13,13 @@ import android.widget.TextView;
 import java.util.HashMap;
 import java.util.Map;
 
+import edu.ucsd.cse110.walkwalkrevolution.DescriptionTags.DescriptionTagsListAdapter;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Activity;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
 import edu.ucsd.cse110.walkwalkrevolution.route.Route;
-import edu.ucsd.cse110.walkwalkrevolution.route.RouteUtils;
 
 public class CreateRouteActivity extends AppCompatActivity {    private RecyclerView recyclerView;
-    RoutesAdapter adapter;
+    DescriptionTagsListAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
 
     @Override
@@ -67,13 +67,19 @@ public class CreateRouteActivity extends AppCompatActivity {    private Recycler
             }
         });
 
-        recyclerView = (RecyclerView) findViewById(R.id.routes);
+        recyclerView = (RecyclerView) findViewById(R.id.route_tags);
         recyclerView.setHasFixedSize(true);
 
-        adapter = new RoutesAdapter();
+        adapter = new DescriptionTagsListAdapter();
         recyclerView.setAdapter(adapter);
 
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        adapter.updateList();
     }
 }
