@@ -133,7 +133,7 @@ public class HomeActivity extends AppCompatActivity implements Observer {
         if(WalkWalkRevolution.getUser() != null) {
             // Round miles to 2 decimal places.
             textMiles.setText(String.valueOf(Math.round(
-                    ActivityUtils.stepsToMiles(stepCount,
+                    ActivityUtils.stepsToMiles(stepCount + offset,
                             WalkWalkRevolution.getUser().getHeight()) * 100) / 100.0));
         }
     }
