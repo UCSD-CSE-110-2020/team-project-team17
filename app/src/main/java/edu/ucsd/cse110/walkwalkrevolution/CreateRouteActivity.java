@@ -1,6 +1,8 @@
 package edu.ucsd.cse110.walkwalkrevolution;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -16,7 +18,9 @@ import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
 import edu.ucsd.cse110.walkwalkrevolution.route.Route;
 import edu.ucsd.cse110.walkwalkrevolution.route.RouteUtils;
 
-public class CreateRouteActivity extends AppCompatActivity {
+public class CreateRouteActivity extends AppCompatActivity {    private RecyclerView recyclerView;
+    RoutesAdapter adapter;
+    private RecyclerView.LayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,5 +66,14 @@ public class CreateRouteActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        recyclerView = (RecyclerView) findViewById(R.id.routes);
+        recyclerView.setHasFixedSize(true);
+
+        adapter = new RoutesAdapter();
+        recyclerView.setAdapter(adapter);
+
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
     }
 }
