@@ -12,12 +12,19 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
 
+import com.google.android.gms.common.data.DataBufferObserver;
+
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import edu.ucsd.cse110.walkwalkrevolution.activity.ActivityUtils;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
+import edu.ucsd.cse110.walkwalkrevolution.fitness.StepSubject;
+import edu.ucsd.cse110.walkwalkrevolution.fitness.Steps;
 
-public class WalkActivity extends AppCompatActivity {
+public class WalkActivity extends AppCompatActivity implements Observer {
     private static final String TAG = "WalkActivity";
 
     long walkSteps ;
@@ -30,10 +37,8 @@ public class WalkActivity extends AppCompatActivity {
 
     private Button stopWalk;
 
-    private SharedPreferences activityHistory;
-    private SharedPreferences userInfo;
-
     private Chronometer chronometer;
+    private Steps stepTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,14 +47,16 @@ public class WalkActivity extends AppCompatActivity {
 
         findViewById(R.id.route_title).setVisibility(View.INVISIBLE);
 
-        activityHistory = getSharedPreferences("activity_history", MODE_PRIVATE);
-        userInfo        = getSharedPreferences("USER", MODE_PRIVATE);
+        stepTracker = WalkWalkRevolution.getSteps();
+        if(!getIntent().hasExtra("test")){
+            HomeActivity.getStepSubject().addObserver(this);
+        }
 
         //  How many steps we begin with.
         walkSteps = 0;
 
         // How many steps we have to ignore from  home screen.
-        currentTotalSteps = getSharedPreferences("activity_history", MODE_PRIVATE).getLong("current_steps",  0);
+        currentTotalSteps = stepTracker.getDailyTotal();
 
         steps      = findViewById(R.id.steps);
         miles      = findViewById(R.id.miles);
@@ -61,9 +68,8 @@ public class WalkActivity extends AppCompatActivity {
 
 
         // Check if a route title was passed in as an extra.
-        Intent intent = getIntent();
-        if(intent.hasExtra("route_title")){
-            routeTitle.setText(intent.getExtras().getString("route_title"));
+        if(getIntent().hasExtra("route_title")){
+            routeTitle.setText(getIntent().getExtras().getString("route_title"));
             routeTitle.setVisibility(View.VISIBLE);
         }
 
@@ -72,16 +78,13 @@ public class WalkActivity extends AppCompatActivity {
         stopWalk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createRouteActivity();
                 finish();
+                createRouteActivity();
             }
         });
 
         chronometer = findViewById(R.id.timer);
         chronometer.start();
-
-        SetWalkStepsAsync updater = new SetWalkStepsAsync();
-        updater.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public void createRouteActivity() {
@@ -92,53 +95,28 @@ public class WalkActivity extends AppCompatActivity {
         startActivity(createRoute);
     }
 
-    private class SetWalkStepsAsync extends AsyncTask<String, String, String> {
-
-        @Override
-        protected String doInBackground(String... params) {
-            Log.d(TAG, "doInBackground: Entering");
-
-            long waitTime = 1000*Integer.parseInt(getString(R.string.daily_step_update_delay_sec));
-            while(true){
-                try {
-                    Log.d(TAG, "doInBackground: Updating steps");
-                    publishProgress();
-
-                    Thread.sleep(waitTime);
-                } catch (Exception e) {
-                    Log.d(TAG, "doInBackground: ERROR BIG ERROR");
-                    e.printStackTrace();
-                    while(true){}
-                }
-            }
-        }
-
-        @Override
-        public void onProgressUpdate(String... text){
-            updateWalkSteps();
-        }
+    @Override
+    public void update(Observable observable, Object o) {
+        Log.d(TAG, "update: Walk Screen");
+        updateWalkSteps();
     }
 
     public void updateWalkSteps(){
-        Log.d(TAG, "updateWalkSteps: Entering");
+        Log.d(TAG, "updateWalkSteps: UPDATING");
+        walkSteps += stepTracker.getLatest();
 
-        long newTotal = activityHistory.getLong("current_steps", 0);
-        float userStepsPerMile = userInfo.getFloat("steps_per_mile", 0);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                steps.setText(String.valueOf(walkSteps));
+                miles.setText(String.valueOf(Math.round(
+                        ActivityUtils.stepsToMiles(walkSteps, WalkWalkRevolution.getUser().getHeight()) * 100.0) / 100.0));
+            }
+        });
 
-        if(newTotal < currentTotalSteps){
-            walkSteps += newTotal;
-        } else {
-            walkSteps += newTotal  - currentTotalSteps;
-        }
+    }
 
-        Log.d(TAG, "updateWalkSteps: Updated Walk Specific stats!");
-        Log.d(TAG, "updateWalkSteps: Current total " + currentTotalSteps);
-        Log.d(TAG, "updateWalkSteps: New total " + newTotal);
-        Log.d(TAG, "updateWalkSteps: walkSteps " + walkSteps);
-
-        currentTotalSteps =  newTotal;
-
-        steps.setText(String.valueOf(walkSteps));
-        miles.setText(String.valueOf(Math.round(walkSteps / userStepsPerMile * 100.0) / 100.0));
+    public void setSteps(Steps steps){
+        this.stepTracker = steps;
     }
 }
