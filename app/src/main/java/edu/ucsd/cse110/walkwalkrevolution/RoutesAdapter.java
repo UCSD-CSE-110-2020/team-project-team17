@@ -1,6 +1,7 @@
 package edu.ucsd.cse110.walkwalkrevolution;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +20,12 @@ public class RoutesAdapter extends
         RecyclerView.Adapter<RoutesAdapter.ViewHolder> {
 
     private Routes routes;
+    public static final String EXTRA_TEXT = "edu.ucsd.cse110.walkwalkrevolution.EXTRA_TEXT";
+    //private Context context;
 
     public RoutesAdapter() {
         routes = new Routes();
+        //this.context = context;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -62,10 +66,20 @@ public class RoutesAdapter extends
             public void onClick(View view) {
                 int index = RoutesActivity.recyclerView.getChildAdapterPosition(view);
                 Route item = routes.get(index);
+
                 Toast.makeText(context, item.getTitle(), Toast.LENGTH_LONG).show();
+                openRoutesDetailActivity(view, item);
+
             }
         });
         return viewHolder;
+    }
+
+    public void openRoutesDetailActivity(View view, Route item) {
+        Intent intent = new Intent(view.getContext(), RoutesDetailActivity.class);
+        long id = item.getId();
+        intent.putExtra(EXTRA_TEXT, id);
+        view.getContext().startActivity(intent);
     }
 
     // Involves populating data into the item through holder
