@@ -14,8 +14,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.annotation.Config;
 
+import edu.ucsd.cse110.walkwalkrevolution.activity.ActivityUtils;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessService;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessServiceFactory;
+import edu.ucsd.cse110.walkwalkrevolution.user.User;
 
 import static com.google.common.truth.Truth.assertThat;
 
@@ -31,6 +33,8 @@ public class HomeActivityUnitTest {
 
     @Before
     public void setUp() {
+        WalkWalkRevolution.setUser(new User(1, 528*12));
+        ActivityUtils.setConversionFactor(1);
         FitnessServiceFactory.put(TEST_SERVICE, TestFitnessService::new);
         intent = new Intent(ApplicationProvider.getApplicationContext(), HomeActivity.class);
         intent.putExtra("FITNESS_SERVICE_KEY", TEST_SERVICE);
@@ -82,15 +86,8 @@ public class HomeActivityUnitTest {
 
             nextStepCount = 1337;
 
-            SharedPreferences sharedPreferences = androidx.test.core.app.ApplicationProvider.getApplicationContext().getSharedPreferences(
-                    "USER", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-
-            editor.putFloat("steps_per_mile", 100);
-            editor.apply();
-
             activity.setStepCount(nextStepCount);
-            assertThat(textMiles.getText().toString()).isEqualTo("13.37");
+            assertThat(textMiles.getText().toString()).isEqualTo("133.7");
         });
     }
 
@@ -106,15 +103,8 @@ public class HomeActivityUnitTest {
 
             nextStepCount = 1337;
 
-            SharedPreferences sharedPreferences = androidx.test.core.app.ApplicationProvider.getApplicationContext().getSharedPreferences(
-                    "USER", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-
-            editor.putFloat("steps_per_mile", 100);
-            editor.apply();
-
             activity.setStepCount(nextStepCount);
-            assertThat(textMiles.getText().toString()).isEqualTo("13.37");
+            assertThat(textMiles.getText().toString()).isEqualTo("133.7");
         });
     }
 
@@ -124,14 +114,9 @@ public class HomeActivityUnitTest {
 
         ActivityScenario<HomeActivity> scenario = ActivityScenario.launch(intent);
         scenario.onActivity(activity -> {
-            SharedPreferences sharedPreferences = androidx.test.core.app.ApplicationProvider.getApplicationContext().getSharedPreferences("USER", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putFloat("steps_per_mile", 100);
-            editor.apply();
-
             TextView textMiles = activity.findViewById(R.id.miles);
             activity.setStepCount(nextStepCount);
-            assertThat(textMiles.getText().toString()).isEqualTo("10.0");
+            assertThat(textMiles.getText().toString()).isEqualTo("100.0");
 
             nextStepCount = 0;
             activity.setStepCount(nextStepCount);

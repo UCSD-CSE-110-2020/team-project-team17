@@ -75,15 +75,4 @@ public class HeightActivityUnitTest {
 
         assert(error.getVisibility() == View.INVISIBLE);
     }
-
-    @Test
-    public void updateSharedPreferences(){
-        feet.setText("5");
-        inches.setText("6");
-        submit.performClick();
-
-        SharedPreferences sp = heightActivity.getSharedPreferences("USER", Context.MODE_PRIVATE);
-        assert(sp.getInt("height_feet", 0) == 5);
-        assert(sp.getInt("height_inches", 0) == 6);
-    }
 }

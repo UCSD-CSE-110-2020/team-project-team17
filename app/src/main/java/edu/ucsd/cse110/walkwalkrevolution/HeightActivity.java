@@ -11,13 +11,12 @@ import android.widget.EditText;
 import android.widget.Button;
 import android.widget.TextView;
 
+import edu.ucsd.cse110.walkwalkrevolution.user.User;
+import edu.ucsd.cse110.walkwalkrevolution.user.persistence.UserSharedPreferenceDao;
+
 import static edu.ucsd.cse110.walkwalkrevolution.WalkWalkRevolution.fitnessServiceKey;
 
 public class HeightActivity extends AppCompatActivity {
-
-    private final double INCHES_PER_FOOT = 12;
-    private final double CONVERSION_FACTOR = .413;
-    private final double FEET_IN_MILE = 5280;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,18 +71,10 @@ public class HeightActivity extends AppCompatActivity {
     }
 
     private void createUserDataFromFields(EditText feet, EditText inches){
-        SharedPreferences prefs = getSharedPreferences("USER", MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-
-        // https://www.openfit.com/how-many-steps-walk-per-mile
-        double heightFeet = Integer.parseInt(feet.getText().toString());
-        double heightInches = Integer.parseInt(inches.getText().toString());
-        double stepsPerMile = FEET_IN_MILE / (CONVERSION_FACTOR * (heightFeet * INCHES_PER_FOOT + heightInches) / 12);
-
-        editor.putInt("height_feet", (int) heightFeet);
-        editor.putInt("height_inches", (int) heightInches);
-        editor.putFloat("steps_per_mile", (float) stepsPerMile);
-        editor.putBoolean("height_set", true);
-        editor.apply();
+        long heightFeet = Long.parseLong(feet.getText().toString());
+        long heightInches = Long.parseLong(inches.getText().toString());
+        User user = new User(UserSharedPreferenceDao.USER_ID, heightFeet, heightInches);
+        WalkWalkRevolution.getUserDao().addUser(user);
+        WalkWalkRevolution.setUser(user);
     }
 }

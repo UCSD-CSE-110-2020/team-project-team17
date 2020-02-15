@@ -12,6 +12,8 @@ import org.junit.runner.RunWith;
 
 import edu.ucsd.cse110.walkwalkrevolution.route.Route;
 import edu.ucsd.cse110.walkwalkrevolution.route.persistence.MockRouteDao;
+import edu.ucsd.cse110.walkwalkrevolution.user.User;
+import edu.ucsd.cse110.walkwalkrevolution.user.persistence.MockUserDao;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
@@ -25,6 +27,8 @@ public class CreateRouteTest {
     @Before
     public void setup(){
         WalkWalkRevolution.setRouteDao(new MockRouteDao());
+        WalkWalkRevolution.setUserDao(new MockUserDao());
+        WalkWalkRevolution.setUser(new User(1, 528*12));
     }
 
     @Test
