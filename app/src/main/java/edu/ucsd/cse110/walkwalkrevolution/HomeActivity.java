@@ -75,6 +75,7 @@ public class HomeActivity extends AppCompatActivity implements Observer {
             Intent heightActivity = new Intent(this, HeightActivity.class);
             heightActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(heightActivity);
+            finish();
         }
     }
 
@@ -99,11 +100,12 @@ public class HomeActivity extends AppCompatActivity implements Observer {
     public void setStepCount(long stepCount) {
         textSteps.setText(String.valueOf(stepCount));
 
-
-        // Round miles to 2 decimal places.
-        textMiles.setText(String.valueOf(Math.round(
-                ActivityUtils.stepsToMiles(stepCount,
-                        WalkWalkRevolution.getUser().getHeight()) * 100) / 100.0));
+        if(WalkWalkRevolution.getUser() != null) {
+            // Round miles to 2 decimal places.
+            textMiles.setText(String.valueOf(Math.round(
+                    ActivityUtils.stepsToMiles(stepCount,
+                            WalkWalkRevolution.getUser().getHeight()) * 100) / 100.0));
+        }
     }
 
     @Override
