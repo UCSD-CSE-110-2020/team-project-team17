@@ -19,6 +19,7 @@ import java.util.Observer;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import edu.ucsd.cse110.walkwalkrevolution.activity.ActivityUtils;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.StepSubject;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.Steps;
@@ -36,9 +37,6 @@ public class WalkActivity extends AppCompatActivity implements Observer {
 
     private Button stopWalk;
 
-    private SharedPreferences activityHistory;
-    private SharedPreferences userInfo;
-
     private Chronometer chronometer;
     private Steps stepTracker;
 
@@ -53,8 +51,6 @@ public class WalkActivity extends AppCompatActivity implements Observer {
         if(!getIntent().hasExtra("test")){
             HomeActivity.getStepSubject().addObserver(this);
         }
-
-        userInfo = getSharedPreferences("USER", MODE_PRIVATE);
 
         //  How many steps we begin with.
         walkSteps = 0;
@@ -107,14 +103,14 @@ public class WalkActivity extends AppCompatActivity implements Observer {
 
     public void updateWalkSteps(){
         Log.d(TAG, "updateWalkSteps: UPDATING");
-        float userStepsPerMile = userInfo.getFloat("steps_per_mile", 0);
         walkSteps += stepTracker.getLatest();
 
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 steps.setText(String.valueOf(walkSteps));
-                miles.setText(String.valueOf(Math.round(walkSteps / userStepsPerMile * 100.0) / 100.0));
+                miles.setText(String.valueOf(Math.round(
+                        ActivityUtils.stepsToMiles(walkSteps, WalkWalkRevolution.getUser().getHeight()) * 100.0) / 100.0));
             }
         });
 

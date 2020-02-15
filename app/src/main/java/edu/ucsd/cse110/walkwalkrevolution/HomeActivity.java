@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -16,6 +15,7 @@ import android.widget.TextView;
 import java.util.Observable;
 import java.util.Observer;
 
+import edu.ucsd.cse110.walkwalkrevolution.activity.ActivityUtils;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessService;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessServiceFactory;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.StepSubject;
@@ -70,11 +70,8 @@ public class HomeActivity extends AppCompatActivity implements Observer {
     @Override
     protected void onStart() {
         super.onStart();
-        SharedPreferences sharedPreferences = getSharedPreferences("USER", MODE_PRIVATE);
-        boolean heightIsSet = sharedPreferences.getBoolean("height_set", false);
 
-
-        if(!heightIsSet){
+        if(WalkWalkRevolution.getUser() == null){
             Intent heightActivity = new Intent(this, HeightActivity.class);
             heightActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(heightActivity);
@@ -102,11 +99,11 @@ public class HomeActivity extends AppCompatActivity implements Observer {
     public void setStepCount(long stepCount) {
         textSteps.setText(String.valueOf(stepCount));
 
-        SharedPreferences userInfo = getSharedPreferences("USER", MODE_PRIVATE);
-        float stepsPerMile = userInfo.getFloat("steps_per_mile", 0);
 
         // Round miles to 2 decimal places.
-        textMiles.setText(String.valueOf(Math.round((stepCount / stepsPerMile) * 100) / 100.0));
+        textMiles.setText(String.valueOf(Math.round(
+                ActivityUtils.stepsToMiles(stepCount,
+                        WalkWalkRevolution.getUser().getHeight()) * 100) / 100.0));
     }
 
     @Override

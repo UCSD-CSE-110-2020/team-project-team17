@@ -15,7 +15,7 @@ public class StepSubject extends Observable {
         updateStep = new TimerTask() {
             @Override
             public void run() {
-                service.getUpdatedSteps();
+                service.updateStepCount();
                 setChanged();
                 notifyObservers();
             }

@@ -9,10 +9,10 @@ public class Steps {
     private long latest;
 
     public Steps(){
-        this(0,0);
+        this(0);
     }
 
-    public Steps(long dailyTotal, long latest) {
+    public Steps(long dailyTotal) {
         this.dailyTotal = dailyTotal;
         this.previousDailyTotal = dailyTotal;
         this.latest = 0;
@@ -37,10 +37,6 @@ public class Steps {
         Log.d(TAG, "updateLatest: Current total " + previousDailyTotal);
         Log.d(TAG, "updateLatest: New total " + dailyTotal);
         Log.d(TAG, "updateLatest: latest " + latest);
-    }
-
-    public void setLatest(long latest) {
-        // this.latest = latest;
     }
 
     public long getDailyTotal() {

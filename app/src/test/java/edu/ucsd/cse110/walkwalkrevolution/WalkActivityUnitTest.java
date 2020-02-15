@@ -20,6 +20,10 @@ import org.robolectric.shadows.ShadowApplication;
 
 import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessServiceFactory;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.Steps;
+import edu.ucsd.cse110.walkwalkrevolution.activity.ActivityUtils;
+import edu.ucsd.cse110.walkwalkrevolution.route.persistence.MockRouteDao;
+import edu.ucsd.cse110.walkwalkrevolution.user.User;
+import edu.ucsd.cse110.walkwalkrevolution.user.persistence.MockUserDao;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.google.common.truth.Truth.assertThat;
@@ -30,19 +34,11 @@ public class WalkActivityUnitTest {
     private static final String TAG = "WalkActivityUnitTest";
 
     private WalkActivity walkActivity;
+    private Steps stepTracker;
+
 
     private TextView steps;
     private TextView miles;
-
-    private static final String TEST_SERVICE = "TEST_SERVICE";
-
-    private Intent intent;
-    private long nextStepCount;
-
-    private Steps stepTracker;
-
-    private SharedPreferences userInfo;
-    private SharedPreferences.Editor userInfoEditor;
 
     @Before
     public void setUp() {
@@ -52,16 +48,14 @@ public class WalkActivityUnitTest {
         Intent intent = new Intent();
         intent.putExtras(bundle);
 
+        WalkWalkRevolution.setUserDao(new MockUserDao());
+        WalkWalkRevolution.setRouteDao(new MockRouteDao());
+        WalkWalkRevolution.setUser(new User(1, 528*12));
         walkActivity = Robolectric.buildActivity(WalkActivity.class, intent).create().get();
         steps        = walkActivity.findViewById(R.id.steps);
         miles        = walkActivity.findViewById(R.id.miles);
         stepTracker  = new Steps();
-
-        userInfo        = walkActivity.getSharedPreferences("USER", MODE_PRIVATE);
-        userInfoEditor  = userInfo.edit();
-
-        userInfoEditor.putFloat("steps_per_mile", 100);
-        userInfoEditor.apply();
+        ActivityUtils.setConversionFactor(1);
 
         walkActivity.setSteps(stepTracker);
     }
@@ -75,7 +69,7 @@ public class WalkActivityUnitTest {
         walkActivity.updateWalkSteps();
 
         assertThat(steps.getText().toString()).isEqualTo("1000");
-        assertThat(miles.getText().toString()).isEqualTo("10.0");
+        assertThat(miles.getText().toString()).isEqualTo("100.0");
     }
 
     @Test
@@ -87,13 +81,13 @@ public class WalkActivityUnitTest {
         walkActivity.updateWalkSteps();
 
         assertThat(steps.getText().toString()).isEqualTo("1000");
-        assertThat(miles.getText().toString()).isEqualTo("10.0");
+        assertThat(miles.getText().toString()).isEqualTo("100.0");
 
         stepTracker.updateStats(100);
         walkActivity.updateWalkSteps();
 
         assertThat(steps.getText().toString()).isEqualTo("1100");
-        assertThat(miles.getText().toString()).isEqualTo("11.0");
+        assertThat(miles.getText().toString()).isEqualTo("110.0");
     }
 
     @Test
