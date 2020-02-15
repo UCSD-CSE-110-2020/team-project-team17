@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import edu.ucsd.cse110.walkwalkrevolution.user.User;
+import edu.ucsd.cse110.walkwalkrevolution.user.persistence.UserSharedPreferenceDao;
 
 import static edu.ucsd.cse110.walkwalkrevolution.WalkWalkRevolution.fitnessServiceKey;
 
@@ -72,7 +73,7 @@ public class HeightActivity extends AppCompatActivity {
     private void createUserDataFromFields(EditText feet, EditText inches){
         long heightFeet = Long.parseLong(feet.getText().toString());
         long heightInches = Long.parseLong(inches.getText().toString());
-        User user = new User(heightFeet, heightInches);
+        User user = new User(UserSharedPreferenceDao.USER_ID, heightFeet, heightInches);
         WalkWalkRevolution.getUserDao().addUser(user);
         WalkWalkRevolution.setUser(user);
     }

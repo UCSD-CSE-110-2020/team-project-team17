@@ -25,7 +25,7 @@ public class ActivityUtils {
 
     public static double stepsToMiles(long steps, long height) {
         // https://www.openfit.com/how-many-steps-walk-per-mile
-        return steps/(FEET_IN_MILE / (CONVERSION_FACTOR * height / (double)12));
+        return steps/(FEET_IN_MILE / ((CONVERSION_FACTOR * height) / (double)12));
     }
 
     public static void setConversionFactor(double factor){
