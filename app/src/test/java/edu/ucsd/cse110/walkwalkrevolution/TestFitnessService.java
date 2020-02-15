@@ -24,10 +24,6 @@ public class TestFitnessService implements FitnessService {
     @Override
     public void updateStepCount() {
         System.out.println(TAG + "updateStepCount");
-        homeActivity.setStepCount(nextStepCount);
-    }
-
-    public void updateStepCount(int nextStepCount){
-        updateStepCount(nextStepCount);
+        WalkWalkRevolution.getSteps().updateStats(nextStepCount);
     }
 }

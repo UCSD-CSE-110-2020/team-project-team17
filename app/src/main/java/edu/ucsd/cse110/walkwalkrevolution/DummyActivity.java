@@ -23,5 +23,6 @@ public class DummyActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
         intent.putExtra(HomeActivity.FITNESS_SERVICE_KEY, fitnessServiceKey);
         startActivity(intent);
+        finish();
     }
 }

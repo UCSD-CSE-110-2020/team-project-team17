@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
@@ -17,6 +18,13 @@ import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowApplication;
 
 
+import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessServiceFactory;
+import edu.ucsd.cse110.walkwalkrevolution.fitness.Steps;
+import edu.ucsd.cse110.walkwalkrevolution.activity.ActivityUtils;
+import edu.ucsd.cse110.walkwalkrevolution.route.persistence.MockRouteDao;
+import edu.ucsd.cse110.walkwalkrevolution.user.User;
+import edu.ucsd.cse110.walkwalkrevolution.user.persistence.MockUserDao;
+
 import static android.content.Context.MODE_PRIVATE;
 import static com.google.common.truth.Truth.assertThat;
 
@@ -26,27 +34,29 @@ public class WalkActivityUnitTest {
     private static final String TAG = "WalkActivityUnitTest";
 
     private WalkActivity walkActivity;
+    private Steps stepTracker;
 
     private TextView steps;
     private TextView miles;
 
-    private SharedPreferences activityHistory;
-    private SharedPreferences userInfo;
-
-    private SharedPreferences.Editor editActivityHistory;
-    private SharedPreferences.Editor editUserInfo;
-
     @Before
     public void setUp() {
-        walkActivity = Robolectric.buildActivity(WalkActivity.class).create().get();
+        Bundle bundle = new Bundle();
+        bundle.putString("test", "");
+
+        Intent intent = new Intent();
+        intent.putExtras(bundle);
+
+        WalkWalkRevolution.setUserDao(new MockUserDao());
+        WalkWalkRevolution.setRouteDao(new MockRouteDao());
+        WalkWalkRevolution.setUser(new User(1, 528*12));
+        walkActivity = Robolectric.buildActivity(WalkActivity.class, intent).create().get();
         steps        = walkActivity.findViewById(R.id.steps);
         miles        = walkActivity.findViewById(R.id.miles);
+        stepTracker  = new Steps();
+        ActivityUtils.setConversionFactor(1);
 
-        activityHistory = walkActivity.getSharedPreferences("activity_history", MODE_PRIVATE);
-        userInfo        = walkActivity.getSharedPreferences("USER", MODE_PRIVATE);
-
-        editActivityHistory = activityHistory.edit();
-        editUserInfo  = userInfo.edit();
+        walkActivity.setSteps(stepTracker);
     }
 
     @Test
@@ -54,16 +64,11 @@ public class WalkActivityUnitTest {
         assertThat(steps.getText().toString()).isEqualTo("0");
         assertThat(miles.getText().toString()).isEqualTo("0.0");
 
-        editActivityHistory.putLong("current_steps",  1000);
-        editUserInfo.putFloat("steps_per_mile", 100);
-
-        editActivityHistory.apply();
-        editUserInfo.apply();
-
+        stepTracker.updateStats(1000);
         walkActivity.updateWalkSteps();
 
         assertThat(steps.getText().toString()).isEqualTo("1000");
-        assertThat(miles.getText().toString()).isEqualTo("10.0");
+        assertThat(miles.getText().toString()).isEqualTo("100.0");
     }
 
     @Test
@@ -71,30 +76,24 @@ public class WalkActivityUnitTest {
         assertThat(steps.getText().toString()).isEqualTo("0");
         assertThat(miles.getText().toString()).isEqualTo("0.0");
 
-        editActivityHistory.putLong("current_steps",  1000);
-        editUserInfo.putFloat("steps_per_mile", 100);
-
-        editActivityHistory.apply();
-        editUserInfo.apply();
-
+        stepTracker.updateStats(1000);
         walkActivity.updateWalkSteps();
 
         assertThat(steps.getText().toString()).isEqualTo("1000");
-        assertThat(miles.getText().toString()).isEqualTo("10.0");
+        assertThat(miles.getText().toString()).isEqualTo("100.0");
 
-        editActivityHistory.putLong("current_steps",  100);
-        editActivityHistory.apply();
-
+        stepTracker.updateStats(100);
         walkActivity.updateWalkSteps();
 
         assertThat(steps.getText().toString()).isEqualTo("1100");
-        assertThat(miles.getText().toString()).isEqualTo("11.0");
+        assertThat(miles.getText().toString()).isEqualTo("110.0");
     }
 
     @Test
     public void testRouteTitleExtra(){
         Bundle bundle = new Bundle();
         bundle.putString("route_title", "Blueberry Lane");
+        bundle.putString("test", "");
 
         Intent intent = new Intent();
         intent.putExtras(bundle);
@@ -102,7 +101,6 @@ public class WalkActivityUnitTest {
         walkActivity = Robolectric.buildActivity(WalkActivity.class, intent).create().get();
 
         assertThat(walkActivity.findViewById(R.id.route_title).getVisibility()).isEqualTo(View.VISIBLE);
-
     }
 
 
