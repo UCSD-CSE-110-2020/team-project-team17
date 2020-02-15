@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import edu.ucsd.cse110.walkwalkrevolution.WalkWalkRevolution;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Activity;
 
-@JsonPropertyOrder({"id", "title", "activity"})
+@JsonPropertyOrder({"id", "title", "activity", "location"})
 public class Route {
 
     private long id;
@@ -15,10 +15,12 @@ public class Route {
     private String location;
 
     public Route(@JsonProperty("id") long id, @JsonProperty("title") String title,
-                 @JsonProperty("activity") Activity activity){
+                 @JsonProperty("activity") Activity activity,
+                 @JsonProperty("location") String location){
         this.id = id;
         this.title = title;
         this.activity = activity;
+        this.location = location;
     }
 
     public Route(String title, Activity activity){
