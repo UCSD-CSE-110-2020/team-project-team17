@@ -36,7 +36,6 @@ public class WalkActivityUnitTest {
     private WalkActivity walkActivity;
     private Steps stepTracker;
 
-
     private TextView steps;
     private TextView miles;
 

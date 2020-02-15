@@ -28,11 +28,13 @@ public class Steps {
     private void updateLatest(){
         Log.d(TAG, "updateLatest: Entering");
 
-        if(dailyTotal > previousDailyTotal) {
-            latest = dailyTotal - previousDailyTotal;
-        } else {
+
+        latest = dailyTotal - previousDailyTotal;
+
+        if(latest < 0){
             latest = dailyTotal;
         }
+
         Log.d(TAG, "updateLatest: Updated Walk Specific stats!");
         Log.d(TAG, "updateLatest: Current total " + previousDailyTotal);
         Log.d(TAG, "updateLatest: New total " + dailyTotal);
