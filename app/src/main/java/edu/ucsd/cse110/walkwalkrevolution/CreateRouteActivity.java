@@ -30,6 +30,7 @@ public class CreateRouteActivity extends AppCompatActivity {    private Recycler
         TextView routeTitle = findViewById(R.id.route_title);
         Button saveRoute = (Button) findViewById(R.id.save_button);
         Button cancelRoute = (Button) findViewById(R.id.cancel_button);
+        TextView startLocation = findViewById(R.id.start_location);
 
         Bundle extras = getIntent().getExtras();
 
@@ -53,7 +54,11 @@ public class CreateRouteActivity extends AppCompatActivity {    private Recycler
                     } else {
                         activity = new Walk();
                     }
+                    // Initialize route and fill in fields.
                     Route route = new Route(routeTitle.getText().toString(), activity);
+
+                    route.setLocation(startLocation.getText().toString());
+
                     WalkWalkRevolution.getRouteDao().addRoute(route);
                     finish();
                 }
