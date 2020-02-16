@@ -56,7 +56,7 @@ public class WalkWalkRevolution extends Application {
     }
 
     public void setupTestFitnessApi() {
-        FitnessServiceFactory.put(fitnessServiceKey, new FitnessServiceFactory.BluePrint() {
+        FitnessServiceFactory.put(testServiceKey, new FitnessServiceFactory.BluePrint() {
             @Override
             public FitnessService create(DummyActivity dummyActivity) {
                 return new MockFitnessService();
