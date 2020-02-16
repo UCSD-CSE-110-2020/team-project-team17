@@ -1,6 +1,10 @@
 package edu.ucsd.cse110.walkwalkrevolution;
 
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.test.core.app.ActivityScenario;
@@ -23,7 +27,6 @@ import org.robolectric.shadows.ShadowLooper;
 
 @RunWith(AndroidJUnit4.class)
 public class CreateRouteTest {
-
     @Before
     public void setup(){
         WalkWalkRevolution.setRouteDao(new MockRouteDao());
@@ -41,6 +44,7 @@ public class CreateRouteTest {
                 routeTitle.setText("Route 1");
 
                 save.performClick();
+
                 ShadowLooper.runUiThreadTasksIncludingDelayedTasks();
                 assertEquals(true, activity.isFinishing());
 
@@ -48,6 +52,7 @@ public class CreateRouteTest {
                 assertNotNull(route);
                 assertEquals(1, route.getId());
                 assertEquals("Route 1", route.getTitle());
+
             });
         }
     }
@@ -89,6 +94,133 @@ public class CreateRouteTest {
                 cancel.performClick();
                 ShadowLooper.runUiThreadTasksIncludingDelayedTasks();
                 assertEquals(true, activity.isFinishing());
+            });
+        }
+    }
+
+    @Test
+    public void routeWithTitleAndTagSave(){
+        try(ActivityScenario<CreateRouteActivity> scenario = ActivityScenario.launch(CreateRouteActivity.class)){
+            scenario.onActivity(activity -> {
+                TextView routeTitle = activity.findViewById(R.id.route_title);
+                Button save = (Button) activity.findViewById(R.id.save_button);
+                LinearLayout linearLayout = activity.findViewById(R.id.route_tags);
+                RadioGroup tags = (RadioGroup) linearLayout.getChildAt(2);
+                assertEquals(5, linearLayout.getChildCount());
+                RadioButton selectRadio = (RadioButton) tags.getChildAt(0);
+                assertEquals(2, tags.getChildCount());
+                assertEquals("streets", selectRadio.getText());
+
+                selectRadio.performClick();
+
+                routeTitle.setText("Route 1");
+
+                save.performClick();
+
+                ShadowLooper.runUiThreadTasksIncludingDelayedTasks();
+                assertEquals(true, activity.isFinishing());
+
+                Route route = WalkWalkRevolution.getRouteDao().getRoute(1);
+                assertNotNull(route);
+                assertEquals(1, route.getId());
+                assertEquals("Route 1", route.getTitle());
+                assertEquals("streets", route.getDescriptionTags());
+
+            });
+        }
+    }
+
+    @Test
+    public void routeWithTitleAndTagsSave(){
+        try(ActivityScenario<CreateRouteActivity> scenario = ActivityScenario.launch(CreateRouteActivity.class)){
+            scenario.onActivity(activity -> {
+                TextView routeTitle = activity.findViewById(R.id.route_title);
+                Button save = (Button) activity.findViewById(R.id.save_button);
+                LinearLayout linearLayout = activity.findViewById(R.id.route_tags);
+                RadioGroup tags = (RadioGroup) linearLayout.getChildAt(2);
+                assertEquals(5, linearLayout.getChildCount());
+                RadioButton selectRadio = (RadioButton) tags.getChildAt(0);
+                assertEquals(2, tags.getChildCount());
+                assertEquals("streets", selectRadio.getText());
+
+                selectRadio.performClick();
+
+                tags = (RadioGroup) linearLayout.getChildAt(4);
+                selectRadio = (RadioButton) tags.getChildAt(2);
+                selectRadio.performClick();
+
+                routeTitle.setText("Route 1");
+
+                save.performClick();
+
+                ShadowLooper.runUiThreadTasksIncludingDelayedTasks();
+                assertEquals(true, activity.isFinishing());
+
+                Route route = WalkWalkRevolution.getRouteDao().getRoute(1);
+                assertNotNull(route);
+                assertEquals(1, route.getId());
+                assertEquals("Route 1", route.getTitle());
+                assertEquals("streets,difficult", route.getDescriptionTags());
+
+            });
+        }
+    }
+
+    @Test
+    public void routeWithTitleAndTagSwitchSave(){
+        try(ActivityScenario<CreateRouteActivity> scenario = ActivityScenario.launch(CreateRouteActivity.class)){
+            scenario.onActivity(activity -> {
+                TextView routeTitle = activity.findViewById(R.id.route_title);
+                Button save = (Button) activity.findViewById(R.id.save_button);
+                LinearLayout linearLayout = activity.findViewById(R.id.route_tags);
+                RadioGroup tags = (RadioGroup) linearLayout.getChildAt(2);
+                assertEquals(5, linearLayout.getChildCount());
+                RadioButton selectRadio = (RadioButton) tags.getChildAt(0);
+                assertEquals(2, tags.getChildCount());
+                assertEquals("streets", selectRadio.getText());
+
+                selectRadio.performClick();
+
+                selectRadio = (RadioButton) tags.getChildAt(1);
+                selectRadio.performClick();
+
+                routeTitle.setText("Route 1");
+
+                save.performClick();
+
+                ShadowLooper.runUiThreadTasksIncludingDelayedTasks();
+                assertEquals(true, activity.isFinishing());
+
+                Route route = WalkWalkRevolution.getRouteDao().getRoute(1);
+                assertNotNull(route);
+                assertEquals(1, route.getId());
+                assertEquals("Route 1", route.getTitle());
+                assertEquals("trail", route.getDescriptionTags());
+
+            });
+        }
+    }
+
+    @Test
+    public void routeWithTitleNoTagSave(){
+        try(ActivityScenario<CreateRouteActivity> scenario = ActivityScenario.launch(CreateRouteActivity.class)){
+            scenario.onActivity(activity -> {
+                TextView routeTitle = activity.findViewById(R.id.route_title);
+                Button save = (Button) activity.findViewById(R.id.save_button);
+
+                routeTitle.setText("Route 1");
+
+                save.performClick();
+
+                ShadowLooper.runUiThreadTasksIncludingDelayedTasks();
+                assertEquals(true, activity.isFinishing());
+
+                Route route = WalkWalkRevolution.getRouteDao().getRoute(1);
+                assertNotNull(route);
+                assertEquals(1, route.getId());
+                assertEquals("Route 1", route.getTitle());
+                assertEquals("", route.getDescriptionTags());
+
             });
         }
     }

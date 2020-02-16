@@ -40,7 +40,7 @@ public class UserSharedPreferenceDao implements BaseUserDao {
 
         String jsonString = sp.getString(Long.toString(USER_ID), "");
 
-        if(jsonString == "") return null;
+        if(jsonString.equals("")) return null;
 
         try {
             return UserUtils.deserialize(jsonString);

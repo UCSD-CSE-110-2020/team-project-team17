@@ -14,8 +14,7 @@ import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
 import edu.ucsd.cse110.walkwalkrevolution.route.Route;
 import edu.ucsd.cse110.walkwalkrevolution.route.Routes;
 
-public class RoutesAdapter extends
-        RecyclerView.Adapter<RoutesAdapter.ViewHolder> {
+public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder> {
 
     private Routes routes;
 
