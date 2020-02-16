@@ -20,19 +20,17 @@ import edu.ucsd.cse110.walkwalkrevolution.activity.Activity;
 import edu.ucsd.cse110.walkwalkrevolution.activity.ActivityUtils;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessService;
-import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessServiceFactory;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.StepSubject;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.Steps;
 import edu.ucsd.cse110.walkwalkrevolution.route.Routes;
 
 public class HomeActivity extends AppCompatActivity implements Observer {
 
-    public static final String FITNESS_SERVICE_KEY = "FITNESS_SERVICE_KEY";
     private static final String TEST_SERVICE = "TEST_SERVICE";
     private static final String TAG = "HomeActivity";
 
+    FitnessService fitnessService;
     private TextView textSteps, textMiles, latestSteps, latestMiles, latestDuration;
-    private FitnessService fitnessService;
     private Button startWalk;
     private static StepSubject stepSubject;
 
@@ -49,13 +47,10 @@ public class HomeActivity extends AppCompatActivity implements Observer {
         latestMiles = findViewById(R.id.latest_miles);
         latestDuration = findViewById(R.id.latest_duration);
 
-        String fitnessServiceKey = getIntent().getStringExtra(FITNESS_SERVICE_KEY);
+        fitnessService = WalkWalkRevolution.getFitnessService();
 
-        fitnessService = FitnessServiceFactory.create(fitnessServiceKey, this);
         stepSubject = new StepSubject(fitnessService);
         stepSubject.addObserver(this);
-
-        fitnessService.setup();
 
         startWalk = findViewById(R.id.start_walk);
         startWalk.setOnClickListener(new View.OnClickListener() {
@@ -85,7 +80,7 @@ public class HomeActivity extends AppCompatActivity implements Observer {
             Intent heightActivity = new Intent(this, HeightActivity.class);
             heightActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(heightActivity);
-            finish();
+            HomeActivity.this.finish();
         } else {
             if(mockedTime == null)
                 populateLatestInfo(getLatestDailyWalk());

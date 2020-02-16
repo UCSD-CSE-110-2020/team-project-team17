@@ -17,6 +17,8 @@ public class WalkWalkRevolution extends Application {
 
     public static String fitnessServiceKey = "GOOGLE_FIT";
 
+    private static FitnessService fitnessService;
+
     private static Context context;
 
     private static BaseRouteDao routeDao;
@@ -26,6 +28,8 @@ public class WalkWalkRevolution extends Application {
     private static Steps steps = new Steps();
 
     private static User user;
+
+    private static boolean hasPermissions = false;
 
     @Override
     public void onCreate() {
@@ -40,8 +44,8 @@ public class WalkWalkRevolution extends Application {
     private void setupGoogleFitnessApi() {
         FitnessServiceFactory.put(fitnessServiceKey, new FitnessServiceFactory.BluePrint() {
             @Override
-            public FitnessService create(HomeActivity homeActivity) {
-                return new GoogleFitAdapter(homeActivity);
+            public FitnessService create(DummyActivity dummyActivity) {
+                return new GoogleFitAdapter(dummyActivity);
             }
         });
     }
@@ -80,6 +84,22 @@ public class WalkWalkRevolution extends Application {
 
     public static void setUser(User user) {
         WalkWalkRevolution.user = user;
+    }
+
+    public static void setFitnessService(FitnessService fitnessService){
+        WalkWalkRevolution.fitnessService = fitnessService;
+    }
+
+    public static FitnessService getFitnessService(){
+        return fitnessService;
+    }
+
+    public static void setHasPermissions(){
+        hasPermissions = true;
+    }
+
+    public static boolean getHasPermissions(){
+        return hasPermissions;
     }
 
 }
