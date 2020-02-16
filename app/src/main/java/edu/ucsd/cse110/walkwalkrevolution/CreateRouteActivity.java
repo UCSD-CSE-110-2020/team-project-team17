@@ -10,20 +10,21 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import edu.ucsd.cse110.walkwalkrevolution.DescriptionTags.DescriptionGroup;
 import edu.ucsd.cse110.walkwalkrevolution.DescriptionTags.DescriptionTagsListAdapter;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Activity;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
 import edu.ucsd.cse110.walkwalkrevolution.route.Route;
 
 public class CreateRouteActivity extends AppCompatActivity {
-    private RecyclerView recyclerView;
-    private DescriptionTagsListAdapter adapter;
-    private RecyclerView.LayoutManager layoutManager;
+    private LinearLayout linearLayout;
+    private DescriptionGroup descGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,15 +32,9 @@ public class CreateRouteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_route);
 
-        recyclerView = (RecyclerView) findViewById(R.id.route_tags);
-        recyclerView.setHasFixedSize(true);
-
-        adapter = new DescriptionTagsListAdapter();
-        recyclerView.setAdapter(adapter);
-
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-
+        linearLayout = findViewById(R.id.route_tags);
+        descGroup = new DescriptionGroup(linearLayout);
+        descGroup.createRadioGroup();
 
         TextView routeTitle = findViewById(R.id.route_title);
         Button saveRoute = (Button) findViewById(R.id.save_button);
@@ -52,7 +47,7 @@ public class CreateRouteActivity extends AppCompatActivity {
         saveRoute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String tags = adapter.getSelectedTags();
+                String tags = descGroup.getSelectedTags();
                 if(TextUtils.isEmpty(routeTitle.getText())){
                     routeTitle.setError("Route Title is Required");
                 } else {
@@ -90,11 +85,5 @@ public class CreateRouteActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    @Override
-    protected void onStart(){
-        super.onStart();
-        adapter.updateList();
     }
 }

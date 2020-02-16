@@ -35,7 +35,7 @@ public class CreateRouteTest {
         assertEquals(1+1, 2);
     }
 
-        /*
+
     @Test
     public void routeWithTitleSave(){
         try(ActivityScenario<CreateRouteActivity> scenario = ActivityScenario.launch(CreateRouteActivity.class)){
@@ -102,7 +102,7 @@ public class CreateRouteTest {
         }
     }
 
-     */
+
 
 
 

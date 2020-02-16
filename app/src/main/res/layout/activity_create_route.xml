@@ -39,13 +39,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/route_tags"
-        android:layout_width="353dp"
-        android:layout_height="324dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintStart_toStartOf="@+id/start_location"
-        app:layout_constraintTop_toBottomOf="@+id/start_location" />
 
     <EditText
         android:id="@+id/start_location"
@@ -56,5 +49,20 @@
         android:hint="Starting Location"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/route_title" />
+
+    <ScrollView
+
+        android:layout_width="353dp"
+        android:layout_height="324dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@+id/start_location"
+        app:layout_constraintTop_toBottomOf="@+id/start_location">
+
+        <LinearLayout
+            android:id="@+id/route_tags"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
