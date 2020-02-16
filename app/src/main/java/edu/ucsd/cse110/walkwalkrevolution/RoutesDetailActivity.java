@@ -38,7 +38,12 @@ public class RoutesDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_routes_detail);
 
         Intent intent = getIntent();
-        long id = intent.getLongExtra(RoutesAdapter.EXTRA_TEXT, 0);
+        long id;
+        if(intent.hasExtra(RoutesAdapter.EXTRA_TEXT)) {
+            id = intent.getLongExtra(RoutesAdapter.EXTRA_TEXT, 0);
+        } else {
+            id = intent.getLongExtra(WalkActivity.TEST, 0);
+        }
 
         Route route = WalkWalkRevolution.getRouteDao().getRoute(id);
 
@@ -72,7 +77,7 @@ public class RoutesDetailActivity extends AppCompatActivity {
                 intent.putExtra(ROUTE, 1);
                 intent.putExtra(ROUTE_ID, id);
                 intent.putExtra("route_title", route.getTitle());
-
+                finish();
                 v.getContext().startActivity(intent);
             }
         });

@@ -32,7 +32,7 @@ import static edu.ucsd.cse110.walkwalkrevolution.RoutesDetailActivity.ROUTE_ID;
 
 public class WalkActivity extends AppCompatActivity implements Observer {
     private static final String TAG = "WalkActivity";
-
+    public static final String TEST = "edu.ucsd.cse110.walkwalkrevolution.TEST";
 
     long walkSteps ;
     long currentTotalSteps;
@@ -92,9 +92,9 @@ public class WalkActivity extends AppCompatActivity implements Observer {
             public void onClick(View view) {
 
 
-                if(i == 1 && j == 0)
+                if(i == 1 && j == 0 && s != 0)
                 {
-                    saveWalk(s, view);
+                    saveWalk(s);
                 }
                 else if(i==0 && j==1)
                 {
@@ -117,7 +117,7 @@ public class WalkActivity extends AppCompatActivity implements Observer {
         startActivity(createRoute);
     }
 
-    public void saveWalk(long id, View v){
+    public void saveWalk(long id){
         Route route = WalkWalkRevolution.getRouteDao().getRoute(id);
         Map<String, String> data = new HashMap<String, String>(){{
             put(Walk.STEP_COUNT, steps.getText().toString());
@@ -126,6 +126,11 @@ public class WalkActivity extends AppCompatActivity implements Observer {
         }};
         route.getActivity().setDetails(data);
         route.getActivity().setDate();
+
+        Intent i = new Intent(this, RoutesDetailActivity.class);
+        i.putExtra(TEST, id);
+        startActivity(i);
+        finish();
 
         /*
         route.getActivity().setDetail(Walk.STEP_COUNT, steps.getText().toString());
