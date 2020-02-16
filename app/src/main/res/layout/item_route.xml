@@ -8,12 +8,13 @@
 
     <TextView
         android:id="@+id/route_title"
-        android:layout_width="50dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="72dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:height="30sp" />
 
     <TextView
         android:id="@+id/start_location"
