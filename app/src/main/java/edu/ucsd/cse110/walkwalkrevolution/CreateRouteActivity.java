@@ -30,7 +30,7 @@ public class CreateRouteActivity extends AppCompatActivity {    private Recycler
         TextView routeTitle = findViewById(R.id.route_title);
         Button saveRoute = (Button) findViewById(R.id.save_button);
         Button cancelRoute = (Button) findViewById(R.id.cancel_button);
-        TextView startLocation = findViewById(R.id.route_loc);
+        TextView startLocation = findViewById(R.id.start_location);
 
         Bundle extras = getIntent().getExtras();
 
