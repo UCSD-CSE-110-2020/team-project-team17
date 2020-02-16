@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.data.DataBufferObserver;
 
@@ -36,6 +37,9 @@ public class WalkActivity extends AppCompatActivity implements Observer {
 
     long walkSteps ;
     long currentTotalSteps;
+
+    int i, j;
+    long s;
 
     private TextView steps;
     private TextView miles;
@@ -81,17 +85,16 @@ public class WalkActivity extends AppCompatActivity implements Observer {
         }
 
         Intent intent = getIntent();
-        int i = intent.getIntExtra(RoutesDetailActivity.ROUTE, 0);
-        int j = intent.getIntExtra(HomeActivity.PRE_EXISTING_ROUTE, 0);
-        long s = intent.getLongExtra(ROUTE_ID, 0);
+        i = intent.getIntExtra(RoutesDetailActivity.ROUTE, 0);
+        j = intent.getIntExtra(HomeActivity.PRE_EXISTING_ROUTE, 0);
+        s = intent.getLongExtra(ROUTE_ID, 0);
 
         //  Exit when stop walk clicked.
         stopWalk = findViewById(R.id.stop_walk);
         stopWalk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
+                //checks if intent is from HomeActivity or RouteDetailActivity
                 if(i == 1 && j == 0 && s != 0)
                 {
                     saveWalk(s);
@@ -101,7 +104,6 @@ public class WalkActivity extends AppCompatActivity implements Observer {
                     createRouteActivity();
                 }
                 finish();
-
             }
         });
 
@@ -126,19 +128,12 @@ public class WalkActivity extends AppCompatActivity implements Observer {
         }};
         route.getActivity().setDetails(data);
         route.getActivity().setDate();
+        WalkWalkRevolution.getRouteDao().addRoute(route);
 
         Intent i = new Intent(this, RoutesDetailActivity.class);
         i.putExtra(TEST, id);
         startActivity(i);
         finish();
-
-        /*
-        route.getActivity().setDetail(Walk.STEP_COUNT, steps.getText().toString());
-        route.getActivity().setDetail(Walk.MILES, miles.getText().toString());
-        route.getActivity().setDetail(Walk.DURATION, timer.getText().toString());
-        route.getActivity().setDate();
-        */
-
     }
 
     @Override
