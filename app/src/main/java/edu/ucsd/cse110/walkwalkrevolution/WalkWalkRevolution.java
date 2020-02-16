@@ -6,6 +6,7 @@ import android.content.Context;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessService;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessServiceFactory;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.GoogleFitAdapter;
+import edu.ucsd.cse110.walkwalkrevolution.fitness.MockFitnessService;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.Steps;
 import edu.ucsd.cse110.walkwalkrevolution.route.persistence.BaseRouteDao;
 import edu.ucsd.cse110.walkwalkrevolution.route.persistence.RouteSharedPreferenceDao;
@@ -16,6 +17,10 @@ import edu.ucsd.cse110.walkwalkrevolution.user.persistence.UserSharedPreferenceD
 public class WalkWalkRevolution extends Application {
 
     public static String fitnessServiceKey = "GOOGLE_FIT";
+
+    public static String testServiceKey = "TEST_FIT";
+
+    public static String currentKey = fitnessServiceKey;
 
     private static FitnessService fitnessService;
 
@@ -50,8 +55,21 @@ public class WalkWalkRevolution extends Application {
         });
     }
 
-    public void setFitnessServiceKey(String fitnessServiceKey) {
-        this.fitnessServiceKey = fitnessServiceKey;
+    public void setupTestFitnessApi() {
+        FitnessServiceFactory.put(fitnessServiceKey, new FitnessServiceFactory.BluePrint() {
+            @Override
+            public FitnessService create(DummyActivity dummyActivity) {
+                return new MockFitnessService();
+            }
+        });
+    }
+
+    public void useGoogleFitFitnessApi(boolean useGoogle) {
+        if(useGoogle){
+            currentKey = fitnessServiceKey;
+        } else {
+            currentKey = testServiceKey;
+        }
     }
 
     public static Context getContext() {
