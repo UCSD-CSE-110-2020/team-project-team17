@@ -12,14 +12,17 @@ public class Route {
     private long id;
     private String title;
     private String location;
+    private String descriptionTags;
     private Activity activity;
 
     public Route(@JsonProperty("id") long id, @JsonProperty("title") String title,
                  @JsonProperty("location") String location,
+                 @JsonProperty("descriptionTags") String descriptionTags,
                  @JsonProperty("activity") Activity activity){
         this.id = id;
         this.title = title;
         this.location = location;
+        this.descriptionTags = descriptionTags;
         this.activity = activity;
     }
 
@@ -64,4 +67,11 @@ public class Route {
         this.location = location;
     }
 
+    public String getDescriptionTags() {
+        return descriptionTags == null ? "": descriptionTags;
+    }
+
+    public void setDescriptionTags(String descriptionTags) {
+        this.descriptionTags = descriptionTags;
+    }
 }
