@@ -6,15 +6,25 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import edu.ucsd.cse110.walkwalkrevolution.WalkWalkRevolution;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Activity;
 
-@JsonPropertyOrder({"id", "title", "activity"})
+@JsonPropertyOrder({"id", "title", "location", "activity"})
 public class Route {
 
     private long id;
     private String title;
+    private String location;
     private Activity activity;
 
     public Route(@JsonProperty("id") long id, @JsonProperty("title") String title,
+                 @JsonProperty("location") String location,
                  @JsonProperty("activity") Activity activity){
+        this.id = id;
+        this.title = title;
+        this.location = location;
+        this.activity = activity;
+    }
+
+    //Used for testing
+    public Route(long id, String title, Activity activity){
         this.id = id;
         this.title = title;
         this.activity = activity;
@@ -44,6 +54,14 @@ public class Route {
 
     public void setTitle(String title){
         this.title = title;
+    }
+
+    public String getLocation() {
+        return location == null ? "": location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
 }
