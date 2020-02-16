@@ -34,4 +34,11 @@ public class DescriptionTagsUnitTest {
         descTags.selectTag(1);
         assertThat(descTags.getSelectedTag()).isEqualTo("crackers");
     }
+
+    @Test
+    public void testSelectTag() {
+        DescriptionTags descTags = new DescriptionTags("cookie", "crackers", "chips");
+        descTags.selectTag(2);
+        assertThat(descTags.getSelectedTag()).isEqualTo("chips");
+    }
 }
