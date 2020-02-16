@@ -13,4 +13,7 @@
     <string name="default_miles">###</string>
     <string name="steps_hint">Steps</string>
     <string name="stop_walk_button">Stop Walk</string>
+    <string name="latest_daily_walk">Latest Daily Walk</string>
+    <string name="duration_hint">Duration</string>
+    <string name="default_latest">N/A</string>
 </resources>

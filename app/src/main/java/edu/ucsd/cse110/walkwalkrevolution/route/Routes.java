@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import edu.ucsd.cse110.walkwalkrevolution.WalkWalkRevolution;
+import edu.ucsd.cse110.walkwalkrevolution.activity.Activity;
+import edu.ucsd.cse110.walkwalkrevolution.activity.ActivityUtils;
+import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
 
 public class Routes {
 
@@ -33,6 +36,21 @@ public class Routes {
 
     public int getSize(){
         return routes.size();
+    }
+
+    // Returns a list of "actual" activities in order of datetime
+    public List<Activity> getActivities() {
+        List<Activity> activities = new ArrayList<>();
+        for(Route route: routes){
+            if(Long.parseLong(route.getActivity().getDetail(Walk.STEP_COUNT)) > 0){
+                activities.add(route.getActivity());
+            }
+        }
+        Collections.sort(activities, (a,b) -> {
+             return ActivityUtils.stringToTime(a.getDetail(Activity.DATE))
+                     .compareTo(ActivityUtils.stringToTime(b.getDetail(Activity.DATE)));
+        });
+        return activities;
     }
 
 }
