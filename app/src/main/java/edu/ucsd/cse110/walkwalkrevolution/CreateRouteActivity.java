@@ -40,6 +40,7 @@ public class CreateRouteActivity extends AppCompatActivity {
         Button saveRoute = (Button) findViewById(R.id.save_button);
         Button cancelRoute = (Button) findViewById(R.id.cancel_button);
         TextView startLocation = findViewById(R.id.start_location);
+        TextView notes = findViewById(R.id.route_notes);
 
         Bundle extras = getIntent().getExtras();
 
@@ -67,8 +68,11 @@ public class CreateRouteActivity extends AppCompatActivity {
                     // Initialize route and fill in fields.
                     Route route = new Route(routeTitle.getText().toString(), activity);
 
-                    if(TextUtils.isEmpty(startLocation.getText())) {
+                    if(!TextUtils.isEmpty(startLocation.getText())) {
                         route.setLocation(startLocation.getText().toString());
+                    }
+                    if(!TextUtils.isEmpty(notes.getText())) {
+                        route.setNotes(notes.getText().toString());
                     }
                     route.setDescriptionTags(tags);
                     Log.d("desc-tags", "tags " + tags);

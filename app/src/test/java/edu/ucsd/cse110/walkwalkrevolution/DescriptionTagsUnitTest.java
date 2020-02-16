@@ -15,11 +15,6 @@ import static com.google.common.truth.Truth.assertThat;
 @Config(sdk=28)
 public class DescriptionTagsUnitTest {
 
-    @Before
-    public void setUp() {
-
-    }
-
     @Test
     public void testGetSize() {
         DescriptionTags descTags = new DescriptionTags("cookie", "crackers", "chips");
@@ -31,5 +26,12 @@ public class DescriptionTagsUnitTest {
     public void testGetSelectedTagWhenNotSelected() {
         DescriptionTags descTags = new DescriptionTags("cookie", "crackers", "chips");
         assertThat(descTags.getSelectedTag()).isEqualTo("");
+    }
+
+    @Test
+    public void testGetSelectedTagWhenSelected() {
+        DescriptionTags descTags = new DescriptionTags("cookie", "crackers", "chips");
+        descTags.selectTag(1);
+        assertThat(descTags.getSelectedTag()).isEqualTo("crackers");
     }
 }

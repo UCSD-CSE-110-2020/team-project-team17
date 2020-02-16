@@ -116,4 +116,22 @@ public class BaseRouteDaoTest {
         assertEquals(true, allRoutes.containsKey("3"));
     }
 
+    @Test
+    public void addRouteWithNotes() {
+        String note = "This is a somewhat longer string that would realistically count as a note.";
+        Route r = new Route("Route", new Walk());
+        r.setNotes(note);
+        dao.addRoute(r);
+
+        Route persisted= dao.getRoute(1);
+        assertNotNull(persisted);
+        assertEquals(r.getId(), persisted.getId());
+        assertEquals(note, r.getNotes());
+        assertEquals(note, persisted.getNotes());
+
+        Map<String, ?> allRoutes = dao.getAllRoutes();
+        assertEquals(1, allRoutes.size());
+        assertEquals(true, allRoutes.containsKey("1"));
+    }
+
 }
