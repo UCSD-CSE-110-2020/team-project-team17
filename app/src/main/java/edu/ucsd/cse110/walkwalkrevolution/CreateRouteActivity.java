@@ -1,11 +1,13 @@
 package edu.ucsd.cse110.walkwalkrevolution;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -18,14 +20,26 @@ import edu.ucsd.cse110.walkwalkrevolution.activity.Activity;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
 import edu.ucsd.cse110.walkwalkrevolution.route.Route;
 
-public class CreateRouteActivity extends AppCompatActivity {    private RecyclerView recyclerView;
-    DescriptionTagsListAdapter adapter;
+public class CreateRouteActivity extends AppCompatActivity {
+    private RecyclerView recyclerView;
+    private DescriptionTagsListAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_route);
+
+        recyclerView = (RecyclerView) findViewById(R.id.route_tags);
+        recyclerView.setHasFixedSize(true);
+
+        adapter = new DescriptionTagsListAdapter();
+        recyclerView.setAdapter(adapter);
+
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
 
         TextView routeTitle = findViewById(R.id.route_title);
         Button saveRoute = (Button) findViewById(R.id.save_button);
@@ -38,6 +52,7 @@ public class CreateRouteActivity extends AppCompatActivity {    private Recycler
         saveRoute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String tags = adapter.getSelectedTags();
                 if(TextUtils.isEmpty(routeTitle.getText())){
                     routeTitle.setError("Route Title is Required");
                 } else {
@@ -57,8 +72,11 @@ public class CreateRouteActivity extends AppCompatActivity {    private Recycler
                     // Initialize route and fill in fields.
                     Route route = new Route(routeTitle.getText().toString(), activity);
 
-                    route.setLocation(startLocation.getText().toString());
-
+                    if(TextUtils.isEmpty(startLocation.getText())) {
+                        route.setLocation(startLocation.getText().toString());
+                    }
+                    route.setDescriptionTags(tags);
+                    Log.d("desc-tags", "tags " + tags);
                     WalkWalkRevolution.getRouteDao().addRoute(route);
                     finish();
                 }
@@ -72,14 +90,6 @@ public class CreateRouteActivity extends AppCompatActivity {    private Recycler
             }
         });
 
-        recyclerView = (RecyclerView) findViewById(R.id.route_tags);
-        recyclerView.setHasFixedSize(true);
-
-        adapter = new DescriptionTagsListAdapter();
-        recyclerView.setAdapter(adapter);
-
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
     }
 
     @Override

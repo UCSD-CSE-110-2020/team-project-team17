@@ -17,6 +17,7 @@ public class Walk extends Activity{
         setDetail(MILES, "0");
     }
 
+
     public Walk(Map<String, String> walk){
         super(walk);
     }

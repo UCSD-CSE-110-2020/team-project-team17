@@ -28,7 +28,6 @@ public class DescriptionTagsListAdapter
             // Stores the itemView in a public final member variable that can be used
             // to access the context from any ViewHolder instance.
             super(itemView);
-
             descriptionTag = itemView.findViewById(R.id.tag_group);
         }
     }
@@ -50,11 +49,13 @@ public class DescriptionTagsListAdapter
     @Override
     public void onBindViewHolder(DescriptionTagsListAdapter.ViewHolder viewHolder, int position) {
         // Get the data model based on position
+        Log.d("des-Check Pos", "pos: " + position);
         DescriptionTags descTags = descriptionTagsList.get(position);
 
         // Set item views based on your views and data model
         viewHolder.descriptionTag.setOrientation(LinearLayout.HORIZONTAL);
         int numTags = descTags.getSize();
+
         for (int i = 0; i < numTags; i++) {
             RadioButton tagOption = new RadioButton(viewHolder.descriptionTag.getContext());
             int radio_id = View.generateViewId();
@@ -65,17 +66,16 @@ public class DescriptionTagsListAdapter
                 @Override
                 public void onClick(View v) {
                     int tagIdx = Integer.valueOf(v.getId()) % 10;
-                    Log.d("tagIdx", "fvre" + tagIdx );
-                    //descTags.selectTag(tagIdx);
-                    for(int i = 0; i < descriptionTagsList.getSize(); i++ ) {
-                        Log.d("TesAt", descriptionTagsList.get(i).getSelectedTag());
-                    }
+                    Log.d("tagIdx", "tag idx: " + tagIdx );
+                    descTags.selectTag(tagIdx);
                 }
             });
 
 
             viewHolder.descriptionTag.addView(tagOption);
+
         }
+
     }
 
     // Returns the total count of items in the list
@@ -85,7 +85,23 @@ public class DescriptionTagsListAdapter
     }
 
     public void updateList() {
-        descriptionTagsList = new DescriptionTagsList();
-        notifyDataSetChanged();
+       descriptionTagsList = new DescriptionTagsList();
+       notifyDataSetChanged();
+    }
+
+    public String getSelectedTags() {
+        String tags = "";
+        for(int i = 0; i < descriptionTagsList.getSize(); i++) {
+            String sTag = descriptionTagsList.get(i).getSelectedTag();
+            if (!sTag.equals("")) {
+                if (tags.equals("")) {
+                    tags = sTag;
+                }
+                else {
+                    tags += "," + sTag;
+                }
+            }
+        }
+        return tags;
     }
 }

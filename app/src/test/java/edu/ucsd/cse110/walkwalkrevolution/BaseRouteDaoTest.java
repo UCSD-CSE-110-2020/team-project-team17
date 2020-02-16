@@ -28,12 +28,29 @@ public class BaseRouteDaoTest {
 
     @Test
     public void addValidRoute() {
-        Route actual = new Route(1, "Route1", new Activity(), "");
+        Route actual = new Route(1, "Route1", new Activity());
         dao.addRoute(actual);
 
         Route persisted = dao.getRoute(1);
         assertNotNull(persisted);
         assertEquals(actual.getId(), persisted.getId());
+
+        Map<String, ?> allRoutes = dao.getAllRoutes();
+        assertEquals(1, allRoutes.size());
+        assertEquals(true, allRoutes.containsKey("1"));
+    }
+
+    @Test
+    public void addRouteWithLocation() {
+        Route actual = new Route(1, "Route1", new Walk());
+        actual.setLocation("Location");
+        dao.addRoute(actual);
+
+        Route persisted = dao.getRoute(1);
+        assertNotNull(persisted);
+        assertEquals(actual.getId(), persisted.getId());
+        assertEquals(actual.getTitle(), persisted.getTitle());
+        assertEquals(actual.getLocation(), persisted.getLocation());
 
         Map<String, ?> allRoutes = dao.getAllRoutes();
         assertEquals(1, allRoutes.size());
@@ -51,9 +68,9 @@ public class BaseRouteDaoTest {
 
     @Test
     public void addMultipleRoutes() {
-        Route r1 = new Route(1, "Route1", new Activity(), "");
-        Route r2 = new Route(2, "Route2", new Activity(), "");
-        Route r3 = new Route(3, "Route3", new Activity(), "");
+        Route r1 = new Route(1, "Route1", new Activity());
+        Route r2 = new Route(2, "Route2", new Activity());
+        Route r3 = new Route(3, "Route3", new Activity());
         dao.addRoute(r1);
         dao.addRoute(r2);
         dao.addRoute(r3);
