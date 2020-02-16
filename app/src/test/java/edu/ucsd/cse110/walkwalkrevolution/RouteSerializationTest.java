@@ -22,7 +22,7 @@ public class RouteSerializationTest {
         LocalDateTime time = LocalDateTime.of(2020, 01, 01, 0, 0);
         activity.setDate(time);
 
-        Route route = new Route(1, "Route1", activity);
+        Route route = new Route(1, "Route1", activity, "");
 
 
         String jsonString = RouteUtils.serialize(route);
@@ -47,7 +47,7 @@ public class RouteSerializationTest {
             put(Walk.DURATION, "5:00");
             put(Activity.DATE, ActivityUtils.timeToString(time));
         }};
-        Route route = new Route(1, "Route1", new Walk(data));
+        Route route = new Route(1, "Route1", new Walk(data), "");
 
         String jsonString = RouteUtils.serialize(route);
 

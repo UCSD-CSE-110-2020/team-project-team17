@@ -11,13 +11,13 @@ public class RouteTest {
 
     @Test
     public void createRouteTest(){
-        Route route = new Route(1, "Route1", new Walk());
+        Route route = new Route(1, "Route1", new Walk(), "");
         assertEquals("Route1", route.getTitle());
     }
 
     @Test
     public void changeRouteTest(){
-        Route route = new Route(1, "Old Route", new Walk());
+        Route route = new Route(1, "Old Route", new Walk(), "");
         route.setTitle("New Route");
 
         assertEquals("New Route", route.getTitle());

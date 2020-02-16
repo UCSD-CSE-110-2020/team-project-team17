@@ -1,10 +1,12 @@
 package edu.ucsd.cse110.walkwalkrevolution;
 
+
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Map;
 
+import edu.ucsd.cse110.walkwalkrevolution.activity.Activity;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
 import edu.ucsd.cse110.walkwalkrevolution.route.Route;
 import edu.ucsd.cse110.walkwalkrevolution.route.persistence.BaseRouteDao;
@@ -26,7 +28,7 @@ public class BaseRouteDaoTest {
 
     @Test
     public void addValidRoute() {
-        Route actual = new Route(1, "Route1", new Walk());
+        Route actual = new Route(1, "Route1", new Activity(), "");
         dao.addRoute(actual);
 
         Route persisted = dao.getRoute(1);
@@ -49,9 +51,9 @@ public class BaseRouteDaoTest {
 
     @Test
     public void addMultipleRoutes() {
-        Route r1 = new Route(1, "Route1", new Walk());
-        Route r2 = new Route(2, "Route2", new Walk());
-        Route r3 = new Route(3, "Route3", new Walk());
+        Route r1 = new Route(1, "Route1", new Activity(), "");
+        Route r2 = new Route(2, "Route2", new Activity(), "");
+        Route r3 = new Route(3, "Route3", new Activity(), "");
         dao.addRoute(r1);
         dao.addRoute(r2);
         dao.addRoute(r3);
