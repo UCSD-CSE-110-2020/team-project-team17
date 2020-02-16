@@ -99,4 +99,12 @@ public class BaseRouteDaoTest {
         assertEquals(true, allRoutes.containsKey("3"));
     }
 
+    @Test
+    public void addRouteWithNotes() {
+        String note = "This is a somewhat longer string that would realistically count as a note.";
+        Route r = new Route("Route", new Walk());
+        r.setNotes(note);
+        assertEquals(note, r.getNotes());
+    }
+
 }
