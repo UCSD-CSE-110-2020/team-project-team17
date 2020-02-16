@@ -39,6 +39,30 @@ public class RouteSerializationTest {
     }
 
     @Test
+    public void serializeRouteWithLocation() throws Exception{
+        Activity activity = new Walk();
+        LocalDateTime time = LocalDateTime.of(2020, 01, 01, 0, 0);
+        activity.setDate(time);
+
+        Route route = new Route(1, "Route1", activity);
+
+        route.setLocation("Location");
+
+        String jsonString = RouteUtils.serialize(route);
+        System.err.println(jsonString);
+
+        Route deserial = RouteUtils.deserialize(jsonString);
+        assertEquals(1, deserial.getId());
+        assertEquals("Route1", deserial.getTitle());
+        assertEquals("Location", deserial.getLocation());
+        assertEquals(4, deserial.getActivity().getDetails().size());
+        assertEquals("0", deserial.getActivity().getDetail(Walk.STEP_COUNT));
+        assertEquals("0", deserial.getActivity().getDetail(Walk.DURATION));
+        assertEquals("0", deserial.getActivity().getDetail(Walk.MILES));
+        assertEquals(time, ActivityUtils.stringToTime(deserial.getActivity().getDetail(Activity.DATE)));
+    }
+
+    @Test
     public void serializeRouteWithActivity() throws Exception{
         LocalDateTime time = LocalDateTime.of(2020, 01, 01, 0, 0);
         Map<String, String> data = new HashMap<String, String>() {{
