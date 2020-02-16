@@ -11,17 +11,11 @@ import com.google.android.gms.fitness.FitnessOptions;
 import com.google.android.gms.fitness.data.DataSet;
 import com.google.android.gms.fitness.data.DataType;
 import com.google.android.gms.fitness.data.Field;
-import com.google.android.gms.fitness.request.DataReadRequest;
-import com.google.android.gms.fitness.result.DataReadResponse;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-import edu.ucsd.cse110.walkwalkrevolution.HomeActivity;
+import edu.ucsd.cse110.walkwalkrevolution.DummyActivity;
 import edu.ucsd.cse110.walkwalkrevolution.WalkWalkRevolution;
 
 //From Lab4
@@ -29,11 +23,10 @@ public class GoogleFitAdapter implements FitnessService {
     private final int GOOGLE_FIT_PERMISSIONS_REQUEST_CODE = System.identityHashCode(this) & 0xFFFF;
     private final String TAG = "GoogleFitAdapter";
     private GoogleSignInAccount account;
-    private LocalDateTime prevTime;
 
-    private HomeActivity activity;
+    private DummyActivity activity;
 
-    public GoogleFitAdapter(HomeActivity activity) {
+    public GoogleFitAdapter(DummyActivity activity) {
         this.activity = activity;
     }
 
@@ -53,6 +46,7 @@ public class GoogleFitAdapter implements FitnessService {
                     account,
                     fitnessOptions);
         } else {
+            WalkWalkRevolution.setHasPermissions();
             updateStepCount();
             startRecording();
         }

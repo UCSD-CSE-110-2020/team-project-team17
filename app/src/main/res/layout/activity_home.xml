@@ -11,9 +11,9 @@
         android:id="@+id/steps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="11dp"
-        android:layout_marginBottom="13dp"
+        android:layout_marginBottom="16dp"
         android:text="@string/default_steps"
         android:textColor="@android:color/white"
         android:textSize="40sp"
@@ -21,19 +21,21 @@
         app:layout_constraintBottom_toTopOf="@+id/miles"
         app:layout_constraintEnd_toStartOf="@+id/steps_hint"
         app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="@+id/step_display_background"
+        app:layout_constraintTop_toTopOf="@+id/step_display_background" />
 
     <ImageView
         android:id="@+id/step_display_background"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="176dp"
         android:layout_marginStart="56dp"
-        android:layout_marginTop="128dp"
+        android:layout_marginTop="57dp"
         android:layout_marginEnd="56dp"
-        android:layout_marginBottom="239dp"
+        android:layout_marginBottom="25dp"
         android:foreground="@drawable/rounded_rectangle"
-        app:layout_constraintBottom_toTopOf="@+id/start_walk"
+        app:layout_constraintBottom_toTopOf="@+id/latest_display_background"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -41,28 +43,71 @@
         android:id="@+id/miles"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="11dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="296dp"
+        android:layout_marginBottom="32dp"
         android:text="@string/default_miles"
         android:textColor="@android:color/white"
         android:textSize="25sp"
         android:translationZ="1sp"
-        app:layout_constraintBottom_toTopOf="@+id/start_walk"
+        app:layout_constraintBottom_toBottomOf="@+id/step_display_background"
         app:layout_constraintEnd_toStartOf="@+id/miles_hint"
         app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/steps_hint" />
+        app:layout_constraintStart_toStartOf="@+id/step_display_background"
+        app:layout_constraintTop_toBottomOf="@+id/steps" />
+
+    <TextView
+        android:id="@+id/latest_miles"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="81dp"
+        android:text="@string/default_latest"
+        android:textColor="@android:color/white"
+        android:textSize="25sp"
+        android:translationZ="1sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/latest_steps"
+        app:layout_constraintEnd_toEndOf="@+id/latest_display_background" />
+
+    <TextView
+        android:id="@+id/latest_steps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="32dp"
+        android:text="@string/default_latest"
+        android:textColor="@android:color/white"
+        android:textSize="25sp"
+        android:translationZ="1sp"
+        app:layout_constraintBottom_toBottomOf="@+id/latest_display_background"
+        app:layout_constraintEnd_toStartOf="@+id/latest_steps_hint"
+        app:layout_constraintStart_toStartOf="@+id/latest_display_background"
+        app:layout_constraintTop_toBottomOf="@+id/latest_duration" />
+
+    <TextView
+        android:id="@+id/latest_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/default_latest"
+        android:textColor="@android:color/white"
+        android:textSize="25sp"
+        android:translationZ="1sp"
+        app:layout_constraintBottom_toTopOf="@+id/latest_steps"
+        app:layout_constraintStart_toStartOf="@+id/latest_display_background"
+        app:layout_constraintTop_toBottomOf="@+id/latest_daily_walk" />
 
     <TextView
         android:id="@+id/miles_hint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="6dp"
         android:text="@string/miles_hint"
         android:textColor="@android:color/white"
         android:textSize="15sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/miles"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/step_display_background"
         app:layout_constraintStart_toEndOf="@+id/miles" />
 
     <Button
@@ -75,22 +120,18 @@
         android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/miles" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/steps_hint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="201dp"
-        android:layout_marginBottom="22dp"
         android:text="@string/steps_hint"
         android:textColor="@android:color/white"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/miles"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/steps"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBaseline_toBaselineOf="@+id/steps"
+        app:layout_constraintEnd_toEndOf="@+id/step_display_background"
+        app:layout_constraintStart_toEndOf="@+id/steps" />
 
     <Button
         android:id="@+id/mock_button"
@@ -99,5 +140,67 @@
         android:text="@string/mock_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/latest_display_background"
+        android:layout_width="0dp"
+        android:layout_height="160dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="56dp"
+        android:layout_marginBottom="56dp"
+        android:foreground="@drawable/rounded_rectangle"
+        app:layout_constraintBottom_toTopOf="@+id/start_walk"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/step_display_background" />
+
+    <TextView
+        android:id="@+id/latest_daily_walk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/latest_daily_walk"
+        android:textColor="@android:color/white"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="@+id/latest_display_background"
+        app:layout_constraintStart_toStartOf="@+id/latest_display_background"
+        app:layout_constraintTop_toTopOf="@+id/latest_display_background" />
+
+    <TextView
+        android:id="@+id/latest_miles_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="32dp"
+        android:text="@string/miles_hint"
+        android:textColor="@android:color/white"
+        android:textSize="15sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/latest_miles"
+        app:layout_constraintEnd_toEndOf="@+id/latest_display_background"
+        app:layout_constraintStart_toEndOf="@+id/latest_miles" />
+
+    <TextView
+        android:id="@+id/latest_steps_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/steps_hint"
+        android:textColor="@android:color/white"
+        android:textSize="15sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/latest_steps"
+        app:layout_constraintStart_toEndOf="@+id/latest_steps"  />
+
+    <TextView
+        android:id="@+id/latest_duration_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/duration_hint"
+        android:textColor="@android:color/white"
+        android:textSize="15sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/latest_duration"
+        app:layout_constraintStart_toEndOf="@+id/latest_duration" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

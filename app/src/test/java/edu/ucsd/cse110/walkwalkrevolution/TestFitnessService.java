@@ -4,11 +4,11 @@ import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessService;
 
 public class TestFitnessService implements FitnessService {
     private static final String TAG = "[TestFitnessService]: ";
-    private HomeActivity homeActivity;
+    private DummyActivity dummyActivity;
     private int nextStepCount;
 
-    public TestFitnessService(HomeActivity homeActivity) {
-        this.homeActivity = homeActivity;
+    public TestFitnessService(DummyActivity dummyActivity) {
+        this.dummyActivity = dummyActivity;
     }
 
     @Override

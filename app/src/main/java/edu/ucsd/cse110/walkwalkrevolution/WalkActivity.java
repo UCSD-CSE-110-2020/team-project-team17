@@ -102,7 +102,7 @@ public class WalkActivity extends AppCompatActivity implements Observer {
     }
 
     public void updateWalkSteps(){
-        Log.d(TAG, "updateWalkSteps: UPDATING");
+        Log.d(TAG, "updateWalkSteps: UPDATING " + stepTracker.getLatest());
         walkSteps += stepTracker.getLatest();
 
         runOnUiThread(new Runnable() {

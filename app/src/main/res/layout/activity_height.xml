@@ -10,20 +10,20 @@
         android:id="@+id/welcome_prompt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="164dp"
-        android:layout_marginTop="152dp"
+        android:layout_marginTop="32dp"
         android:text="@string/welcome_prompt"
         android:textColor="@android:color/white"
         android:textSize="32sp"
         android:translationZ="1sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="@+id/imageView2"
+        app:layout_constraintStart_toStartOf="@+id/imageView2"
+        app:layout_constraintTop_toTopOf="@+id/imageView2" />
 
     <TextView
         android:id="@+id/height_prompt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="32dp"
         android:text="@string/height_prompt"
         android:textColor="@android:color/white"
         android:textSize="30sp"
@@ -37,7 +37,7 @@
         android:id="@+id/feet_user_input"
         android:layout_width="30dp"
         android:layout_height="60sp"
-        android:layout_marginStart="148dp"
+        android:layout_marginStart="112dp"
         android:layout_marginTop="8dp"
         android:backgroundTint="@android:color/white"
         android:ems="10"
@@ -47,14 +47,15 @@
         android:textColor="@android:color/white"
         android:textSize="30sp"
         android:translationZ="1sp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+        app:layout_constraintStart_toStartOf="@+id/imageView2"
         app:layout_constraintTop_toBottomOf="@+id/height_prompt" />
 
     <EditText
         android:id="@+id/inches_user_input"
         android:layout_width="45dp"
         android:layout_height="60sp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
         android:backgroundTint="@android:color/white"
         android:ems="10"
         android:importantForAutofill="no"
@@ -63,44 +64,48 @@
         android:textColor="@android:color/white"
         android:textSize="30sp"
         android:translationZ="1sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/feet_user_input"
         app:layout_constraintEnd_toStartOf="@+id/inches_hint"
-        app:layout_constraintStart_toEndOf="@+id/feet_hint"
-        app:layout_constraintTop_toBottomOf="@+id/height_prompt" />
+        app:layout_constraintStart_toEndOf="@+id/feet_hint" />
 
     <TextView
         android:id="@+id/feet_hint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
+        android:layout_marginStart="16dp"
         android:layout_marginEnd="8dp"
         android:text="@string/feet_hint"
         android:textColor="@android:color/white"
         android:textSize="30sp"
         android:translationZ="1sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/feet_user_input"
         app:layout_constraintEnd_toStartOf="@+id/inches_user_input"
-        app:layout_constraintStart_toEndOf="@+id/feet_user_input"
-        app:layout_constraintTop_toTopOf="@+id/height_prompt" />
+        app:layout_constraintStart_toEndOf="@+id/feet_user_input" />
 
     <TextView
         android:id="@+id/inches_hint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="29dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="112dp"
         android:text="@string/inches_hint"
         android:textColor="@android:color/white"
         android:textSize="30sp"
         android:translationZ="1sp"
-        app:layout_constraintStart_toEndOf="@+id/inches_user_input"
-        app:layout_constraintTop_toBottomOf="@+id/height_prompt" />
+        app:layout_constraintBaseline_toBaselineOf="@+id/inches_user_input"
+        app:layout_constraintEnd_toEndOf="@+id/imageView2"
+        app:layout_constraintStart_toEndOf="@+id/inches_user_input" />
 
     <Button
         android:id="@+id/submit_height"
         android:layout_width="211sp"
         android:layout_height="100sp"
         android:layout_marginTop="268dp"
+        android:layout_marginBottom="57dp"
         android:fontFamily="sans-serif-light"
         android:text="@string/submit_button"
         android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/height_prompt" />
@@ -111,6 +116,8 @@
         android:layout_height="248dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="128dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/rounded_rectangle" />

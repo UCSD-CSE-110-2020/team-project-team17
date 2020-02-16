@@ -39,6 +39,23 @@ public class BaseRouteDaoTest {
     }
 
     @Test
+    public void addRouteWithLocation() {
+        Route actual = new Route(1, "Route1", new Walk());
+        actual.setLocation("Location");
+        dao.addRoute(actual);
+
+        Route persisted = dao.getRoute(1);
+        assertNotNull(persisted);
+        assertEquals(actual.getId(), persisted.getId());
+        assertEquals(actual.getTitle(), persisted.getTitle());
+        assertEquals(actual.getLocation(), persisted.getLocation());
+
+        Map<String, ?> allRoutes = dao.getAllRoutes();
+        assertEquals(1, allRoutes.size());
+        assertEquals(true, allRoutes.containsKey("1"));
+    }
+
+    @Test
     public void getNonExistentRoute() {
         Route route = dao.getRoute(1);
         assertNull(route);
