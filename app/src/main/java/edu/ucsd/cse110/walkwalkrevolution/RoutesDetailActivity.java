@@ -17,6 +17,7 @@ public class RoutesDetailActivity extends AppCompatActivity {
 
     public static final String ROUTE = "edu.ucsd.cse110.walkwalkrevolution.ROUTE";
     public static final String ROUTE_ID = "edu.ucsd.cse110.walkwalkrevolution.ROUTE_ID";
+    public long id;
 
     private TextView title;
     private TextView steps;
@@ -39,7 +40,6 @@ public class RoutesDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_routes_detail);
 
         Intent intent = getIntent();
-        long id;
         if(intent.hasExtra(RoutesAdapter.EXTRA_TEXT)) {
             id = intent.getLongExtra(RoutesAdapter.EXTRA_TEXT, 0);
         } else {
@@ -48,7 +48,7 @@ public class RoutesDetailActivity extends AppCompatActivity {
 
         Route route = WalkWalkRevolution.getRouteDao().getRoute(id);
 
-        title = (TextView) findViewById(R.id.title);
+        title = (TextView) findViewById(R.id.title1);
         steps = (TextView) findViewById(R.id.numOfSteps);
         miles = (TextView) findViewById(R.id.numOfMiles);
         duration = (TextView) findViewById(R.id.numOfDur);

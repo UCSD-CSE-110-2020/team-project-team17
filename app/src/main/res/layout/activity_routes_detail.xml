@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/title1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="32dp"
@@ -18,7 +18,7 @@
         android:id="@+id/location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/title"
+        android:layout_below="@+id/title1"
         android:layout_marginTop="14dp"
         android:layout_marginLeft="20dp"
         android:text="Start Location:"
@@ -28,7 +28,7 @@
         android:id="@+id/location_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/title"
+        android:layout_below="@+id/title1"
         android:layout_marginStart="20dp"
         android:layout_marginTop="14dp"
         android:layout_toEndOf="@+id/location"
