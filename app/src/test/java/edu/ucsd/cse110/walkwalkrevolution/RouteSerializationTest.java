@@ -60,4 +60,30 @@ public class RouteSerializationTest {
         assertEquals("0.25", deserial.getActivity().getDetail(Walk.MILES));
         assertEquals(time, ActivityUtils.stringToTime(deserial.getActivity().getDetail(Activity.DATE)));
     }
+
+    @Test
+    public void serializeRouteWithNotes() throws Exception{
+        String note = "A longer string that would realistically function as a note.";
+        LocalDateTime time = LocalDateTime.of(2020, 1, 1, 0, 0);
+        Map<String, String> data = new HashMap<String, String>() {{
+            put(Walk.STEP_COUNT, "500");
+            put(Walk.MILES, "0.25");
+            put(Walk.DURATION, "5:00");
+            put(Activity.DATE, ActivityUtils.timeToString(time));
+        }};
+        Route route = new Route(1, "Route1", new Walk(data));
+        route.setNotes(note);
+
+        String jsonString = RouteUtils.serialize(route);
+
+        Route deserial = RouteUtils.deserialize(jsonString);
+        assertEquals(1, deserial.getId());
+        assertEquals("Route1", deserial.getTitle());
+        assertEquals(4, deserial.getActivity().getDetails().size());
+        assertEquals("500", deserial.getActivity().getDetail(Walk.STEP_COUNT));
+        assertEquals("5:00", deserial.getActivity().getDetail(Walk.DURATION));
+        assertEquals("0.25", deserial.getActivity().getDetail(Walk.MILES));
+        assertEquals(time, ActivityUtils.stringToTime(deserial.getActivity().getDetail(Activity.DATE)));
+        assertEquals(note, deserial.getNotes());
+    }
 }
