@@ -49,17 +49,16 @@ public class CreateRouteActivity extends AppCompatActivity {    private Recycler
                             put(Walk.STEP_COUNT, extras.getString(Walk.STEP_COUNT));
                             put(Walk.MILES, extras.getString(Walk.MILES));
                             put(Walk.DURATION, extras.getString(Walk.DURATION));
-                            put(Walk.DESC_TAGS, extras.getString(Walk.DESC_TAGS));
                         }};
                         activity = new Walk(data);
                         activity.setDate();
                     } else {
-                        activity = new Walk(tags);
+                        activity = new Walk();
                     }
                     // Initialize route and fill in fields.
                     Route route = new Route(routeTitle.getText().toString(), activity);
-
                     route.setLocation(startLocation.getText().toString());
+                    route.setDescriptionTags(tags);
 
                     WalkWalkRevolution.getRouteDao().addRoute(route);
                     finish();

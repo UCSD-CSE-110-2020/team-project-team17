@@ -6,21 +6,31 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import edu.ucsd.cse110.walkwalkrevolution.WalkWalkRevolution;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Activity;
 
-@JsonPropertyOrder({"id", "title", "activity", "location"})
+@JsonPropertyOrder({"id", "title", "location", "activity"})
 public class Route {
 
     private long id;
     private String title;
-    private Activity activity;
     private String location;
+    private String descriptionTags;
+    private Activity activity;
 
     public Route(@JsonProperty("id") long id, @JsonProperty("title") String title,
-                 @JsonProperty("activity") Activity activity,
-                 @JsonProperty("location") String location){
+                 @JsonProperty("location") String location,
+                 @JsonProperty("descriptionTags") String descriptionTags,
+                 @JsonProperty("activity") Activity activity){
+        this.id = id;
+        this.title = title;
+        this.location = location;
+        this.descriptionTags = descriptionTags;
+        this.activity = activity;
+    }
+
+    //Used for testing
+    public Route(long id, String title, Activity activity){
         this.id = id;
         this.title = title;
         this.activity = activity;
-        this.location = location;
     }
 
     public Route(String title, Activity activity){
@@ -49,8 +59,19 @@ public class Route {
         this.title = title;
     }
 
-    public String getLocation() { return this.location; }
+    public String getLocation() {
+        return location == null ? "": location;
+    }
 
-    public void setLocation(String location) { this.location = location; }
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
+    public String getDescriptionTags() {
+        return descriptionTags == null ? "": descriptionTags;
+    }
+
+    public void setDescriptionTags(String descriptionTags) {
+        this.descriptionTags = descriptionTags;
+    }
 }
