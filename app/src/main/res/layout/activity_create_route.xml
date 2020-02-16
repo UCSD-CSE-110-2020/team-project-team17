@@ -52,31 +52,6 @@
             android:orientation="vertical" />
     </ScrollView>
 
-<!--    <ScrollView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:layout_weight="1"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/scrollView2"-->
-<!--        android:fillViewport="true" >-->
-<!--        <EditText-->
-<!--            android:id="@+id/route_notes"-->
-<!--            android:ems="10"-->
-<!--            android:gravity="top|left"-->
-<!--            android:inputType="textMultiLine"-->
-<!--            android:scrollbarAlwaysDrawVerticalTrack="false"-->
-<!--            android:scrollbarStyle="insideOverlay"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="48dp"-->
-<!--            android:layout_marginStart="16dp"-->
-<!--            android:layout_marginTop="16dp"-->
-<!--            android:layout_marginEnd="16dp"-->
-<!--            android:hint="Note">-->
-<!--            <requestFocus />-->
-<!--        </EditText>-->
-<!--    </ScrollView>-->
-
     <EditText
         android:id="@+id/route_notes"
         android:layout_width="0dp"
