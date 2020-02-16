@@ -50,6 +50,7 @@ public class DescriptionTagsListAdapter
     @Override
     public void onBindViewHolder(DescriptionTagsListAdapter.ViewHolder viewHolder, int position) {
         // Get the data model based on position
+        Log.d("Check Pos", "pos: " + position);
         DescriptionTags descTags = descriptionTagsList.get(position);
 
         // Set item views based on your views and data model
