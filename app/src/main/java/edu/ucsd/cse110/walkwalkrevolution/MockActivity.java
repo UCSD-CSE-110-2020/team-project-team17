@@ -14,13 +14,13 @@ import android.widget.TextView;
 public class MockActivity extends AppCompatActivity {
     private static final String TAG = "MockActivity";
 
-    private int mockedSteps = 0;
-    private int mockedTime  = 0;
+    private long mockedSteps = 0;
+    private long mockedTime  = 0;
 
     private TextView added_steps_text;
     private EditText mock_time_text;
 
-    private Button mock_steps, mock_time_button, finish;
+    private Button mock_steps, mock_time_button, finish, cancel, reset;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +38,8 @@ public class MockActivity extends AppCompatActivity {
         mock_steps = findViewById(R.id.add_steps_button);
 
         finish = findViewById(R.id.finish_button);
+        cancel = findViewById(R.id.cancel_button);
+        reset = findViewById(R.id.reset_button);
 
         mock_steps.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,8 +63,35 @@ public class MockActivity extends AppCompatActivity {
                 Log.d(TAG, "onClick: Sending results back to previous activity");
 
                 Intent intent = new Intent();
+                intent.putExtra("signal", 0);
                 intent.putExtra("steps", mockedSteps);
                 intent.putExtra("time", mockedTime);
+
+                setResult(Activity.RESULT_OK, intent);
+                finish();
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "onClick: Sending results back to previous activity");
+
+                Intent intent = new Intent();
+                intent.putExtra("signal", 1);
+
+                setResult(Activity.RESULT_OK, intent);
+                finish();
+            }
+        });
+
+        reset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "onClick: signal to set mock");
+
+                Intent intent = new Intent();
+                intent.putExtra("signal", 2);
 
                 setResult(Activity.RESULT_OK, intent);
                 finish();
@@ -77,7 +106,7 @@ public class MockActivity extends AppCompatActivity {
 
     public void updateMockedTime(){
         try {
-            mockedTime = Integer.parseInt(mock_time_text.getText().toString());
+            mockedTime = Long.parseLong(mock_time_text.getText().toString());
         } catch (Exception e){
             mockedTime = 0;
         }

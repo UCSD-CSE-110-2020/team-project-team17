@@ -39,7 +39,7 @@ public class HomeActivity extends AppCompatActivity implements Observer {
 
     private static StepSubject stepSubject;
 
-    private int offset;
+    private long offsetStep;
     private LocalDateTime mockedTime;
 
     @Override
@@ -128,10 +128,17 @@ public class HomeActivity extends AppCompatActivity implements Observer {
 
             // Enter mock mode, add additional steps from mock screen.
             if (requestCode == MOCK_ID) {
-                offset += data.getIntExtra("steps", 0);
-                int time = data.getIntExtra("time", 0);
+                int signal = data.getIntExtra("signal", 1);
+                if(signal == 0) {
+                    offsetStep += data.getLongExtra("steps", 0);
+                    long time = data.getLongExtra("time", 0);
+                    WalkWalkRevolution.setTimeOffset(time);
+                } else if(signal == 2) {
+                    offsetStep = 0;
+                    WalkWalkRevolution.setTimeOffset(0);
+                }
 
-                Log.d(TAG, "onActivityResult: " + offset + ", " + time);
+                Log.d(TAG, "onActivityResult: " + offsetStep + ", " + WalkWalkRevolution.getTimeOffset());
             }
         }
     }
@@ -141,12 +148,12 @@ public class HomeActivity extends AppCompatActivity implements Observer {
     }
 
     public void setStepCount(long stepCount) {
-        textSteps.setText(String.valueOf(offset + stepCount));
+        textSteps.setText(String.valueOf(offsetStep + stepCount));
 
         if(WalkWalkRevolution.getUser() != null) {
             // Round miles to 2 decimal places.
             textMiles.setText(String.valueOf(Math.round(
-                    ActivityUtils.stepsToMiles(stepCount + offset,
+                    ActivityUtils.stepsToMiles(stepCount + offsetStep,
                             WalkWalkRevolution.getUser().getHeight()) * 100) / 100.0));
         }
     }
@@ -182,8 +189,6 @@ public class HomeActivity extends AppCompatActivity implements Observer {
 
     }
 
-
-
     public static StepSubject getStepSubject(){
         return stepSubject;
     }
@@ -196,12 +201,13 @@ public class HomeActivity extends AppCompatActivity implements Observer {
         }
     }
 
+    //For testing
     public void setMockedTime(LocalDateTime time){
         this.mockedTime = time;
     }
 
     public Activity getLatestDailyWalk(){
-        return getLatestDailyWalk(LocalDateTime.now());
+        return getLatestDailyWalk(WalkWalkRevolution.getTime());
     }
 
     //O(logn) - Binary Search for the latest time

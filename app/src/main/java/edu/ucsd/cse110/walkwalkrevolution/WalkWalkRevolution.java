@@ -3,6 +3,10 @@ package edu.ucsd.cse110.walkwalkrevolution;
 import android.app.Application;
 import android.content.Context;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+
 import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessService;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessServiceFactory;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.GoogleFitAdapter;
@@ -35,6 +39,8 @@ public class WalkWalkRevolution extends Application {
     private static User user;
 
     private static boolean hasPermissions = false;
+
+    private static long timeOffset = 0;
 
     @Override
     public void onCreate() {
@@ -118,6 +124,22 @@ public class WalkWalkRevolution extends Application {
 
     public static boolean getHasPermissions(){
         return hasPermissions;
+    }
+
+    public static long getTimeOffset() {
+        return timeOffset;
+    }
+
+    public static void setTimeOffset(long offset) {
+        WalkWalkRevolution.timeOffset = offset;
+    }
+
+    public static LocalDateTime getTime(){
+        return toLDT(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() + timeOffset);
+    }
+
+    private static LocalDateTime toLDT(long millis) {
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(millis), ZoneId.systemDefault());
     }
 
 }

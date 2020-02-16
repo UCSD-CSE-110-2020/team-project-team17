@@ -9,6 +9,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
+import edu.ucsd.cse110.walkwalkrevolution.WalkWalkRevolution;
+
 public class Activity {
 
     private Map<String, String> details;
@@ -43,7 +45,7 @@ public class Activity {
     }
 
     public void setDate(){
-        setDate(LocalDateTime.now());
+        setDate(WalkWalkRevolution.getTime());
     }
 
     public void setDate(LocalDateTime dt){
