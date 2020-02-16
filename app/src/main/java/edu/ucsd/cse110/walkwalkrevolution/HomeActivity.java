@@ -2,7 +2,6 @@ package edu.ucsd.cse110.walkwalkrevolution;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,26 +11,31 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+import edu.ucsd.cse110.walkwalkrevolution.activity.Activity;
 import edu.ucsd.cse110.walkwalkrevolution.activity.ActivityUtils;
+import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessService;
-import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessServiceFactory;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.StepSubject;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.Steps;
+import edu.ucsd.cse110.walkwalkrevolution.route.Routes;
 
 public class HomeActivity extends AppCompatActivity implements Observer {
 
-    public static final String FITNESS_SERVICE_KEY = "FITNESS_SERVICE_KEY";
     private static final String TEST_SERVICE = "TEST_SERVICE";
     private static final String TAG = "HomeActivity";
     public static final String PRE_EXISTING_ROUTE = "edu.ucsd.cse110.walkwalkrevolution.PRE_EXISTING_ROUTE";
 
-    private TextView textSteps, textMiles;
-    private FitnessService fitnessService;
+    FitnessService fitnessService;
+    private TextView textSteps, textMiles, latestSteps, latestMiles, latestDuration;
     private Button startWalk;
     private static StepSubject stepSubject;
+
+    private LocalDateTime mockedTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,13 +44,14 @@ public class HomeActivity extends AppCompatActivity implements Observer {
         textSteps = findViewById(R.id.steps);
         textMiles = findViewById(R.id.miles);
 
-        String fitnessServiceKey = getIntent().getStringExtra(FITNESS_SERVICE_KEY);
+        latestSteps = findViewById(R.id.latest_steps);
+        latestMiles = findViewById(R.id.latest_miles);
+        latestDuration = findViewById(R.id.latest_duration);
 
-        fitnessService = FitnessServiceFactory.create(fitnessServiceKey, this);
+        fitnessService = WalkWalkRevolution.getFitnessService();
+
         stepSubject = new StepSubject(fitnessService);
         stepSubject.addObserver(this);
-
-        fitnessService.setup();
 
         startWalk = findViewById(R.id.start_walk);
         startWalk.setOnClickListener(new View.OnClickListener() {
@@ -77,7 +82,13 @@ public class HomeActivity extends AppCompatActivity implements Observer {
             Intent heightActivity = new Intent(this, HeightActivity.class);
             heightActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(heightActivity);
-            finish();
+            HomeActivity.this.overridePendingTransition(0, 0);
+            HomeActivity.this.finish();
+        } else {
+            if(mockedTime == null)
+                populateLatestInfo(getLatestDailyWalk());
+            else
+                populateLatestInfo(getLatestDailyWalk(mockedTime));
         }
     }
 
@@ -86,7 +97,7 @@ public class HomeActivity extends AppCompatActivity implements Observer {
         super.onActivityResult(requestCode, resultCode, data);
 
 //       If authentication was required during google fit setup, this will be called after the user authenticates
-        if (resultCode == Activity.RESULT_OK) {
+        if (resultCode == android.app.Activity.RESULT_OK) {
             if (requestCode == fitnessService.getRequestCode()) {
                 setStepCount(WalkWalkRevolution.getSteps());
             }
@@ -143,6 +154,42 @@ public class HomeActivity extends AppCompatActivity implements Observer {
 
     public static StepSubject getStepSubject(){
         return stepSubject;
+    }
+
+    public void populateLatestInfo(Activity activity){
+        if(activity != null){
+            latestDuration.setText(activity.getDetail(Walk.DURATION));
+            latestSteps.setText(activity.getDetail(Walk.STEP_COUNT));
+            latestMiles.setText(activity.getDetail(Walk.MILES));
+        }
+    }
+
+    public void setMockedTime(LocalDateTime time){
+        this.mockedTime = time;
+    }
+
+    public Activity getLatestDailyWalk(){
+        return getLatestDailyWalk(LocalDateTime.now());
+    }
+
+    //O(logn) - Binary Search for the latest time
+    public Activity getLatestDailyWalk(LocalDateTime time){
+        Routes routes = new Routes();
+        List<Activity> activities = routes.getActivities();
+        int l = 0, r = activities.size();
+        while(l < r){
+            int m = l + (r-l)/2;
+            if(ActivityUtils.stringToTime(activities.get(m).getDetail(Activity.DATE))
+                    .compareTo(time) < 0){
+                l = m+1;
+            } else {
+                r = m;
+            }
+        }
+        if(l == 0 ||
+                !ActivityUtils.isSameDay(ActivityUtils.stringToTime(activities.get(l-1).getDetail(Activity.DATE)), time))
+            return null;
+        else return activities.get(l-1);
     }
 
 }

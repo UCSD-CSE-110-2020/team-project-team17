@@ -30,7 +30,6 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView routeTitle;
-        public TextView startLocation;
         public TextView steps;
         public TextView miles;
         public TextView duration;
@@ -42,7 +41,6 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
             super(itemView);
 
             routeTitle = (TextView) itemView.findViewById(R.id.route_title);
-            startLocation = (TextView) itemView.findViewById(R.id.start_location);
             steps = (TextView) itemView.findViewById(R.id.steps);
             miles = (TextView) itemView.findViewById(R.id.miles);
             duration = (TextView) itemView.findViewById(R.id.duration);
@@ -92,9 +90,6 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
         // Set item views based on your views and data model
         TextView routeTitle = viewHolder.routeTitle;
         routeTitle.setText(route.getTitle());
-
-        TextView startLocation = viewHolder.startLocation;
-        startLocation.setText(route.getLocation());
 
         TextView steps = viewHolder.steps;
         steps.setText(route.getActivity().getDetail(Walk.STEP_COUNT));

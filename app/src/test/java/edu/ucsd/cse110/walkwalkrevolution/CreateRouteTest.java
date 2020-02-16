@@ -23,13 +23,18 @@ import org.robolectric.shadows.ShadowLooper;
 
 @RunWith(AndroidJUnit4.class)
 public class CreateRouteTest {
-
     @Before
     public void setup(){
         WalkWalkRevolution.setRouteDao(new MockRouteDao());
         WalkWalkRevolution.setUserDao(new MockUserDao());
         WalkWalkRevolution.setUser(new User(1, 528*12));
     }
+
+    @Test
+    public void dummyTest() {
+        assertEquals(1+1, 2);
+    }
+
 
     @Test
     public void routeWithTitleSave(){
@@ -41,6 +46,7 @@ public class CreateRouteTest {
                 routeTitle.setText("Route 1");
 
                 save.performClick();
+
                 ShadowLooper.runUiThreadTasksIncludingDelayedTasks();
                 assertEquals(true, activity.isFinishing());
 
@@ -48,9 +54,11 @@ public class CreateRouteTest {
                 assertNotNull(route);
                 assertEquals(1, route.getId());
                 assertEquals("Route 1", route.getTitle());
+
             });
         }
     }
+
 
 
     @Test
@@ -93,6 +101,8 @@ public class CreateRouteTest {
             });
         }
     }
+
+
 
 
 
