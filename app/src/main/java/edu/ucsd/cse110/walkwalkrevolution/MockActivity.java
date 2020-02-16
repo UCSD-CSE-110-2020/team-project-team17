@@ -27,16 +27,15 @@ public class MockActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mock_screen);
 
+        mock_time_button = findViewById(R.id.mock_time_button);
+
         // Make password input visible.
         mock_time_text = findViewById(R.id.mocked_time_text);
         mock_time_text.setTransformationMethod(null);
 
-        // Text displaying how many steps we're adding.
+        // Text field showing how many steps we've added / button to add more
         added_steps_text = findViewById(R.id.added_steps);
-
-        // Mock steps text field and button
         mock_steps = findViewById(R.id.add_steps_button);
-        mock_time_button = findViewById(R.id.mock_time_button);
 
         finish = findViewById(R.id.finish_button);
 
