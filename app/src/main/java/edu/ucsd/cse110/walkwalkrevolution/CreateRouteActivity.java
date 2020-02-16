@@ -58,7 +58,7 @@ public class CreateRouteActivity extends AppCompatActivity {    private Recycler
                     // Initialize route and fill in fields.
                     Route route = new Route(routeTitle.getText().toString(), activity);
 
-                    if(TextUtils.isEmpty(startLocation.getText())) {
+                    if(!TextUtils.isEmpty(startLocation.getText())) {
                         route.setLocation(startLocation.getText().toString());
                     }
                     route.setDescriptionTags(tags);

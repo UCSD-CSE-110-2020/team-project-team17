@@ -14,18 +14,25 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.data.DataBufferObserver;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import edu.ucsd.cse110.walkwalkrevolution.activity.Activity;
 import edu.ucsd.cse110.walkwalkrevolution.activity.ActivityUtils;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.StepSubject;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.Steps;
+import edu.ucsd.cse110.walkwalkrevolution.route.Route;
+
+import static edu.ucsd.cse110.walkwalkrevolution.RoutesDetailActivity.ROUTE_ID;
 
 public class WalkActivity extends AppCompatActivity implements Observer {
     private static final String TAG = "WalkActivity";
+
 
     long walkSteps ;
     long currentTotalSteps;
@@ -73,13 +80,28 @@ public class WalkActivity extends AppCompatActivity implements Observer {
             routeTitle.setVisibility(View.VISIBLE);
         }
 
+        Intent intent = getIntent();
+        int i = intent.getIntExtra(RoutesDetailActivity.ROUTE, 0);
+        int j = intent.getIntExtra(HomeActivity.PRE_EXISTING_ROUTE, 0);
+        long s = intent.getLongExtra(ROUTE_ID, 0);
+
         //  Exit when stop walk clicked.
         stopWalk = findViewById(R.id.stop_walk);
         stopWalk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
+                if(i == 1 && j == 0)
+                {
+                    saveWalk(s, view);
+                }
+                else if(i==0 && j==1)
+                {
+                    createRouteActivity();
+                }
                 finish();
-                createRouteActivity();
+
             }
         });
 
@@ -93,6 +115,25 @@ public class WalkActivity extends AppCompatActivity implements Observer {
         createRoute.putExtra(Walk.MILES, miles.getText().toString());
         createRoute.putExtra(Walk.DURATION, timer.getText().toString());
         startActivity(createRoute);
+    }
+
+    public void saveWalk(long id, View v){
+        Route route = WalkWalkRevolution.getRouteDao().getRoute(id);
+        Map<String, String> data = new HashMap<String, String>(){{
+            put(Walk.STEP_COUNT, steps.getText().toString());
+            put(Walk.MILES, miles.getText().toString());
+            put(Walk.DURATION, timer.getText().toString());
+        }};
+        route.getActivity().setDetails(data);
+        route.getActivity().setDate();
+
+        /*
+        route.getActivity().setDetail(Walk.STEP_COUNT, steps.getText().toString());
+        route.getActivity().setDetail(Walk.MILES, miles.getText().toString());
+        route.getActivity().setDetail(Walk.DURATION, timer.getText().toString());
+        route.getActivity().setDate();
+        */
+
     }
 
     @Override

@@ -8,7 +8,7 @@
 
     <TextView
         android:id="@+id/route_title"
-        android:layout_width="0dp"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginLeft="16dp"

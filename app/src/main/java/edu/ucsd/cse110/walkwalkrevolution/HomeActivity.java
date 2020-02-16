@@ -26,6 +26,7 @@ public class HomeActivity extends AppCompatActivity implements Observer {
     public static final String FITNESS_SERVICE_KEY = "FITNESS_SERVICE_KEY";
     private static final String TEST_SERVICE = "TEST_SERVICE";
     private static final String TAG = "HomeActivity";
+    public static final String PRE_EXISTING_ROUTE = "edu.ucsd.cse110.walkwalkrevolution.PRE_EXISTING_ROUTE";
 
     private TextView textSteps, textMiles;
     private FitnessService fitnessService;
@@ -64,6 +65,7 @@ public class HomeActivity extends AppCompatActivity implements Observer {
 
     private void startWalk(){
         Intent intent = new Intent(this,  WalkActivity.class);
+        intent.putExtra(PRE_EXISTING_ROUTE, 1);
         startActivity(intent);
     }
 
