@@ -80,6 +80,7 @@ public class HomeActivity extends AppCompatActivity implements Observer {
             Intent heightActivity = new Intent(this, HeightActivity.class);
             heightActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(heightActivity);
+            HomeActivity.this.overridePendingTransition(0, 0);
             HomeActivity.this.finish();
         } else {
             if(mockedTime == null)
