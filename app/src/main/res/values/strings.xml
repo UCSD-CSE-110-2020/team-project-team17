@@ -12,4 +12,5 @@
     <string name="miles_hint">Miles</string>
     <string name="default_miles">###</string>
     <string name="steps_hint">Steps</string>
+    <string name="stop_walk_button">Stop Walk</string>
 </resources>

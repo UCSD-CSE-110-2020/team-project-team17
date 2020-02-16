@@ -3,7 +3,6 @@ package edu.ucsd.cse110.walkwalkrevolution;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import static edu.ucsd.cse110.walkwalkrevolution.WalkWalkRevolution.fitnessServiceKey;
@@ -24,5 +23,6 @@ public class DummyActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
         intent.putExtra(HomeActivity.FITNESS_SERVICE_KEY, fitnessServiceKey);
         startActivity(intent);
+        finish();
     }
 }
