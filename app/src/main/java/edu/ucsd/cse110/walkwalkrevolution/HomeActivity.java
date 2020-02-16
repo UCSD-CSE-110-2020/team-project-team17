@@ -136,7 +136,7 @@ public class HomeActivity extends AppCompatActivity implements Observer {
         }
     }
 
-    private void setStepCount(Steps steps){
+    public void setStepCount(Steps steps){
         setStepCount(steps.getDailyTotal());
     }
 
