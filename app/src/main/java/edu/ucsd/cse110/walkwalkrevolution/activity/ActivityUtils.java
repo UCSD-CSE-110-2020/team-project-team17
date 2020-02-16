@@ -32,4 +32,9 @@ public class ActivityUtils {
         ActivityUtils.CONVERSION_FACTOR = factor;
     }
 
+    public static boolean isSameDay(LocalDateTime a, LocalDateTime b){
+        return a.getDayOfMonth() == b.getDayOfMonth() && a.getMonthValue() == b.getMonthValue() &&
+                a.getYear() == b.getYear();
+    }
+
 }
