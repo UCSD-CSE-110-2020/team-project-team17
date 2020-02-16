@@ -37,6 +37,7 @@ public class CreateRouteActivity extends AppCompatActivity {    private Recycler
         saveRoute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String tags = adapter.getSelectedTags();
                 if(TextUtils.isEmpty(routeTitle.getText())){
                     routeTitle.setError("Route Title is Required");
                 } else {
@@ -47,11 +48,12 @@ public class CreateRouteActivity extends AppCompatActivity {    private Recycler
                             put(Walk.STEP_COUNT, extras.getString(Walk.STEP_COUNT));
                             put(Walk.MILES, extras.getString(Walk.MILES));
                             put(Walk.DURATION, extras.getString(Walk.DURATION));
+                            put(Walk.DESC_TAGS, extras.getString(Walk.DESC_TAGS));
                         }};
                         activity = new Walk(data);
                         activity.setDate();
                     } else {
-                        activity = new Walk();
+                        activity = new Walk(tags);
                     }
                     Route route = new Route(routeTitle.getText().toString(), activity);
                     WalkWalkRevolution.getRouteDao().addRoute(route);

@@ -65,11 +65,8 @@ public class DescriptionTagsListAdapter
                 @Override
                 public void onClick(View v) {
                     int tagIdx = Integer.valueOf(v.getId()) % 10;
-                    Log.d("tagIdx", "fvre" + tagIdx );
-                    //descTags.selectTag(tagIdx);
-                    for(int i = 0; i < descriptionTagsList.getSize(); i++ ) {
-                        Log.d("TesAt", descriptionTagsList.get(i).getSelectedTag());
-                    }
+                    Log.d("tagIdx", "tag idx: " + tagIdx );
+                    descTags.selectTag(tagIdx);
                 }
             });
 
@@ -87,5 +84,13 @@ public class DescriptionTagsListAdapter
     public void updateList() {
         descriptionTagsList = new DescriptionTagsList();
         notifyDataSetChanged();
+    }
+
+    public String getSelectedTags() {
+        String tags = "";
+        for(int i = 0; i < descriptionTagsList.getSize(); i++) {
+           tags +=  "," + descriptionTagsList.get(i).getSelectedTag();
+        }
+        return tags;
     }
 }

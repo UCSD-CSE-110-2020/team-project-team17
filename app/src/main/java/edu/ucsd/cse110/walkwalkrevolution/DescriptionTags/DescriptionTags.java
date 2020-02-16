@@ -24,10 +24,6 @@ public class DescriptionTags {
         return selectedTag;
     }
 
-    public ArrayList<String> getTags() {
-        return tags;
-    }
-
     public String get(int idx) {
         return tags.get(idx);
     }
