@@ -24,6 +24,7 @@ public class RoutesDetailActivity extends AppCompatActivity {
     private TextView duration;
     private TextView date;
     private TextView location;
+    private TextView note;
 
     private TextView tag1;
     private TextView tag2;
@@ -54,6 +55,7 @@ public class RoutesDetailActivity extends AppCompatActivity {
         date = (TextView) findViewById(R.id.numOfDay);
         location = (TextView) findViewById(R.id.location_text);
         start = (Button) findViewById(R.id.start_preroute);
+        note = (TextView) findViewById(R.id.Note_view);
 
         tag1 = (TextView) findViewById(R.id.tag1);
         tag2 = (TextView) findViewById(R.id.tag2);
@@ -69,6 +71,7 @@ public class RoutesDetailActivity extends AppCompatActivity {
         date.setText(ActivityUtils.timeToMonthDay(
                 ActivityUtils.stringToTime(route.getActivity().getDetail(Activity.DATE))));
         setTags(route.getDescriptionTags());
+        note.setText(route.getNotes());
 
         start.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v)
