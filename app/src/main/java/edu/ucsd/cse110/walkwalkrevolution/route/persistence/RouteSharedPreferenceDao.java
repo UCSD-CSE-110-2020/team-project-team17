@@ -43,7 +43,7 @@ public class RouteSharedPreferenceDao implements BaseRouteDao {
 
         String jsonString = sp.getString(Long.toString(routeId), "");
 
-        if(jsonString == "") return null;
+        if(jsonString.equals("")) return null;
 
         try {
             return RouteUtils.deserialize(jsonString);

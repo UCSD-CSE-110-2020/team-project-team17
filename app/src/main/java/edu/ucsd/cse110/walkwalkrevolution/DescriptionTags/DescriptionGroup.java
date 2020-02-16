@@ -22,6 +22,7 @@ public class DescriptionGroup {
         int numGroups = descriptionTagsList.getSize();
         for(int i = 0; i < numGroups; i++) {
             RadioGroup tagGroup = new RadioGroup(linearLayout.getContext());
+            tagGroup.setId(View.generateViewId());
             createRadios(tagGroup, descriptionTagsList.get(i));
             tagGroup.setOrientation(LinearLayout.HORIZONTAL);
             linearLayout.addView(tagGroup);
