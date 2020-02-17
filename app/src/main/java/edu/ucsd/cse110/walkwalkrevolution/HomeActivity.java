@@ -55,8 +55,14 @@ public class HomeActivity extends AppCompatActivity implements Observer {
 
         fitnessService = WalkWalkRevolution.getFitnessService();
 
-        stepSubject = new StepSubject(fitnessService);
-        stepSubject.addObserver(this);
+
+        if(WalkWalkRevolution.getStepSubject() == null) {
+            WalkWalkRevolution.setStepSubject(new StepSubject(fitnessService));
+            stepSubject = WalkWalkRevolution.getStepSubject();
+            stepSubject.addObserver(this);
+        } else {
+            WalkWalkRevolution.getStepSubject().addObserver(this);
+        }
 
         startWalk = findViewById(R.id.start_walk);
         startWalk.setOnClickListener(new View.OnClickListener() {
@@ -150,7 +156,8 @@ public class HomeActivity extends AppCompatActivity implements Observer {
     }
 
     public void setStepCount(Steps steps){
-        setStepCount(steps.getDailyTotal());
+        Log.d(TAG, "setStepCount: " + WalkWalkRevolution.getSteps().getDailyTotal());
+        setStepCount(WalkWalkRevolution.getSteps().getDailyTotal());
     }
 
     public void setStepCount(long stepCount) {
