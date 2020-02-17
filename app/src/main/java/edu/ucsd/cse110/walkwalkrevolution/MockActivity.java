@@ -20,7 +20,7 @@ public class MockActivity extends AppCompatActivity {
     private TextView added_steps_text;
     private EditText mock_time_text;
 
-    private Button mock_steps, mock_time_button, finish, cancel, reset;
+    private Button mock_steps, mock_time_button, finish, cancel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +39,6 @@ public class MockActivity extends AppCompatActivity {
 
         finish = findViewById(R.id.finish_button);
         cancel = findViewById(R.id.cancel_button);
-        reset = findViewById(R.id.reset_button);
 
         mock_steps.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,19 +78,6 @@ public class MockActivity extends AppCompatActivity {
 
                 Intent intent = new Intent();
                 intent.putExtra("signal", 1);
-
-                setResult(Activity.RESULT_OK, intent);
-                finish();
-            }
-        });
-
-        reset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "onClick: signal to set mock");
-
-                Intent intent = new Intent();
-                intent.putExtra("signal", 2);
 
                 setResult(Activity.RESULT_OK, intent);
                 finish();

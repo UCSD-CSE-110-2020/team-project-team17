@@ -129,13 +129,11 @@ public class HomeActivity extends AppCompatActivity implements Observer {
             // Enter mock mode, add additional steps from mock screen.
             if (requestCode == MOCK_ID) {
                 int signal = data.getIntExtra("signal", 1);
+
                 if(signal == 0) {
                     offsetStep += data.getLongExtra("steps", 0);
                     long time = data.getLongExtra("time", 0);
                     WalkWalkRevolution.setTimeOffset(time);
-                } else if(signal == 2) {
-                    offsetStep = 0;
-                    WalkWalkRevolution.setTimeOffset(0);
                 }
 
                 Log.d(TAG, "onActivityResult: " + offsetStep + ", " + WalkWalkRevolution.getTimeOffset());
