@@ -131,7 +131,7 @@ public class WalkWalkRevolution extends Application {
     }
 
     public static void setTimeOffset(long offset) {
-        WalkWalkRevolution.timeOffset = offset;
+        WalkWalkRevolution.timeOffset += offset;
     }
 
     public static LocalDateTime getTime(){

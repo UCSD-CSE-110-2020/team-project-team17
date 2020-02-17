@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.data.DataBufferObserver;
 
+import java.time.LocalDateTime;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Timer;
@@ -25,9 +27,12 @@ import edu.ucsd.cse110.walkwalkrevolution.fitness.StepSubject;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.Steps;
 
 public class WalkActivity extends AppCompatActivity implements Observer {
+
+    private final int MOCK_ID = 0;
+
     private static final String TAG = "WalkActivity";
 
-    long walkSteps ;
+    long walkSteps;
     long currentTotalSteps;
 
     private TextView steps;
@@ -35,8 +40,9 @@ public class WalkActivity extends AppCompatActivity implements Observer {
     private TextView routeTitle;
     private TextView timer;
 
-    private Button stopWalk;
+    private Button stopWalk, mock;
 
+    private LocalDateTime start;
     private Chronometer chronometer;
     private Steps stepTracker;
 
@@ -73,6 +79,14 @@ public class WalkActivity extends AppCompatActivity implements Observer {
             routeTitle.setVisibility(View.VISIBLE);
         }
 
+        mock = findViewById(R.id.mock_button);
+        mock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startMock();
+            }
+        });
+
         //  Exit when stop walk clicked.
         stopWalk = findViewById(R.id.stop_walk);
         stopWalk.setOnClickListener(new View.OnClickListener() {
@@ -83,8 +97,42 @@ public class WalkActivity extends AppCompatActivity implements Observer {
             }
         });
 
+
+
         chronometer = findViewById(R.id.timer);
         chronometer.start();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Log.d(TAG, "onActivityResult: " + requestCode);
+        if (requestCode == MOCK_ID) {
+            int signal = data.getIntExtra("signal", 1);
+
+            if(signal == 0) {
+                walkSteps += data.getLongExtra("steps", 0);
+                long time = data.getLongExtra("time", 0);
+                long base = (SystemClock.elapsedRealtime() -
+                        (SystemClock.elapsedRealtime() - chronometer.getBase() + time));
+                chronometer.setBase(base);
+                WalkWalkRevolution.setTimeOffset(time);
+            }
+
+            Log.d(TAG, "onActivityResult: " + walkSteps + ", " + WalkWalkRevolution.getTimeOffset());
+        }
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        updateWalkSteps();
+    }
+
+    private void startMock(){
+        Intent intent = new Intent(this, MockActivity.class);
+        startActivityForResult(intent, MOCK_ID, null);
     }
 
     public void createRouteActivity() {
