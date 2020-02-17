@@ -100,6 +100,7 @@ public class WalkActivity extends AppCompatActivity implements Observer {
             @Override
             public void onClick(View view) {
                 //checks if intent is from HomeActivity or RouteDetailActivity
+                WalkWalkRevolution.getFitnessService().updateStepCount();
                 if(i == 1 && j == 0 && s != 0)
                 {
                     saveWalk(s);
