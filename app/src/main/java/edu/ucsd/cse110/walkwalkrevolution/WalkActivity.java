@@ -48,9 +48,13 @@ public class WalkActivity extends AppCompatActivity implements Observer {
     private LocalDateTime start;
     private Chronometer chronometer;
     private Steps stepTracker;
+    private Observer current;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        current = this;
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_walk);
 
@@ -101,6 +105,8 @@ public class WalkActivity extends AppCompatActivity implements Observer {
             public void onClick(View view) {
                 //checks if intent is from HomeActivity or RouteDetailActivity
                 WalkWalkRevolution.getFitnessService().updateStepCount();
+                HomeActivity.getStepSubject().deleteObserver(current);
+
                 updateWalkSteps();
                 if(i == 1 && j == 0 && s != 0)
                 {
@@ -125,7 +131,7 @@ public class WalkActivity extends AppCompatActivity implements Observer {
         super.onActivityResult(requestCode, resultCode, data);
 
         Log.d(TAG, "onActivityResult: " + requestCode);
-        if (requestCode == MOCK_ID) {
+        if (requestCode == MOCK_ID && data != null) {
             int signal = data.getIntExtra("signal", 1);
 
             if(signal == 0) {

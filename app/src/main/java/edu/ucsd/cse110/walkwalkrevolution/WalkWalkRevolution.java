@@ -11,6 +11,7 @@ import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessService;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessServiceFactory;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.GoogleFitAdapter;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.MockFitnessService;
+import edu.ucsd.cse110.walkwalkrevolution.fitness.StepSubject;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.Steps;
 import edu.ucsd.cse110.walkwalkrevolution.route.persistence.BaseRouteDao;
 import edu.ucsd.cse110.walkwalkrevolution.route.persistence.RouteSharedPreferenceDao;
@@ -35,6 +36,7 @@ public class WalkWalkRevolution extends Application {
     private static BaseUserDao userDao;
 
     private static Steps steps = new Steps();
+    private static StepSubject stepTracker;
 
     private static User user;
 
@@ -101,6 +103,14 @@ public class WalkWalkRevolution extends Application {
 
     public static Steps getSteps(){
         return steps;
+    }
+
+    public static StepSubject getStepSubject(){
+        return stepTracker;
+    }
+
+    public static void  setStepSubject(StepSubject newST){
+        WalkWalkRevolution.stepTracker = newST;
     }
 
     public static User getUser() {
