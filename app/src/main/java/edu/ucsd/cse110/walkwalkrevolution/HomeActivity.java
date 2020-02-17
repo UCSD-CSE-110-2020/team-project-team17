@@ -103,12 +103,19 @@ public class HomeActivity extends AppCompatActivity implements Observer {
             startActivity(heightActivity);
             HomeActivity.this.overridePendingTransition(0, 0);
             HomeActivity.this.finish();
-        } else {
-            if(mockedTime == null)
-                populateLatestInfo(getLatestDailyWalk());
-            else
-                populateLatestInfo(getLatestDailyWalk(mockedTime));
         }
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+
+        setStepCount(WalkWalkRevolution.getSteps());
+
+        if(mockedTime == null)
+            populateLatestInfo(getLatestDailyWalk());
+        else
+            populateLatestInfo(getLatestDailyWalk(mockedTime));
     }
 
     @Override
@@ -184,6 +191,10 @@ public class HomeActivity extends AppCompatActivity implements Observer {
             @Override
             public void run() {
                 setStepCount(WalkWalkRevolution.getSteps());
+                if(mockedTime == null)
+                    populateLatestInfo(getLatestDailyWalk());
+                else
+                    populateLatestInfo(getLatestDailyWalk(mockedTime));
             }
         });
 
@@ -198,6 +209,10 @@ public class HomeActivity extends AppCompatActivity implements Observer {
             latestDuration.setText(activity.getDetail(Walk.DURATION));
             latestSteps.setText(activity.getDetail(Walk.STEP_COUNT));
             latestMiles.setText(activity.getDetail(Walk.MILES));
+        } else {
+            latestDuration.setText(getResources().getString(R.string.default_latest));
+            latestSteps.setText(getResources().getString(R.string.default_latest));
+            latestMiles.setText(getResources().getString(R.string.default_latest));
         }
     }
 
