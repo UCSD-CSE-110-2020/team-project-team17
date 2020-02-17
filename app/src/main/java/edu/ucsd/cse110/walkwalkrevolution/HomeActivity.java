@@ -26,15 +26,21 @@ import edu.ucsd.cse110.walkwalkrevolution.route.Routes;
 
 public class HomeActivity extends AppCompatActivity implements Observer {
 
+    private final int MOCK_ID = 0;
+
     private static final String TEST_SERVICE = "TEST_SERVICE";
     private static final String TAG = "HomeActivity";
     public static final String PRE_EXISTING_ROUTE = "edu.ucsd.cse110.walkwalkrevolution.PRE_EXISTING_ROUTE";
 
     FitnessService fitnessService;
     private TextView textSteps, textMiles, latestSteps, latestMiles, latestDuration;
+
     private Button startWalk;
+    private Button mockButton;
+
     private static StepSubject stepSubject;
 
+    private long offsetStep;
     private LocalDateTime mockedTime;
 
     @Override
@@ -61,6 +67,14 @@ public class HomeActivity extends AppCompatActivity implements Observer {
             }
         });
 
+        mockButton = findViewById(R.id.mock_button);
+        mockButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startMock();
+            }
+        });
+
     }
 
     public void createRouteActivity() {
@@ -72,6 +86,11 @@ public class HomeActivity extends AppCompatActivity implements Observer {
         Intent intent = new Intent(this,  WalkActivity.class);
         intent.putExtra(PRE_EXISTING_ROUTE, 1);
         startActivity(intent);
+    }
+
+    private void startMock(){
+        Intent intent = new Intent(this, MockActivity.class);
+        startActivityForResult(intent, MOCK_ID, null);
     }
 
     @Override
@@ -96,27 +115,45 @@ public class HomeActivity extends AppCompatActivity implements Observer {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-//       If authentication was required during google fit setup, this will be called after the user authenticates
+        Log.d(TAG, "onActivityResult: " + requestCode);
+
+        // If authentication was required during google fit setup, this will be called after the user authenticates
         if (resultCode == android.app.Activity.RESULT_OK) {
-            if (requestCode == fitnessService.getRequestCode()) {
-                setStepCount(WalkWalkRevolution.getSteps());
+//       If authentication was required during google fit setup, this will be called after the user authenticates
+            if (resultCode == android.app.Activity.RESULT_OK) {
+                if (requestCode == fitnessService.getRequestCode()) {
+                    setStepCount(WalkWalkRevolution.getSteps());
+                }
+            } else {
+                Log.e(TAG, "ERROR, google fit result code: " + resultCode);
             }
-        } else {
-            Log.e(TAG, "ERROR, google fit result code: " + resultCode);
+
+            // Enter mock mode, add additional steps from mock screen.
+            if (requestCode == MOCK_ID) {
+                int signal = data.getIntExtra("signal", 1);
+
+                if(signal == 0) {
+                    offsetStep += data.getLongExtra("steps", 0);
+                    long time = data.getLongExtra("time", 0);
+                    WalkWalkRevolution.setTimeOffset(time);
+                }
+
+                Log.d(TAG, "onActivityResult: " + offsetStep + ", " + WalkWalkRevolution.getTimeOffset());
+            }
         }
     }
 
-    private void setStepCount(Steps steps){
+    public void setStepCount(Steps steps){
         setStepCount(steps.getDailyTotal());
     }
 
     public void setStepCount(long stepCount) {
-        textSteps.setText(String.valueOf(stepCount));
+        textSteps.setText(String.valueOf(offsetStep + stepCount));
 
         if(WalkWalkRevolution.getUser() != null) {
             // Round miles to 2 decimal places.
             textMiles.setText(String.valueOf(Math.round(
-                    ActivityUtils.stepsToMiles(stepCount,
+                    ActivityUtils.stepsToMiles(stepCount + offsetStep,
                             WalkWalkRevolution.getUser().getHeight()) * 100) / 100.0));
         }
     }
@@ -164,12 +201,13 @@ public class HomeActivity extends AppCompatActivity implements Observer {
         }
     }
 
+    //For testing
     public void setMockedTime(LocalDateTime time){
         this.mockedTime = time;
     }
 
     public Activity getLatestDailyWalk(){
-        return getLatestDailyWalk(LocalDateTime.now());
+        return getLatestDailyWalk(WalkWalkRevolution.getTime());
     }
 
     //O(logn) - Binary Search for the latest time
