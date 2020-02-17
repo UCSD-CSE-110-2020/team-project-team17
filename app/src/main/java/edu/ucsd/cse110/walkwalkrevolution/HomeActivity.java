@@ -38,8 +38,6 @@ public class HomeActivity extends AppCompatActivity implements Observer {
     private Button startWalk;
     private Button mockButton;
 
-    private static StepSubject stepSubject;
-
     private LocalDateTime mockedTime;
 
     @Override
@@ -55,8 +53,7 @@ public class HomeActivity extends AppCompatActivity implements Observer {
 
         fitnessService = WalkWalkRevolution.getFitnessService();
 
-        stepSubject = new StepSubject(fitnessService);
-        stepSubject.addObserver(this);
+        WalkWalkRevolution.getStepSubject().addObserver(this);
 
         startWalk = findViewById(R.id.start_walk);
         startWalk.setOnClickListener(new View.OnClickListener() {
@@ -197,10 +194,6 @@ public class HomeActivity extends AppCompatActivity implements Observer {
             }
         });
 
-    }
-
-    public static StepSubject getStepSubject(){
-        return stepSubject;
     }
 
     public void populateLatestInfo(Activity activity){

@@ -20,6 +20,7 @@ import java.util.Observer;
 
 import edu.ucsd.cse110.walkwalkrevolution.activity.ActivityUtils;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
+import edu.ucsd.cse110.walkwalkrevolution.fitness.StepSubject;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.Steps;
 import edu.ucsd.cse110.walkwalkrevolution.route.Route;
 
@@ -58,7 +59,7 @@ public class WalkActivity extends AppCompatActivity implements Observer {
 
         stepTracker = WalkWalkRevolution.getSteps();
         if(!getIntent().hasExtra("test")){
-            HomeActivity.getStepSubject().addObserver(this);
+            WalkWalkRevolution.getStepSubject().addObserver(this);
         }
 
         //  How many steps we begin with.

@@ -11,6 +11,7 @@ import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessService;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessServiceFactory;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.GoogleFitAdapter;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.MockFitnessService;
+import edu.ucsd.cse110.walkwalkrevolution.fitness.StepSubject;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.Steps;
 import edu.ucsd.cse110.walkwalkrevolution.route.persistence.BaseRouteDao;
 import edu.ucsd.cse110.walkwalkrevolution.route.persistence.RouteSharedPreferenceDao;
@@ -42,6 +43,8 @@ public class WalkWalkRevolution extends Application {
 
     private static long timeOffset = 0;
     private static long walkOffset = 0;
+
+    private static StepSubject stepSubject;
 
     @Override
     public void onCreate() {
@@ -149,6 +152,14 @@ public class WalkWalkRevolution extends Application {
 
     private static LocalDateTime toLDT(long millis) {
         return LocalDateTime.ofInstant(Instant.ofEpochMilli(millis), ZoneId.systemDefault());
+    }
+
+    public static void setStepSubject(StepSubject stepSubject) {
+        WalkWalkRevolution.stepSubject = stepSubject;
+    }
+
+    public static StepSubject getStepSubject() {
+        return stepSubject;
     }
 
 }

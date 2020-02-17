@@ -20,6 +20,7 @@ import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessService;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessServiceFactory;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.MockFitnessService;
+import edu.ucsd.cse110.walkwalkrevolution.fitness.StepSubject;
 import edu.ucsd.cse110.walkwalkrevolution.route.Route;
 import edu.ucsd.cse110.walkwalkrevolution.route.persistence.MockRouteDao;
 import edu.ucsd.cse110.walkwalkrevolution.user.User;
@@ -46,6 +47,7 @@ public class HomeActivityUnitTest {
         WalkWalkRevolution.setUserDao(new MockUserDao());
         WalkWalkRevolution.setUser(new User(1, 528*12));
         fitnessService = new MockFitnessService();
+        WalkWalkRevolution.setStepSubject(new StepSubject(fitnessService));
         WalkWalkRevolution.setRouteDao(new MockRouteDao());
         ActivityUtils.setConversionFactor(1);
         WalkWalkRevolution.setFitnessService(fitnessService);
