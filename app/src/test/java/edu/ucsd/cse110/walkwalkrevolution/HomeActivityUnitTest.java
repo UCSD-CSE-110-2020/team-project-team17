@@ -166,6 +166,7 @@ public class HomeActivityUnitTest {
         scenario.onActivity(activity -> {
             activity.setMockedTime(currTime);
             activity.onStart();
+            activity.onResume();
 
             TextView latestSteps = activity.findViewById(R.id.latest_steps);
             TextView latestMiles = activity.findViewById(R.id.latest_miles);
@@ -206,6 +207,7 @@ public class HomeActivityUnitTest {
         scenario.onActivity(activity -> {
             activity.setMockedTime(currTime);
             activity.onStart();
+            activity.onResume();
 
             TextView latestSteps = activity.findViewById(R.id.latest_steps);
             TextView latestMiles = activity.findViewById(R.id.latest_miles);
@@ -235,6 +237,7 @@ public class HomeActivityUnitTest {
         scenario.onActivity(activity -> {
             activity.setMockedTime(currTime);
             activity.onStart();
+            activity.onResume();
 
             TextView latestSteps = activity.findViewById(R.id.latest_steps);
             TextView latestMiles = activity.findViewById(R.id.latest_miles);

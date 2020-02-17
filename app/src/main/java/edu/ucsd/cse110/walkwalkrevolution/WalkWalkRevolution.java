@@ -41,6 +41,7 @@ public class WalkWalkRevolution extends Application {
     private static boolean hasPermissions = false;
 
     private static long timeOffset = 0;
+    private static long walkOffset = 0;
 
     @Override
     public void onCreate() {
@@ -124,6 +125,14 @@ public class WalkWalkRevolution extends Application {
 
     public static boolean getHasPermissions(){
         return hasPermissions;
+    }
+
+    public static long getWalkOffset() {
+        return walkOffset;
+    }
+
+    public static void setWalkOffset(long offset) {
+        WalkWalkRevolution.walkOffset += offset;
     }
 
     public static long getTimeOffset() {

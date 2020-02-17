@@ -128,6 +128,7 @@ public class WalkActivity extends AppCompatActivity implements Observer {
 
             if(signal == 0) {
                 walkSteps += data.getLongExtra("steps", 0);
+                WalkWalkRevolution.setWalkOffset(data.getLongExtra("steps", 0));
                 long time = data.getLongExtra("time", 0);
                 long base = (SystemClock.elapsedRealtime() -
                         (SystemClock.elapsedRealtime() - chronometer.getBase() + time));

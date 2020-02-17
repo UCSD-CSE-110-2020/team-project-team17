@@ -40,7 +40,6 @@ public class HomeActivity extends AppCompatActivity implements Observer {
 
     private static StepSubject stepSubject;
 
-    private long offsetStep;
     private LocalDateTime mockedTime;
 
     @Override
@@ -140,12 +139,12 @@ public class HomeActivity extends AppCompatActivity implements Observer {
                 int signal = data.getIntExtra("signal", 1);
 
                 if(signal == 0) {
-                    offsetStep += data.getLongExtra("steps", 0);
+                    WalkWalkRevolution.setWalkOffset(data.getLongExtra("steps", 0));
                     long time = data.getLongExtra("time", 0);
                     WalkWalkRevolution.setTimeOffset(time);
                 }
 
-                Log.d(TAG, "onActivityResult: " + offsetStep + ", " + WalkWalkRevolution.getTimeOffset());
+                Log.d(TAG, "onActivityResult: " + WalkWalkRevolution.getWalkOffset() + ", " + WalkWalkRevolution.getTimeOffset());
             }
         }
     }
@@ -155,12 +154,12 @@ public class HomeActivity extends AppCompatActivity implements Observer {
     }
 
     public void setStepCount(long stepCount) {
-        textSteps.setText(String.valueOf(offsetStep + stepCount));
+        textSteps.setText(String.valueOf(WalkWalkRevolution.getWalkOffset() + stepCount));
 
         if(WalkWalkRevolution.getUser() != null) {
             // Round miles to 2 decimal places.
             textMiles.setText(String.valueOf(Math.round(
-                    ActivityUtils.stepsToMiles(stepCount + offsetStep,
+                    ActivityUtils.stepsToMiles(stepCount + WalkWalkRevolution.getWalkOffset(),
                             WalkWalkRevolution.getUser().getHeight()) * 100) / 100.0));
         }
     }
