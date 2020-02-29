@@ -16,7 +16,7 @@ public class DummyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dummy);
-        fitnessService = FitnessServiceFactory.create(WalkWalkRevolution.fitnessServiceKey, this);
+        fitnessService = FitnessServiceFactory.create(WalkWalkRevolution.currentKey, this);
         WalkWalkRevolution.setFitnessService(fitnessService);
     }
 

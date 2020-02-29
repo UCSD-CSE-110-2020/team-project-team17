@@ -55,6 +55,10 @@ public class Route {
         return activity;
     }
 
+    public void setActivity(Activity newAct) {
+        this.activity = newAct;
+    }
+
     public String getTitle(){
         return title;
     }

@@ -13,7 +13,7 @@ import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
 import edu.ucsd.cse110.walkwalkrevolution.route.Route;
 
 public class RoutesActivity extends AppCompatActivity {
-    private RecyclerView recyclerView;
+    public static RecyclerView recyclerView;
     RoutesAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
 

@@ -3,9 +3,15 @@ package edu.ucsd.cse110.walkwalkrevolution;
 import android.app.Application;
 import android.content.Context;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+
 import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessService;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessServiceFactory;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.GoogleFitAdapter;
+import edu.ucsd.cse110.walkwalkrevolution.fitness.MockFitnessService;
+import edu.ucsd.cse110.walkwalkrevolution.fitness.StepSubject;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.Steps;
 import edu.ucsd.cse110.walkwalkrevolution.route.persistence.BaseRouteDao;
 import edu.ucsd.cse110.walkwalkrevolution.route.persistence.RouteSharedPreferenceDao;
@@ -17,6 +23,10 @@ public class WalkWalkRevolution extends Application {
 
     public static String fitnessServiceKey = "GOOGLE_FIT";
 
+    public static String testServiceKey = "TEST_FIT";
+
+    public static String currentKey = fitnessServiceKey;
+
     private static FitnessService fitnessService;
 
     private static Context context;
@@ -26,10 +36,14 @@ public class WalkWalkRevolution extends Application {
     private static BaseUserDao userDao;
 
     private static Steps steps = new Steps();
+    private static StepSubject stepTracker;
 
     private static User user;
 
     private static boolean hasPermissions = false;
+
+    private static long timeOffset = 0;
+    private static long walkOffset = 0;
 
     @Override
     public void onCreate() {
@@ -50,8 +64,21 @@ public class WalkWalkRevolution extends Application {
         });
     }
 
-    public void setFitnessServiceKey(String fitnessServiceKey) {
-        this.fitnessServiceKey = fitnessServiceKey;
+    public void setupTestFitnessApi() {
+        FitnessServiceFactory.put(testServiceKey, new FitnessServiceFactory.BluePrint() {
+            @Override
+            public FitnessService create(DummyActivity dummyActivity) {
+                return new MockFitnessService();
+            }
+        });
+    }
+
+    public void useGoogleFitFitnessApi(boolean useGoogle) {
+        if(useGoogle){
+            currentKey = fitnessServiceKey;
+        } else {
+            currentKey = testServiceKey;
+        }
     }
 
     public static Context getContext() {
@@ -78,6 +105,14 @@ public class WalkWalkRevolution extends Application {
         return steps;
     }
 
+    public static StepSubject getStepSubject(){
+        return stepTracker;
+    }
+
+    public static void  setStepSubject(StepSubject newST){
+        WalkWalkRevolution.stepTracker = newST;
+    }
+
     public static User getUser() {
         return user;
     }
@@ -100,6 +135,30 @@ public class WalkWalkRevolution extends Application {
 
     public static boolean getHasPermissions(){
         return hasPermissions;
+    }
+
+    public static long getWalkOffset() {
+        return walkOffset;
+    }
+
+    public static void setWalkOffset(long offset) {
+        WalkWalkRevolution.walkOffset += offset;
+    }
+
+    public static long getTimeOffset() {
+        return timeOffset;
+    }
+
+    public static void setTimeOffset(long offset) {
+        WalkWalkRevolution.timeOffset += offset;
+    }
+
+    public static LocalDateTime getTime(){
+        return toLDT(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() + timeOffset);
+    }
+
+    private static LocalDateTime toLDT(long millis) {
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(millis), ZoneId.systemDefault());
     }
 
 }

@@ -91,7 +91,8 @@ public class DescriptionTagsListAdapter
 
     public String getSelectedTags() {
         String tags = "";
-        for(int i = 0; i < descriptionTagsList.getSize(); i++) {
+        int i;
+        for(i = 0; i < descriptionTagsList.getSize(); i++) {
             String sTag = descriptionTagsList.get(i).getSelectedTag();
             if (!sTag.equals("")) {
                 if (tags.equals("")) {
@@ -102,6 +103,9 @@ public class DescriptionTagsListAdapter
                 }
             }
         }
+        //i++;
+        //tags +=  descriptionTagsList.get(i).getSelectedTag();
+
         return tags;
     }
 }

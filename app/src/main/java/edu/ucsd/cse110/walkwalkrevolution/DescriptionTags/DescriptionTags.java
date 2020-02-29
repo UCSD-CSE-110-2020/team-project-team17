@@ -15,7 +15,7 @@ public class DescriptionTags {
     }
 
     public void selectTag(int idx) {
-        if (tags.size() > 0) {
+        if (tags.size() > 0 && idx < tags.size()) {
             selectedTag = tags.get(idx);
         }
     }
