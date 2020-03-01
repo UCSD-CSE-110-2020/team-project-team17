@@ -5,25 +5,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessService;
-import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessServiceFactory;
-
 public class DummyActivity extends AppCompatActivity {
 
-    private FitnessService fitnessService;
+    //Purpose: Initialize FitnessService and Firestore
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dummy);
-        fitnessService = FitnessServiceFactory.create(WalkWalkRevolution.currentKey, this);
-        WalkWalkRevolution.setFitnessService(fitnessService);
+        WalkWalkRevolution.setFitnessService(WalkWalkRevolution.getFitnessServiceFactory().createFitnessService(this));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        fitnessService.setup();
+        WalkWalkRevolution.getFitnessService().setup();
         if(WalkWalkRevolution.getHasPermissions()){
             Intent intent = new Intent(this, HomeActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
