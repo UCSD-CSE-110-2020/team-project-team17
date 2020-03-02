@@ -82,11 +82,7 @@ public class DummyActivity extends AppCompatActivity {
         super.onResume();
         WalkWalkRevolution.getFitnessService().setup();
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        if(WalkWalkRevolution.getHasPermissions() && account != null){
-            WalkWalkRevolution.setGoogleSignInAccount(account);
-            Log.d(TAG, account.getDisplayName());
-            updateUI();
-        }
+        signIn();
     }
 
     private void updateUI(){
