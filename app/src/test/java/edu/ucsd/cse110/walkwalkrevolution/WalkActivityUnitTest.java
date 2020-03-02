@@ -58,7 +58,7 @@ public class WalkActivityUnitTest {
 
         WalkWalkRevolution.setUserDao(new MockUserDao());
         WalkWalkRevolution.setRouteDao(new MockRouteDao());
-        WalkWalkRevolution.setUser(new User(1, 528*12));
+        WalkWalkRevolution.setUser(new User(1, 528*12, "", ""));
         walkActivity = Robolectric.buildActivity(WalkActivity.class, intent).create().get();
         steps        = walkActivity.findViewById(R.id.steps);
         miles        = walkActivity.findViewById(R.id.miles);

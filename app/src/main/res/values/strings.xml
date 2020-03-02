@@ -17,4 +17,6 @@
     <string name="latest_daily_walk">Latest Daily Walk</string>
     <string name="duration_hint">Duration</string>
     <string name="default_latest">N/A</string>
+    <string name="user_name">user_name</string>
+    <string name="user_email">user_email</string>
 </resources>

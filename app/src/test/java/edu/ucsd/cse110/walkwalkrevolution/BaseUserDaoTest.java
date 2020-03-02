@@ -22,7 +22,7 @@ public class BaseUserDaoTest {
 
     @Test
     public void addValidRoute() {
-        User actual = new User(1, 72);
+        User actual = new User(1, 72, "", "");
         dao.addUser(actual);
 
         User persisted = dao.getUser(1);

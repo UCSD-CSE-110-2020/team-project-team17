@@ -31,7 +31,7 @@ public class CreateRouteTest {
     public void setup(){
         WalkWalkRevolution.setRouteDao(new MockRouteDao());
         WalkWalkRevolution.setUserDao(new MockUserDao());
-        WalkWalkRevolution.setUser(new User(1, 528*12));
+        WalkWalkRevolution.setUser(new User(1, 528*12, "", ""));
     }
 
     @Test
