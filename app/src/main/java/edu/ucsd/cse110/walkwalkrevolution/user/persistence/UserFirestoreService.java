@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -55,8 +56,14 @@ public class UserFirestoreService implements UserService{
         users.document(email).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                User route = snapshotToUser(documentSnapshot);
-                u.add(route);
+                User user = snapshotToUser(documentSnapshot);
+                Log.d(TAG, "User Found: " + user.getName() + " " + user.getEmail());
+                u.add(user);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, e.getLocalizedMessage());
             }
         });
         return u.isEmpty() ? null : u.get(0);

@@ -48,6 +48,8 @@ public class DummyActivity extends AppCompatActivity {
 
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        this.overridePendingTransition(0, 0);
+
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 

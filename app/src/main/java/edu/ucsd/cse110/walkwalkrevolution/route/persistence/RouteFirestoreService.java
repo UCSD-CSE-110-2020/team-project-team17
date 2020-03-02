@@ -2,6 +2,9 @@ package edu.ucsd.cse110.walkwalkrevolution.route.persistence;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -41,7 +44,13 @@ public class RouteFirestoreService implements RouteService {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 Route route = snapshotToRoute(documentSnapshot);
+                Log.d(TAG, "Route retrieved: " + route.getTitle());
                 r.add(route);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, e.getLocalizedMessage());
             }
         });
         return r.isEmpty() ? null : r.get(0);
@@ -78,6 +87,11 @@ public class RouteFirestoreService implements RouteService {
                     Route route = snapshotToRoute(documentSnapshot);
                     r.add(route);
                 }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, e.getLocalizedMessage());
             }
         });
         return r;
