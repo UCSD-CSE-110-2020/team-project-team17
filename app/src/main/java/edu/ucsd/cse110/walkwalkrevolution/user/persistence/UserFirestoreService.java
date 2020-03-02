@@ -1,6 +1,12 @@
 package edu.ucsd.cse110.walkwalkrevolution.user.persistence;
 
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -23,8 +29,24 @@ public class UserFirestoreService implements UserService{
 
     @Override
     public void addUser(User user){
-        if(getUser(user.getEmail()) == null)
-            users.document(user.getEmail()).set(user.toMap());
+        users.document(user.getEmail()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d(TAG, "Document exists!");
+                    } else {
+                        users.document(user.getEmail()).set(user.toMap()).addOnFailureListener(error -> {
+                            Log.e(TAG, error.getLocalizedMessage());
+                        });
+                        Log.d(TAG, "Document does not exist!");
+                    }
+                } else {
+                    Log.d(TAG, "Failed with: ", task.getException());
+                }
+            }
+        });
     }
 
     @Override

@@ -16,6 +16,7 @@ public class User {
 
     private long id;
     private long height;
+
     @JsonIgnore
     private String name;
     @JsonIgnore
@@ -50,7 +51,7 @@ public class User {
         this.name = name;
     }
 
-    public String getFirstName(){
+    public String getName(){
         return name;
     }
 

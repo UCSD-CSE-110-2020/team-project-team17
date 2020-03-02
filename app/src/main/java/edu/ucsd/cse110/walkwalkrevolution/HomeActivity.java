@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.firebase.FirebaseApp;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Observable;

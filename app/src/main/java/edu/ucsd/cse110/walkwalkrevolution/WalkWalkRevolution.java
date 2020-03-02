@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -60,8 +61,6 @@ public class WalkWalkRevolution extends Application {
         fitnessServiceFactory = new FitnessServiceFactory();
         routeDao = new RouteSharedPreferenceDao();
         userDao = new UserSharedPreferenceDao();
-        routeService = routeServiceFactory.createRouteService();
-        userService = userServiceFactory.createUserService();
         user = userDao.getUser(UserSharedPreferenceDao.USER_ID);
     }
 
@@ -164,12 +163,24 @@ public class WalkWalkRevolution extends Application {
         return routeServiceFactory;
     }
 
+    public static void createRouteService(){
+        WalkWalkRevolution.routeService = WalkWalkRevolution.routeServiceFactory.createRouteService();
+    }
+
     public static RouteService getRouteService(){
         return WalkWalkRevolution.routeService;
     }
 
+    public static void setUserServiceFactory(UserServiceFactory usf){
+        WalkWalkRevolution.userServiceFactory = usf;
+    }
+
     public static UserServiceFactory getUserServiceFactory(){
         return userServiceFactory;
+    }
+
+    public static void createUserService(){
+        WalkWalkRevolution.userService = WalkWalkRevolution.userServiceFactory.createUserService();
     }
 
     public static UserService getUserService(){
