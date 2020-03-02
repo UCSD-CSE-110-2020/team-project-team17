@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "346425556044",
+    "firebase_url": "https://walkwalkrev.firebaseio.com",
+    "project_id": "walkwalkrev",
+    "storage_bucket": "walkwalkrev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:346425556044:android:6f9e996fff854938fc08e9",
+        "android_client_info": {
+          "package_name": "edu.ucsd.cse110.walkwalkrevolution"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "346425556044-a5enijk94fpco1j5ig6g7d5cf3kqo9ue.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBvKCSdVbfYLcl2WGAC8QhyOZLlaWUcHo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "346425556044-a5enijk94fpco1j5ig6g7d5cf3kqo9ue.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

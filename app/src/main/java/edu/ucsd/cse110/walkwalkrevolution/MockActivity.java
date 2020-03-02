@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
+
 public class MockActivity extends AppCompatActivity {
     private static final String TAG = "MockActivity";
 
@@ -26,6 +28,11 @@ public class MockActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mock_screen);
+
+        TextView name = findViewById(R.id.name);
+        TextView email = findViewById(R.id.email);
+        name.setText(WalkWalkRevolution.getGoogleSignInAccount().getDisplayName());
+        email.setText(WalkWalkRevolution.getGoogleSignInAccount().getEmail());
 
         mock_time_button = findViewById(R.id.mock_time_button);
 

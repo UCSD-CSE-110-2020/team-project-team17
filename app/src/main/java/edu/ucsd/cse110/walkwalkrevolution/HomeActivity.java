@@ -23,6 +23,7 @@ import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessService;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.StepSubject;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.Steps;
 import edu.ucsd.cse110.walkwalkrevolution.route.Routes;
+import edu.ucsd.cse110.walkwalkrevolution.user.User;
 
 public class HomeActivity extends AppCompatActivity implements Observer {
 
@@ -78,6 +79,13 @@ public class HomeActivity extends AppCompatActivity implements Observer {
                 startMock();
             }
         });
+
+        if(WalkWalkRevolution.getUser() != null) {
+            User user = WalkWalkRevolution.getUser();
+            user.setName(WalkWalkRevolution.getGoogleSignInAccount().getDisplayName());
+            user.setEmail(WalkWalkRevolution.getGoogleSignInAccount().getEmail());
+            WalkWalkRevolution.getUserService().addUser(user);
+        }
 
     }
 
