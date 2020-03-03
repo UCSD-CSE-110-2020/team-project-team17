@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -44,9 +45,14 @@ public class TeamDetailsActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.add_button) {
-            // inviteTeamMemberActivity(); This button is to invite new team members.
+            teamInviteActivity();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void teamInviteActivity(){
+        Intent createRoute = new Intent(this, TeamInviteActivity.class);
+        startActivity(createRoute);
     }
 
 }
