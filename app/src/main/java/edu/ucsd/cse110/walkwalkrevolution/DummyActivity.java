@@ -31,10 +31,7 @@ public class DummyActivity extends AppCompatActivity {
         WalkWalkRevolution.createRouteService();
         WalkWalkRevolution.createUserService();
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        mGoogleSignInClient = WalkWalkRevolution.getGoogleSignInClient();
 
         findViewById(R.id.signin_button).setOnClickListener(new View.OnClickListener() {
             @Override

@@ -26,6 +26,7 @@ public class RouteServiceTest {
     RouteServiceFactory routeServiceFactory;
     UserService userService;
     UserServiceFactory userServiceFactory;
+    GoogleSigninClientFactory gscf;
     Intent intent;
 
     @Before
@@ -35,6 +36,7 @@ public class RouteServiceTest {
         routeServiceFactory = Mockito.mock(RouteServiceFactory.class);
         userService = Mockito.mock(UserService.class);
         userServiceFactory = Mockito.mock(UserServiceFactory.class);
+        gscf = Mockito.mock(GoogleSigninClientFactory.class);
 
         when(userServiceFactory.createUserService())
                 .thenReturn(userService);
@@ -44,6 +46,7 @@ public class RouteServiceTest {
 
         WalkWalkRevolution.setRouteServiceFactory(routeServiceFactory);
         WalkWalkRevolution.setUserServiceFactory(userServiceFactory);
+        WalkWalkRevolution.setGoogleSignInClientFactory(gscf);
     }
 
     @Test

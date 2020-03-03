@@ -9,14 +9,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import edu.ucsd.cse110.walkwalkrevolution.team.Team;
 import edu.ucsd.cse110.walkwalkrevolution.team.TeamRecycleView.TeamAdapter;
 import edu.ucsd.cse110.walkwalkrevolution.user.User;
+import edu.ucsd.cse110.walkwalkrevolution.user.persistence.UserFirestoreService;
 
 public class TeamDetailsActivity extends AppCompatActivity {
-
-    ArrayList<User> users;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,9 +25,7 @@ public class TeamDetailsActivity extends AppCompatActivity {
 
         RecyclerView rvUsers = findViewById(R.id.rvUsers);
 
-        users = Team.generateTestEntries(50);
-
-        TeamAdapter adapter = new TeamAdapter(new Team(users));
+        TeamAdapter adapter = new TeamAdapter(new Team());
         rvUsers.setAdapter(adapter);
 
         rvUsers.setLayoutManager(new LinearLayoutManager(this));

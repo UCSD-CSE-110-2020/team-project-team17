@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -46,6 +48,9 @@ public class WalkWalkRevolution extends Application {
     private static User user;
     private static GoogleSignInAccount account;
 
+    private static GoogleSigninClientFactory gscf;
+    private static GoogleSignInClient gsc;
+
     private static boolean hasPermissions = false;
 
     private static long timeOffset = 0;
@@ -62,6 +67,8 @@ public class WalkWalkRevolution extends Application {
         routeDao = new RouteSharedPreferenceDao();
         userDao = new UserSharedPreferenceDao();
         user = userDao.getUser(UserSharedPreferenceDao.USER_ID);
+        gscf = new GoogleSigninClientFactory();
+        gsc = gscf.getGoogleSigninClient();
     }
 
     public static FitnessServiceFactory getFitnessServiceFactory() {
@@ -70,6 +77,14 @@ public class WalkWalkRevolution extends Application {
 
     public static void setFitnessServiceFactory(FitnessServiceFactory fsf){
         WalkWalkRevolution.fitnessServiceFactory = fsf;
+    }
+
+    public static void setGoogleSignInClientFactory(GoogleSigninClientFactory gscf){
+        WalkWalkRevolution.gscf = gscf;
+    }
+
+    public static GoogleSignInClient getGoogleSignInClient(){
+        return WalkWalkRevolution.gsc;
     }
 
     public static Context getContext() {

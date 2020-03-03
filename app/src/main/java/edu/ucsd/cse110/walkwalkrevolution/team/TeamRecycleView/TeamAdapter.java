@@ -1,6 +1,7 @@
 package edu.ucsd.cse110.walkwalkrevolution.team.TeamRecycleView;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,16 +11,22 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import edu.ucsd.cse110.walkwalkrevolution.R;
 import edu.ucsd.cse110.walkwalkrevolution.team.Team;
+import edu.ucsd.cse110.walkwalkrevolution.team.TeamObserver;
 import edu.ucsd.cse110.walkwalkrevolution.user.User;
 
-public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.ViewHolder> {
-    private ArrayList<User> mUsers;
+public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.ViewHolder> implements TeamObserver {
+
+    private Team team;
+    private List<User> mUsers;
 
     public TeamAdapter(Team mTeam){
-        this.mUsers = mTeam.getUsers();
+        this.team = mTeam;
+        team.subscribe(this);
+        mUsers = new ArrayList<>();
     }
 
     @NonNull
@@ -61,5 +68,10 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.ViewHolder> {
             nameField = itemView.findViewById(R.id.user_name);
             emailField = itemView.findViewById(R.id.user_email);
         }
+    }
+
+    public void update(List<User> users){
+        mUsers = users;
+        notifyDataSetChanged();
     }
 }
