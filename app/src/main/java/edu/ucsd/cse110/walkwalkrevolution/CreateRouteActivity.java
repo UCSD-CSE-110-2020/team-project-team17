@@ -66,17 +66,25 @@ public class CreateRouteActivity extends AppCompatActivity {
                         activity = new Walk();
                     }
                     // Initialize route and fill in fields.
-                    Route route = new Route(routeTitle.getText().toString(), activity);
+
+                    Route.Builder builder = new Route.Builder();
+                    builder.setTitle(routeTitle.getText().toString());
+                    builder.setActivity(activity);
 
                     if(!TextUtils.isEmpty(startLocation.getText())) {
-                        route.setLocation(startLocation.getText().toString());
+                        builder.setLocation(startLocation.getText().toString());
                     }
                     if(!TextUtils.isEmpty(notes.getText())) {
-                        route.setNotes(notes.getText().toString());
+                        builder.setNotes(notes.getText().toString());
                     }
-                    route.setDescriptionTags(tags);
+                    builder.setDescription(tags);
                     Log.d("desc-tags", "tags " + tags);
+                    builder.setUserId(WalkWalkRevolution.getUser().getEmail());
+
+                    Route route = builder.build();
+
                     WalkWalkRevolution.getRouteDao().addRoute(route);
+                    WalkWalkRevolution.getRouteService().addRoute(route);
                     finish();
                 }
             }

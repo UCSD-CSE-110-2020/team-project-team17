@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.firebase.FirebaseApp;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Observable;
@@ -23,6 +25,7 @@ import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessService;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.StepSubject;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.Steps;
 import edu.ucsd.cse110.walkwalkrevolution.route.Routes;
+import edu.ucsd.cse110.walkwalkrevolution.user.User;
 
 public class HomeActivity extends AppCompatActivity implements Observer {
 
@@ -78,6 +81,13 @@ public class HomeActivity extends AppCompatActivity implements Observer {
                 startMock();
             }
         });
+
+        if(WalkWalkRevolution.getUser() != null) {
+            User user = WalkWalkRevolution.getUser();
+            user.setName(WalkWalkRevolution.getGoogleSignInAccount().getDisplayName());
+            user.setEmail(WalkWalkRevolution.getGoogleSignInAccount().getEmail());
+            WalkWalkRevolution.getUserService().addUser(user);
+        }
 
     }
 

@@ -45,7 +45,7 @@ public class UserSharedPreferenceDao implements BaseUserDao {
         try {
             return UserUtils.deserialize(jsonString);
         } catch (Exception e) {
-            throw new RuntimeException("Invalid Route JsonString");
+            throw new RuntimeException("Invalid User JsonString: " + jsonString);
         }
     }
 
