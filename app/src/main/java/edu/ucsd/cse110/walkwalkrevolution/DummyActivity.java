@@ -13,6 +13,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 
 public class DummyActivity extends AppCompatActivity {
 
@@ -27,6 +28,8 @@ public class DummyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dummy);
+
+        FirebaseApp.initializeApp(WalkWalkRevolution.getContext());
 
         WalkWalkRevolution.createRouteService();
         WalkWalkRevolution.createUserService();

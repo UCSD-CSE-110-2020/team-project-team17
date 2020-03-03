@@ -59,7 +59,7 @@ public class WalkWalkRevolution extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        FirebaseApp.initializeApp(this);
+
         routeServiceFactory = new RouteServiceFactory();
         userServiceFactory = new UserServiceFactory();
         WalkWalkRevolution.context = getApplicationContext();

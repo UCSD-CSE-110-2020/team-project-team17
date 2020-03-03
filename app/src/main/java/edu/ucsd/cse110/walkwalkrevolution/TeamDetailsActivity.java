@@ -26,9 +26,15 @@ public class TeamDetailsActivity extends AppCompatActivity {
 
         RecyclerView rvUsers = findViewById(R.id.rvUsers);
 
-        TeamAdapter adapter = new TeamAdapter(new Team());
-        rvUsers.setAdapter(adapter);
+        TeamAdapter adapter;
 
+        if(!getIntent().hasExtra("test")){
+            adapter = new TeamAdapter(new Team(Team.generateTestEntries(50)));
+        } else {
+            adapter = new TeamAdapter(new Team());
+        }
+
+        rvUsers.setAdapter(adapter);
         rvUsers.setLayoutManager(new LinearLayoutManager(this));
     }
 
