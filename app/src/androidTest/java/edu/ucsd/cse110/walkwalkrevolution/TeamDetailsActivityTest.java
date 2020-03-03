@@ -24,6 +24,7 @@ import edu.ucsd.cse110.walkwalkrevolution.route.RouteRecycleView.RoutesAdapter;
 import edu.ucsd.cse110.walkwalkrevolution.route.persistence.MockRouteDao;
 import edu.ucsd.cse110.walkwalkrevolution.route.persistence.RouteService;
 import edu.ucsd.cse110.walkwalkrevolution.route.persistence.RouteServiceFactory;
+import edu.ucsd.cse110.walkwalkrevolution.team.Team;
 import edu.ucsd.cse110.walkwalkrevolution.user.persistence.UserService;
 import edu.ucsd.cse110.walkwalkrevolution.user.persistence.UserServiceFactory;
 
@@ -41,10 +42,14 @@ public class TeamDetailsActivityTest {
     UserService userService;
     UserServiceFactory userServiceFactory;
 
+    Team team;
+
     @Before
     public void setUp() {
         TeamDetailsActivity.testMode = true; // Bigbrain
         WalkWalkRevolution.setRouteDao(new MockRouteDao());
+
+        team = Mockito.mock(Team.class);
     }
 
 

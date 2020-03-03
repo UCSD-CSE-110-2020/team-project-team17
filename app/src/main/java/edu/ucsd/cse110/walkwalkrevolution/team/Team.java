@@ -17,7 +17,8 @@ public class Team implements TeamSubject{
         WalkWalkRevolution.getUserService().getTeam(this, WalkWalkRevolution.getUser());
     }
 
-    public Team(List<User> users) { // TODO basically all team is right now is a User ArrayList wrapper.
+    public Team(List<User> users) { // TODO basically all team is right now is a User ArrayList wrappe
+        observers = new ArrayList<>();
         this.users = users;
     }
 
