@@ -39,6 +39,11 @@ public class MockRouteDao implements BaseRouteDao {
     }
 
     @Override
+    public void setRoute(Route r) {
+
+    }
+
+    @Override
     public Map<String, ?> getAllRoutes() {
         Map<String, String> map = new HashMap<>();
         for(Map.Entry<Long, String> e: persisted.entrySet()) {

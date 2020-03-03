@@ -92,14 +92,15 @@ public class RoutesDetailActivity extends AppCompatActivity {
             public void onClick(View v)
             {
                 if (!route.getProposed()) {
-                    Intent intent = new Intent(v.getContext(), WalkActivity.class);
-                    intent.putExtra(ROUTE, 1);
-                    intent.putExtra(ROUTE_ID, id);
-                    intent.putExtra("route_title", route.getTitle());
-                    finish();
-                    v.getContext().startActivity(intent);
+//                    Intent intent = new Intent(v.getContext(), WalkActivity.class);
+//                    intent.putExtra(ROUTE, 1);
+//                    intent.putExtra(ROUTE_ID, id);
+//                    intent.putExtra("route_title", route.getTitle());
+//                    finish();
+//                    v.getContext().startActivity(intent);
                     Toast.makeText(RoutesDetailActivity.this, "Proposed route", Toast.LENGTH_SHORT).show();
                     route.setProposed();
+                    WalkWalkRevolution.getRouteDao().setRoute(route);
                 }
                 else {
                     Toast.makeText(RoutesDetailActivity.this, "Already proposed", Toast.LENGTH_SHORT).show();

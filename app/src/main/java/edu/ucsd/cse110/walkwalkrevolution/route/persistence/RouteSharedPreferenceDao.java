@@ -37,6 +37,25 @@ public class RouteSharedPreferenceDao implements BaseRouteDao {
     }
 
     @Override
+    public void setRoute(Route route) {
+        Context context = WalkWalkRevolution.getContext();
+        SharedPreferences sp = context.getSharedPreferences(SP_ROUTE, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+
+        String jsonString;
+
+        try {
+            jsonString = RouteUtils.serialize(route);
+        } catch (Exception e) {
+            throw new RuntimeException("Invalid Route");
+        }
+
+        editor.putString(Long.toString(route.getId()), jsonString);
+
+        editor.apply();
+    }
+
+    @Override
     public Route getRoute(long routeId) {
         Context context = WalkWalkRevolution.getContext();
         SharedPreferences sp = context.getSharedPreferences(SP_ROUTE, MODE_PRIVATE);
