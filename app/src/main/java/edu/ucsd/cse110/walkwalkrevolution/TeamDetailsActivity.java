@@ -19,6 +19,8 @@ import edu.ucsd.cse110.walkwalkrevolution.user.persistence.UserFirestoreService;
 
 public class TeamDetailsActivity extends AppCompatActivity {
 
+    public static boolean testMode;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,7 +30,7 @@ public class TeamDetailsActivity extends AppCompatActivity {
 
         TeamAdapter adapter;
 
-        if(!getIntent().hasExtra("test")){
+        if(testMode){
             adapter = new TeamAdapter(new Team(Team.generateTestEntries(50)));
         } else {
             adapter = new TeamAdapter(new Team());
