@@ -10,13 +10,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MockActivity"></activity>
-        <activity android:name=".RoutesActivity"></activity>
-        <activity android:name=".RoutesDetailActivity"></activity>
-        <activity android:name=".CreateRouteActivity"
-            android:windowSoftInputMode="adjustPan|adjustResize"
-            ></activity>
-        <activity android:name=".HeightActivity" android:exported="true"></activity>
+        <activity android:name=".TeamDetailsActivity" android:exported="true"></activity>
+        <activity android:name=".MockActivity" />
+        <activity
+            android:name=".RoutesActivity"
+            android:exported="true" />
+        <activity android:name=".RoutesDetailActivity" />
+        <activity
+            android:name=".CreateRouteActivity"
+            android:windowSoftInputMode="adjustPan|adjustResize" />
+        <activity
+            android:name=".HeightActivity"
+            android:exported="true" />
         <activity android:name=".HomeActivity" />
         <activity
             android:name=".WalkActivity"
@@ -34,4 +39,3 @@
     </application>
 
 </manifest>
-

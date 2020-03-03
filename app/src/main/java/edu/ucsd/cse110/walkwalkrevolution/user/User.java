@@ -35,7 +35,7 @@ public class User {
         return id;
     }
 
-    public void setId() {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -43,7 +43,7 @@ public class User {
         return height;
     }
 
-    public void setHeight() {
+    public void setHeight(long height) {
         this.height = height;
     }
 

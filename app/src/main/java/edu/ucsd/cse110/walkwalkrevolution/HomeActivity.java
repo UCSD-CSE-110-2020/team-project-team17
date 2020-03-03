@@ -26,6 +26,7 @@ import edu.ucsd.cse110.walkwalkrevolution.fitness.StepSubject;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.Steps;
 import edu.ucsd.cse110.walkwalkrevolution.route.Routes;
 import edu.ucsd.cse110.walkwalkrevolution.user.User;
+import edu.ucsd.cse110.walkwalkrevolution.team.Team;
 
 public class HomeActivity extends AppCompatActivity implements Observer {
 
@@ -38,7 +39,7 @@ public class HomeActivity extends AppCompatActivity implements Observer {
     FitnessService fitnessService;
     private TextView textSteps, textMiles, latestSteps, latestMiles, latestDuration;
 
-    private Button startWalk;
+    private Button startWalk, team;
     private Button mockButton;
 
     private static StepSubject stepSubject;
@@ -49,6 +50,7 @@ public class HomeActivity extends AppCompatActivity implements Observer {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
         textSteps = findViewById(R.id.steps);
         textMiles = findViewById(R.id.miles);
 
@@ -71,6 +73,14 @@ public class HomeActivity extends AppCompatActivity implements Observer {
             @Override
             public void onClick(View view) {
                 startWalk();
+            }
+        });
+
+        team = findViewById(R.id.team_button);
+        team.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startTeamDetails();
             }
         });
 
@@ -101,6 +111,12 @@ public class HomeActivity extends AppCompatActivity implements Observer {
         intent.putExtra(PRE_EXISTING_ROUTE, 1);
         startActivity(intent);
     }
+
+    private void startTeamDetails() {
+        Intent intent = new Intent(this,  TeamDetailsActivity.class);
+        startActivity(intent);
+    }
+
 
     private void startMock(){
         Intent intent = new Intent(this, MockActivity.class);
@@ -182,7 +198,7 @@ public class HomeActivity extends AppCompatActivity implements Observer {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.home_menu, menu);
+        getMenuInflater().inflate(R.menu.add_or_list_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
