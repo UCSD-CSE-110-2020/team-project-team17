@@ -68,7 +68,7 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
                 int index = RoutesActivity.recyclerView.getChildAdapterPosition(view);
                 Route item = routes.get(index);
 
-                //Toast.makeText(context, item.getTitle(), Toast.LENGTH_LONG).show();
+
                 openRoutesDetailActivity(view, item);
 
             }

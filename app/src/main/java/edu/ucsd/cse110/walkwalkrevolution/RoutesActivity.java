@@ -39,7 +39,7 @@ public class RoutesActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.add_button_menu, menu);
+        getMenuInflater().inflate(R.menu.add_propose_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -65,7 +65,7 @@ public class RoutesActivity extends AppCompatActivity {
     }
 
     public void createProposeScreenActivity() {
-        Intent createRoute = new Intent(this, CreateRouteActivity.class);
-        startActivity(createRoute);
+        Intent create = new Intent(this, ProposeScreenActivity.class);
+        startActivity(create);
     }
 }
