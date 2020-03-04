@@ -217,7 +217,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/Note"
-        android:layout_above="@+id/btn_ll"
+        android:layout_above="@id/btn_ll"
         android:layout_marginTop="14dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
