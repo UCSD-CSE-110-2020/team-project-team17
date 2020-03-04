@@ -80,7 +80,7 @@ public class HomeActivityUnitTest {
 
         WalkWalkRevolution.setGoogleSignInAccount(acc);
         WalkWalkRevolution.setUserDao(new MockUserDao());
-        WalkWalkRevolution.setUser(new User(1, 528*12));
+        WalkWalkRevolution.setUser(new User(1, 528*12, "", ""));
         fitnessService = new MockFitnessService();
         WalkWalkRevolution.setRouteDao(new MockRouteDao());
         ActivityUtils.setConversionFactor(1);

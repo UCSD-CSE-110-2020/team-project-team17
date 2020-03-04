@@ -1,15 +1,8 @@
 package edu.ucsd.cse110.walkwalkrevolution;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.test.core.app.ActivityScenario;
-import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
@@ -17,8 +10,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.annotation.Config;
-import org.robolectric.shadows.ShadowApplication;
-import org.robolectric.shadows.ShadowLooper;
 
 
 import java.util.HashMap;
@@ -26,15 +17,12 @@ import java.util.Map;
 
 import edu.ucsd.cse110.walkwalkrevolution.activity.Activity;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
-import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessServiceFactory;
-import edu.ucsd.cse110.walkwalkrevolution.fitness.Steps;
-import edu.ucsd.cse110.walkwalkrevolution.activity.ActivityUtils;
 import edu.ucsd.cse110.walkwalkrevolution.route.Route;
+import edu.ucsd.cse110.walkwalkrevolution.route.RouteRecycleView.RoutesAdapter;
 import edu.ucsd.cse110.walkwalkrevolution.route.persistence.MockRouteDao;
 import edu.ucsd.cse110.walkwalkrevolution.user.User;
 import edu.ucsd.cse110.walkwalkrevolution.user.persistence.MockUserDao;
 
-import static android.content.Context.MODE_PRIVATE;
 import static com.google.common.truth.Truth.assertThat;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
@@ -51,7 +39,7 @@ public class RoutesDetailActivityTest {
     public void setUp() {
         WalkWalkRevolution.setUserDao(new MockUserDao());
         WalkWalkRevolution.setRouteDao(new MockRouteDao());
-        WalkWalkRevolution.setUser(new User(1, 528*12));
+        WalkWalkRevolution.setUser(new User(1, 528*12, "", ""));
 
         Activity activity;
 

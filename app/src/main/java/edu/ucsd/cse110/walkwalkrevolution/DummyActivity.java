@@ -13,6 +13,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 
 public class DummyActivity extends AppCompatActivity {
 
@@ -28,13 +29,12 @@ public class DummyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dummy);
 
+        FirebaseApp.initializeApp(WalkWalkRevolution.getContext());
+
         WalkWalkRevolution.createRouteService();
         WalkWalkRevolution.createUserService();
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        mGoogleSignInClient = WalkWalkRevolution.getGoogleSignInClient();
 
         findViewById(R.id.signin_button).setOnClickListener(new View.OnClickListener() {
             @Override
