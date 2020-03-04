@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import edu.ucsd.cse110.walkwalkrevolution.route.RouteRecycleView.RoutesAdapter;
 
@@ -15,6 +17,8 @@ public class RoutesActivity extends AppCompatActivity {
     public static RecyclerView recyclerView;
     RoutesAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
+
+    Button yourRoutes, teammateRoutes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +33,26 @@ public class RoutesActivity extends AppCompatActivity {
 
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+
+        yourRoutes = findViewById(R.id.your_routes);
+        teammateRoutes = findViewById(R.id.teammate_routes);
+
+
+        ///*
+        yourRoutes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               recyclerView.setVisibility(View.VISIBLE);
+            }
+        });
+
+        teammateRoutes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                recyclerView.setVisibility(View.GONE);
+            }
+        });
+
     }
 
     @Override
