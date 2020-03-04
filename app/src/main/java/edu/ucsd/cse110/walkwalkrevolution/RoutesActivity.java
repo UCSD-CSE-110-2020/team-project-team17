@@ -9,8 +9,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
-import edu.ucsd.cse110.walkwalkrevolution.route.Route;
+import edu.ucsd.cse110.walkwalkrevolution.route.RouteRecycleView.RoutesAdapter;
 
 public class RoutesActivity extends AppCompatActivity {
     public static RecyclerView recyclerView;
@@ -40,7 +39,7 @@ public class RoutesActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.routes_menu, menu);
+        getMenuInflater().inflate(R.menu.add_button_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

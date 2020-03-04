@@ -11,10 +11,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.ucsd.cse110.walkwalkrevolution.WalkWalkRevolution;
+import edu.ucsd.cse110.walkwalkrevolution.team.Team;
 import edu.ucsd.cse110.walkwalkrevolution.user.User;
 
 public class UserFirestoreService implements UserService{
@@ -37,10 +41,13 @@ public class UserFirestoreService implements UserService{
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         Log.d(TAG, "Document exists!");
+                        User temp = snapshotToUser(document);
+                        user.setTeamId(document.getString(User.TEAM));
                     } else {
                         users.document(user.getEmail()).set(user.toMap()).addOnFailureListener(error -> {
                             Log.e(TAG, error.getLocalizedMessage());
                         });
+                        user.setTeamId(document.getString(user.getEmail()));
                         Log.d(TAG, "Document does not exist!");
                     }
                 } else {
@@ -51,14 +58,36 @@ public class UserFirestoreService implements UserService{
     }
 
     @Override
-    public User getUser(String email){
-        List<User> u = new ArrayList<>();
-        users.document(email).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+    public void refresh(){
+        users.document(WalkWalkRevolution.getUser().getEmail()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                User user = snapshotToUser(documentSnapshot);
-                Log.d(TAG, "User Found: " + user.getName() + " " + user.getEmail());
-                u.add(user);
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        User t = snapshotToUser(document);
+                        WalkWalkRevolution.getUser().setTeamId(t.getTeamId());
+                        Log.d(TAG, "Document exists!");
+                    }
+                } else {
+                    Log.d(TAG, "Failed with: ", task.getException());
+                }
+            }
+        });
+    }
+
+    @Override
+    public void getTeam(Team t, User user){
+        users.orderBy(User.NAME, Query.Direction.ASCENDING).whereEqualTo(User.TEAM, user.getTeamId())
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(DocumentSnapshot documentSnapshot: queryDocumentSnapshots.getDocuments()){
+                    User user = snapshotToUser(documentSnapshot);
+                    Log.d(TAG, user.getName());
+                    t.addUser(user);
+                }
+                t.notifyObservers();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -66,13 +95,18 @@ public class UserFirestoreService implements UserService{
                 Log.d(TAG, e.getLocalizedMessage());
             }
         });
-        return u.isEmpty() ? null : u.get(0);
     }
 
     private User snapshotToUser(DocumentSnapshot documentSnapshot){
         User user = new User(-1, -1);
+        Log.d(TAG, documentSnapshot.getString(User.NAME));
+        Log.d(TAG, documentSnapshot.getString(User.EMAIL));
+        Log.d(TAG, documentSnapshot.getString(User.TEAM));
         user.setName(documentSnapshot.getString(User.NAME));
         user.setEmail(documentSnapshot.getString(User.EMAIL));
+        if(documentSnapshot.contains(User.TEAM)){
+            user.setTeamId(documentSnapshot.getString(User.TEAM));
+        }
         return user;
     }
 

@@ -1,10 +1,14 @@
 package edu.ucsd.cse110.walkwalkrevolution.user.persistence;
 
+import java.util.List;
+
+import edu.ucsd.cse110.walkwalkrevolution.team.Team;
 import edu.ucsd.cse110.walkwalkrevolution.user.User;
 
 public interface UserService {
 
     void addUser(User user);
-    User getUser(String email);
+    void refresh();
+    void getTeam(Team team, User user);
 
 }

@@ -37,6 +37,7 @@ public class RouteFirestoreService implements RouteService {
         });
     }
 
+    //TODO: FIX W/ OBSERVER PATTERN (FIRESTORE IS ASYNC)
     @Override
     public Route getRoute(String routeId) {
         List<Route> r = new ArrayList<>();
@@ -76,6 +77,7 @@ public class RouteFirestoreService implements RouteService {
         return builder.build();
     }
 
+    //TODO: FIX W/ OBSERVER PATTERN (FIRESTORE IS ASYNC)
     @Override
     public List<Route> getRoutes(User user) {
         List<Route> r = new ArrayList<>();

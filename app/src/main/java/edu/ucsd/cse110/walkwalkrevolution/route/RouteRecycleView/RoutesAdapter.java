@@ -1,4 +1,4 @@
-package edu.ucsd.cse110.walkwalkrevolution;
+package edu.ucsd.cse110.walkwalkrevolution.route.RouteRecycleView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,10 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import edu.ucsd.cse110.walkwalkrevolution.R;
+import edu.ucsd.cse110.walkwalkrevolution.RoutesActivity;
+import edu.ucsd.cse110.walkwalkrevolution.RoutesDetailActivity;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Activity;
 import edu.ucsd.cse110.walkwalkrevolution.activity.ActivityUtils;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
