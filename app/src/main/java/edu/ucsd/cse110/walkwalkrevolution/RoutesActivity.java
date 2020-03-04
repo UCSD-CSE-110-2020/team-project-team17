@@ -52,10 +52,20 @@ public class RoutesActivity extends AppCompatActivity {
         if (id == R.id.add_button) {
             createRouteActivity();
         }
+
+        if (id == R.id.proposeScreen_button) {
+            createProposeScreenActivity();
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
     public void createRouteActivity() {
+        Intent createRoute = new Intent(this, CreateRouteActivity.class);
+        startActivity(createRoute);
+    }
+
+    public void createProposeScreenActivity() {
         Intent createRoute = new Intent(this, CreateRouteActivity.class);
         startActivity(createRoute);
     }

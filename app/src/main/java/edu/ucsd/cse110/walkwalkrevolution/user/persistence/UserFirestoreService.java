@@ -43,6 +43,7 @@ public class UserFirestoreService implements UserService{
                         });
                         Log.d(TAG, "Document does not exist!");
                     }
+
                 } else {
                     Log.d(TAG, "Failed with: ", task.getException());
                 }
