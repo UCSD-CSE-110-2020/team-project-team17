@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 
 import edu.ucsd.cse110.walkwalkrevolution.route.RouteRecycleView.RoutesAdapter;
 import edu.ucsd.cse110.walkwalkrevolution.route.persistence.MockRouteDao;
+import edu.ucsd.cse110.walkwalkrevolution.team.TeamRecycleView.TeamAdapter;
 
 import static junit.framework.TestCase.assertEquals;
 
@@ -24,10 +25,10 @@ public class TeamDetailsActivityTest {
 
 
     @Test
-    public void noTeammates(){
+    public void correctNumberOfEntries(){
         try(ActivityScenario<TeamDetailsActivity> scenario = ActivityScenario.launch(TeamDetailsActivity.class)){
             scenario.onActivity(activity -> {
-                RecyclerView currentRecyclerView = ((RecyclerView) activity.findViewById(R.id.routes));
+                RecyclerView currentRecyclerView = ((RecyclerView) activity.findViewById(R.id.rvUsers));
                 assertEquals(50, currentRecyclerView.getAdapter().getItemCount());
             });
         }
@@ -37,11 +38,10 @@ public class TeamDetailsActivityTest {
     public void testCorrectEntries(){
         try(ActivityScenario<TeamDetailsActivity> scenario = ActivityScenario.launch(TeamDetailsActivity.class)){
             scenario.onActivity(activity -> {
-                RecyclerView currentRecyclerView = ((RecyclerView) activity.findViewById(R.id.routes));
-                assertEquals(1, currentRecyclerView.getAdapter().getItemCount());
-                RoutesAdapter.ViewHolder holder = (RoutesAdapter.ViewHolder) currentRecyclerView.findViewHolderForLayoutPosition(0);
-                assertEquals("Route 1", holder.routeTitle.getText().toString());
-                assertEquals("0", holder.steps.getText().toString());
+                RecyclerView currentRecyclerView = ((RecyclerView) activity.findViewById(R.id.rvUsers));
+                TeamAdapter.ViewHolder holder = (TeamAdapter.ViewHolder) currentRecyclerView.findViewHolderForLayoutPosition(0);
+                assertEquals("0", holder.nameField.getText().toString());
+                assertEquals("0@email.com", holder.emailField.getText().toString());
             });
         }
     }
