@@ -22,6 +22,7 @@ public class Route {
     public static final String LOCATION = "location";
     public static final String NOTES = "notes";
     public static final String DESCRIPTION_TAGS = "descriptionTags";
+    public static final String PROPOSED = "proposed";
 
     private long id;
     @JsonIgnore
@@ -31,6 +32,7 @@ public class Route {
     private String descriptionTags;
     private Activity activity;
     private String notes;
+    private Boolean proposed;
 
     public static class Builder {
         String title;
@@ -38,6 +40,7 @@ public class Route {
         String notes;
         String description;
         String userId;
+        Boolean proposed;
         Activity activity;
 
         public Builder setTitle(String title){
@@ -65,10 +68,21 @@ public class Route {
             return this;
         }
 
+        public Builder setProposed() {
+            this.proposed = true;
+            return this;
+        }
+
+        public Builder clearProposed() {
+            this.proposed = false;
+            return this;
+        }
+
         public Builder setActivity(Activity activity){
             this.activity = activity;
             return this;
         }
+
 
         public Route build(){
             Route route = new Route(title, activity != null ? activity : new Walk());
@@ -90,6 +104,7 @@ public class Route {
         this.location = location;
         this.descriptionTags = descriptionTags;
         this.notes = notes;
+        this.proposed = false;
         this.activity = activity;
     }
 
@@ -97,12 +112,14 @@ public class Route {
     public Route(long id, String title, Activity activity){
         this.id = id;
         this.title = title;
+        this.proposed = false;
         this.activity = activity;
     }
 
     public Route(String title, Activity activity){
         this.id = WalkWalkRevolution.getRouteDao().getNextId();
         this.title = title;
+        this.proposed = false;
         this.activity = activity;
     }
 
@@ -162,6 +179,13 @@ public class Route {
         this.notes = notes;
     }
 
+    public void setProposed() { this.proposed = true; }
+
+    public void clearProposed() { this.proposed = false; }
+
+    public Boolean getProposed() { return this.proposed; }
+
+
     public Map<String, String> toMap(){
         Map<String, String> map = new HashMap<>();
         if(title != null)
@@ -174,6 +198,7 @@ public class Route {
             map.put(NOTES, notes);
         if(userId != null)
             map.put(USER_ID, userId);
+        map.put(PROPOSED, Boolean.toString(proposed));
         return map;
     }
 

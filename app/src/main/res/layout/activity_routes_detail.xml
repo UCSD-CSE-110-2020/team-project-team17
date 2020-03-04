@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
         android:id="@+id/title1"
@@ -174,16 +175,32 @@
         android:text=""
         android:textSize="20dp" />
 
-    <Button
-        android:id="@+id/start_preroute"
-        android:layout_width="211sp"
-        android:layout_height="75sp"
+
+    <LinearLayout
+        android:id="@+id/btn_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
-        android:fontFamily="sans-serif-light"
-        android:text="@string/start_walk_btn"
-        android:textSize="30sp" />
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <Button
+            android:id="@+id/propose_walk"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/propose_btn" />
+
+        <Button
+            android:id="@+id/start_preroute"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/start_walk_btn" />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/Note"
@@ -200,7 +217,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/Note"
-        android:layout_above="@id/start_preroute"
+        android:layout_above="@id/btn_ll"
         android:layout_marginTop="14dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"

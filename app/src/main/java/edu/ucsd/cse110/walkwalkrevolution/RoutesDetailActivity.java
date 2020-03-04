@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -35,6 +36,7 @@ public class RoutesDetailActivity extends AppCompatActivity {
     private TextView tag5;
 
     private Button start;
+    private Button proposal;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +59,7 @@ public class RoutesDetailActivity extends AppCompatActivity {
         location = (TextView) findViewById(R.id.location_text);
         start = (Button) findViewById(R.id.start_preroute);
         note = (TextView) findViewById(R.id.Note_view);
+        proposal = (Button) findViewById(R.id.propose_walk);
 
         tag1 = (TextView) findViewById(R.id.tag1);
         tag2 = (TextView) findViewById(R.id.tag2);
@@ -83,6 +86,26 @@ public class RoutesDetailActivity extends AppCompatActivity {
                 intent.putExtra("route_title", route.getTitle());
                 finish();
                 v.getContext().startActivity(intent);
+            }
+        });
+
+        proposal.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v)
+            {
+                if (!route.getProposed()) {
+//                    Intent intent = new Intent(v.getContext(), WalkActivity.class);
+//                    intent.putExtra(ROUTE, 1);
+//                    intent.putExtra(ROUTE_ID, id);
+//                    intent.putExtra("route_title", route.getTitle());
+//                    finish();
+//                    v.getContext().startActivity(intent);
+                    Toast.makeText(RoutesDetailActivity.this, "Proposed route", Toast.LENGTH_SHORT).show();
+                    route.setProposed();
+                    WalkWalkRevolution.getRouteDao().setRoute(route);
+                }
+                else {
+                    Toast.makeText(RoutesDetailActivity.this, "Already proposed", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
