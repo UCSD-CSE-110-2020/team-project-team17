@@ -5,14 +5,22 @@
     <application
         android:name=".WalkWalkRevolution"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/wwr_squatch"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TeamInvitation"></activity>
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <activity android:name=".TeamInviteActivity" android:exported="true"></activity>
+        <activity
+            android:name=".TeamDetailsActivity"
+            android:exported="true" />
         <activity android:name=".MockActivity" />
-        <activity android:name=".RoutesActivity" />
+        <activity
+            android:name=".RoutesActivity"
+            android:exported="true" />
         <activity android:name=".RoutesDetailActivity" />
         <activity
             android:name=".CreateRouteActivity"

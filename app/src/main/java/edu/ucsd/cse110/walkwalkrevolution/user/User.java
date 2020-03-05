@@ -8,11 +8,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import java.util.HashMap;
 import java.util.Map;
 
+import edu.ucsd.cse110.walkwalkrevolution.WalkWalkRevolution;
+
 @JsonPropertyOrder({"id","height"})
 public class User {
 
     public static final String NAME = "name";
     public static final String EMAIL = "email";
+    public static final String TEAM = "team";
 
     private long id;
     private long height;
@@ -21,6 +24,8 @@ public class User {
     private String name;
     @JsonIgnore
     private String email;
+    @JsonIgnore
+    private String teamId;
 
     public User(@JsonProperty("id") long id, @JsonProperty("height") long height) {
         this.id = id;
@@ -31,11 +36,18 @@ public class User {
         this(id, ft*12+in);
     }
 
+    public User(long id, long height, String name, String email){
+        this(1, height);
+        this.name = name;
+        this.email = email;
+    }
+
+
     public long getId() {
         return id;
     }
 
-    public void setId() {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -43,7 +55,7 @@ public class User {
         return height;
     }
 
-    public void setHeight() {
+    public void setHeight(long height) {
         this.height = height;
     }
 
@@ -63,10 +75,19 @@ public class User {
         return email;
     }
 
+    public void setTeamId(String teamId) {
+        this.teamId = teamId;
+    }
+
+    public String getTeamId() {
+        return teamId;
+    }
+
     public Map<String, String> toMap(){
         return new HashMap<String, String>(){{
             put(NAME, name);
             put(EMAIL, email);
+            if (teamId != null) put(TEAM, teamId);
         }};
     }
 

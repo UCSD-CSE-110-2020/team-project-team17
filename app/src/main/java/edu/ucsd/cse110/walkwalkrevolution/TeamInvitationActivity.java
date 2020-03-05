@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class TeamInvitation extends AppCompatActivity {
+public class TeamInvitationActivity extends AppCompatActivity {
 
     TextView invitationText;
     Button acceptBtn;

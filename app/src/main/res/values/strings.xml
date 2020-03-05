@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">WalkWalkRevolution</string>
+    <string name="app_name">Walk Walk Revolution</string>
     <string name="welcome_prompt">Hello!</string>
     <string name="feet_hint">ft</string>
     <string name="inches_hint">in</string>
@@ -17,4 +17,7 @@
     <string name="latest_daily_walk">Latest Daily Walk</string>
     <string name="duration_hint">Duration</string>
     <string name="default_latest">N/A</string>
+    <string name="user_name">user_name</string>
+    <string name="user_email">user_email</string>
+    <string name="team_email_prompt">Please enter your teammate\'s email address</string>
 </resources>
