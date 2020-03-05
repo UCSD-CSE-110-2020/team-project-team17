@@ -67,6 +67,7 @@ public class WalkWalkRevolution extends Application {
         routeServiceFactory = new RouteServiceFactory();
         userServiceFactory = new UserServiceFactory();
         inviteServiceFactory = new InvitationServiceFactory();
+
         WalkWalkRevolution.context = getApplicationContext();
         fitnessServiceFactory = new FitnessServiceFactory();
         routeDao = new RouteSharedPreferenceDao();

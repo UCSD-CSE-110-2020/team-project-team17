@@ -31,7 +31,8 @@ public class InvitationFirestoreService implements InvitationService {
     //TODO: From invite receiver's POV, allow them to accept/decline invite
     @Override
     public void confirmInvite(Invitation invite){
-        WalkWalkRevolution.getUser().setTeamId(invite.getSenderTeamId());
+        //TODO: Improve implementation
+//        WalkWalkRevolution.getUser().setTeamId(invite.getSenderTeamId());
     }
 
     @Override

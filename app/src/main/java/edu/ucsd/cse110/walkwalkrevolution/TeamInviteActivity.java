@@ -30,15 +30,16 @@ public class TeamInviteActivity extends AppCompatActivity {
                 if(!isValidEmail(emailEditText.getText().toString())){
                     emailEditText.setError("You dummy. Fill this in right.");
                 } else {
-                    // TODO Send the invite.
-                    Invitation invite = new Invitation(emailEditText.getText().toString());
-                    if(invite.getReceiver() == null) {
-                        emailEditText.setError("Could not find user associated with this email.");
-                    } else {
-                        WalkWalkRevolution.getInvitationService().addInvite(invite);
-                        Toast.makeText(getApplicationContext(), "Sent Invite", Toast.LENGTH_LONG).show();
-                        finish();
-                    }
+                    // TODO: Currently doesn't create invite if email doesn't exist
+                    Invitation invite = new Invitation(WalkWalkRevolution.getUser(), emailEditText.getText().toString());
+                    finish();
+//                    if(invite.getReceiver() == null) {
+//                        emailEditText.setError("Could not find user associated with this email.");
+//                    } else {
+//                        WalkWalkRevolution.getInvitationService().addInvite(invite);
+//                        Toast.makeText(getApplicationContext(), "Sent Invite", Toast.LENGTH_LONG).show();
+//                        finish();
+//                    }
                 }
             }
         });

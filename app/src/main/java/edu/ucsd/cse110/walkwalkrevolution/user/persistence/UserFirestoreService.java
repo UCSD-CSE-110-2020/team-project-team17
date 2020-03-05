@@ -20,6 +20,7 @@ import java.util.List;
 import edu.ucsd.cse110.walkwalkrevolution.WalkWalkRevolution;
 import edu.ucsd.cse110.walkwalkrevolution.team.Team;
 import edu.ucsd.cse110.walkwalkrevolution.user.User;
+import edu.ucsd.cse110.walkwalkrevolution.user.invite.Invitation;
 
 public class UserFirestoreService implements UserService{
 
@@ -113,14 +114,16 @@ public class UserFirestoreService implements UserService{
     //Added for functionality with Invitations --Justin
     //Assumed to work if users is arranged by email.
     @Override
-    public User getUser(String userEmail){
-        List<User> u = new ArrayList<>();
+    public void getReceiver(Invitation invitation, String userEmail){
         users.document(userEmail).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                User user = snapshotToUser(documentSnapshot);
-                Log.d(TAG, "User retrieved: " + user.getName() + ": " + user.getEmail());
-                u.add(user);
+                if(documentSnapshot.exists()) {
+                    User user = snapshotToUser(documentSnapshot);
+                    Log.d(TAG, "User retrieved: " + user.getName() + ": " + user.getEmail());
+                    invitation.setReceiver(user);
+                    WalkWalkRevolution.getInvitationService().addInvite(invitation);
+                }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -128,7 +131,6 @@ public class UserFirestoreService implements UserService{
                 Log.d(TAG, e.getLocalizedMessage());
             }
         });
-        return u.isEmpty() ? null : u.get(0);
     }
 
 }

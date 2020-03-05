@@ -17,27 +17,22 @@ public class Invitation {
 
     private User sender;
     private User receiver;
-    private String senderTeamId;
 
-    public Invitation(){
-        this.sender = WalkWalkRevolution.getUser();
-        this.senderTeamId = this.sender.getTeamId();
-    }
+
     //assumption that only *this* user makes the invitation
-    public Invitation(User receiver){
-        super();
+    public Invitation(User sender, User receiver){
+        this.sender = sender;
         this.receiver = receiver;
     }
 
-    public Invitation(String receiverEmail){
-        super();
-        this.receiver = WalkWalkRevolution.getUserService().getUser(receiverEmail);
-        if(this.receiver == null){
-            Log.e(TAG, "Could not get receiver from email.");
-        }
+    public Invitation(User sender, String receiverEmail){
+        this.sender = sender;
+        WalkWalkRevolution.getUserService().getReceiver(this, receiverEmail);
     }
 
+
     public Map<String, String> toMap(){
+        Log.d(TAG, WalkWalkRevolution.getUser().getEmail());
         Map<String, String> map = new HashMap<>();
         map.put(FROM, this.sender.getEmail());
         map.put(TO, this.receiver.getEmail());
@@ -52,8 +47,8 @@ public class Invitation {
         return this.receiver;
     }
 
-    public String getSenderTeamId(){
-        return this.senderTeamId;
+    public void setReceiver(User user){
+        this.receiver = user;
     }
 
 }
