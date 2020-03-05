@@ -5,6 +5,7 @@ import android.util.Log;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import edu.ucsd.cse110.walkwalkrevolution.WalkWalkRevolution;
 import edu.ucsd.cse110.walkwalkrevolution.user.User;
 
 public class InvitationFirestoreService implements InvitationService {
@@ -32,7 +33,7 @@ public class InvitationFirestoreService implements InvitationService {
     //TODO: From invite receiver's POV, allow them to accept/decline invite
     @Override
     public void confirmInvite(Invitation invite){
-
+        WalkWalkRevolution.getUser().setTeamId(invite.getSenderTeamId());
     }
 
 }
