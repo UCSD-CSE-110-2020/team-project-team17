@@ -27,6 +27,7 @@ import edu.ucsd.cse110.walkwalkrevolution.user.User;
 
 
 public class ProposalFirestoreService implements ProposalService {
+    public static String activeProposal = "";
 
     private CollectionReference proposals;
     private FirebaseFirestore db;
@@ -51,6 +52,7 @@ public class ProposalFirestoreService implements ProposalService {
             @Override
             public void onSuccess(DocumentReference documentReference) {
                 Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                activeProposal = documentReference.getId();
             }
         })
                 .addOnFailureListener(error -> {
@@ -58,47 +60,23 @@ public class ProposalFirestoreService implements ProposalService {
         });
     }
 
-    //TODO: FIX
- //   @Override
-//    public Route getProposal(User user) {
-//        String teamId = user.
-//   getTeamId();
-//        String routeId = "";
-//        Query query = proposals.whereEqualTo("teamId", teamId);
-//        query.get()
-//        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                if (task.isSuccessful()) {
-//                    for (QueryDocumentSnapshot document : task.getResult()) {
-//                        Log.d(TAG, document.getId() + " => " + document.getData());
-//                    }
-//                } else {
-//                    Log.d(TAG, "Error getting documents: ", task.getException());
-//                }
-//            }
-//        });
-//
-//    }
-
-//    private Route snapshotToRoute(DocumentSnapshot documentSnapshot){
-//        Route.Builder builder = new Route.Builder();
-//        if(documentSnapshot.contains(Route.TITLE)){
-//            builder.setTitle(documentSnapshot.getString(Route.TITLE));
-//        }
-//        if(documentSnapshot.contains(Route.LOCATION)){
-//            builder.setTitle(documentSnapshot.getString(Route.LOCATION));
-//        }
-//        if(documentSnapshot.contains(Route.NOTES)){
-//            builder.setTitle(documentSnapshot.getString(Route.NOTES));
-//        }
-//        if(documentSnapshot.contains(Route.DESCRIPTION_TAGS)){
-//            builder.setTitle(documentSnapshot.getString(Route.DESCRIPTION_TAGS));
-//        }
-//        if(documentSnapshot.contains(Route.USER_ID)){
-//            builder.setUserId(documentSnapshot.getString(Route.USER_ID));
-//        }
-//        return builder.build();
-//    }
+    @Override
+    public void withdrawProposal() {
+        proposals.document(activeProposal)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                        activeProposal = "";
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error deleting document", e);
+                    }
+                });
+    }
 
 }

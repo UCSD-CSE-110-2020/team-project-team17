@@ -8,6 +8,9 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import edu.ucsd.cse110.walkwalkrevolution.proposal.ProposalFirestoreService;
+import edu.ucsd.cse110.walkwalkrevolution.proposal.ProposalService;
+
 public class ProposeScreenActivity extends AppCompatActivity {
 
     Button schdWalk, wthdWalk, afterBtn;
@@ -46,6 +49,8 @@ public class ProposeScreenActivity extends AppCompatActivity {
                 one.setVisibility(View.GONE);
                 two.setVisibility(View.GONE);
                 walkName.setText("");
+                ProposalService ps = WalkWalkRevolution.getProposalService();
+                ps.withdrawProposal();
             }
         });
 

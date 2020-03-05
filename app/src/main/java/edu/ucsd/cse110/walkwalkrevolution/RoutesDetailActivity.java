@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Activity;
 import edu.ucsd.cse110.walkwalkrevolution.activity.ActivityUtils;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
+import edu.ucsd.cse110.walkwalkrevolution.proposal.ProposalFirestoreService;
 import edu.ucsd.cse110.walkwalkrevolution.proposal.ProposalService;
 import edu.ucsd.cse110.walkwalkrevolution.route.Route;
 import edu.ucsd.cse110.walkwalkrevolution.route.RouteRecycleView.RoutesAdapter;
@@ -24,6 +25,7 @@ public class RoutesDetailActivity extends AppCompatActivity {
 
     public static final String ROUTE = "edu.ucsd.cse110.walkwalkrevolution.ROUTE";
     public static final String ROUTE_ID = "edu.ucsd.cse110.walkwalkrevolution.ROUTE_ID";
+
 
     public long id;
 
@@ -98,8 +100,8 @@ public class RoutesDetailActivity extends AppCompatActivity {
         proposal.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v)
             {
-                //TODO: Create and use ps.proposalActive()
-                if (true) {
+                String activeProposal = ProposalFirestoreService.activeProposal;
+                if (activeProposal.equals("") ) {
                     Toast.makeText(RoutesDetailActivity.this, "Proposed route", Toast.LENGTH_SHORT).show();
                     ProposalService ps = WalkWalkRevolution.getProposalService();
                     String teamId = WalkWalkRevolution.getUser().getEmail();

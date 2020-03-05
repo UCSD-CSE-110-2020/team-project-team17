@@ -30,7 +30,6 @@ import edu.ucsd.cse110.walkwalkrevolution.user.persistence.UserServiceFactory;
 import edu.ucsd.cse110.walkwalkrevolution.user.persistence.UserSharedPreferenceDao;
 
 public class WalkWalkRevolution extends Application {
-
     private static FitnessServiceFactory fitnessServiceFactory;
     private static FitnessService fitnessService;
 
