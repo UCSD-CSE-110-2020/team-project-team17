@@ -10,5 +10,6 @@ public interface UserService {
     void addUser(User user);
     void refresh();
     void getTeam(Team team, User user);
+    User getUser(String userEmail);
 
 }

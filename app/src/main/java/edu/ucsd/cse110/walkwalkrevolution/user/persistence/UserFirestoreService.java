@@ -110,4 +110,25 @@ public class UserFirestoreService implements UserService{
         return user;
     }
 
+    //Added for functionality with Invitations --Justin
+    //Assumed to work if users is arranged by email.
+    @Override
+    public User getUser(String userEmail){
+        List<User> u = new ArrayList<>();
+        users.document(userEmail).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                User user = snapshotToUser(documentSnapshot);
+                Log.d(TAG, "User retrieved: " + user.getName() + ": " + user.getEmail());
+                u.add(user);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, e.getLocalizedMessage());
+            }
+        });
+        return u.isEmpty() ? null : u.get(0);
+    }
+
 }

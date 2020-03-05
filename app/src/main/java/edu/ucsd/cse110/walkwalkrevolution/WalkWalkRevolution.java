@@ -22,6 +22,8 @@ import edu.ucsd.cse110.walkwalkrevolution.route.persistence.RouteService;
 import edu.ucsd.cse110.walkwalkrevolution.route.persistence.RouteServiceFactory;
 import edu.ucsd.cse110.walkwalkrevolution.route.persistence.RouteSharedPreferenceDao;
 import edu.ucsd.cse110.walkwalkrevolution.user.User;
+import edu.ucsd.cse110.walkwalkrevolution.user.invite.InvitationService;
+import edu.ucsd.cse110.walkwalkrevolution.user.invite.InvitationServiceFactory;
 import edu.ucsd.cse110.walkwalkrevolution.user.persistence.BaseUserDao;
 import edu.ucsd.cse110.walkwalkrevolution.user.persistence.UserService;
 import edu.ucsd.cse110.walkwalkrevolution.user.persistence.UserServiceFactory;
@@ -41,6 +43,8 @@ public class WalkWalkRevolution extends Application {
     private static RouteServiceFactory routeServiceFactory;
     private static UserService userService;
     private static UserServiceFactory userServiceFactory;
+    private static InvitationService inviteService;
+    private static InvitationServiceFactory inviteServiceFactory;
 
     private static Steps steps = new Steps();
     private static StepSubject stepTracker;
@@ -62,6 +66,7 @@ public class WalkWalkRevolution extends Application {
 
         routeServiceFactory = new RouteServiceFactory();
         userServiceFactory = new UserServiceFactory();
+        inviteServiceFactory = new InvitationServiceFactory();
         WalkWalkRevolution.context = getApplicationContext();
         fitnessServiceFactory = new FitnessServiceFactory();
         routeDao = new RouteSharedPreferenceDao();
@@ -200,6 +205,14 @@ public class WalkWalkRevolution extends Application {
 
     public static UserService getUserService(){
         return WalkWalkRevolution.userService;
+    }
+
+    public static void createInvitationService(){
+        WalkWalkRevolution.inviteService = WalkWalkRevolution.inviteServiceFactory.createInvitationService();
+    }
+
+    public static InvitationService getInvitationService(){
+        return inviteService;
     }
 
 }
