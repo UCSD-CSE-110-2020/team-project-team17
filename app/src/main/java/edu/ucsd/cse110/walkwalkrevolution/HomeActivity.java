@@ -100,6 +100,8 @@ public class HomeActivity extends AppCompatActivity implements Observer {
             WalkWalkRevolution.getUserService().refresh();
         }
 
+
+
     }
 
     public void createRouteActivity() {

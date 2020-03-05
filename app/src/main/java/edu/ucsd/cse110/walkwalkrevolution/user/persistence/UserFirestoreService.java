@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.ucsd.cse110.walkwalkrevolution.WalkWalkRevolution;
+import edu.ucsd.cse110.walkwalkrevolution.route.Route;
+import edu.ucsd.cse110.walkwalkrevolution.route.Routes;
 import edu.ucsd.cse110.walkwalkrevolution.team.Team;
 import edu.ucsd.cse110.walkwalkrevolution.user.User;
 
@@ -98,8 +100,50 @@ public class UserFirestoreService implements UserService{
         });
     }
 
+    @Override
+    public void getTeamRoutes(Routes r, User user) {
+        users.orderBy(User.NAME, Query.Direction.ASCENDING).whereEqualTo(User.TEAM, user.getTeamId())
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(DocumentSnapshot documentSnapshot: queryDocumentSnapshots.getDocuments()){
+                    User u = snapshotToUser(documentSnapshot);
+                    Log.d(TAG, u.getName());
+
+                    getRoutes(r, u);
+                    //r.addUser(user);
+                }
+                //r.notifyObservers();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, e.getLocalizedMessage());
+            }
+        });
+    }
+
+    private void getRoutes(Routes r, User u) {
+        users.orderBy()
+    }
+
     private User snapshotToUser(DocumentSnapshot documentSnapshot){
         User user = new User(-1, -1);
+        Log.d(TAG, documentSnapshot.getString(User.NAME));
+        Log.d(TAG, documentSnapshot.getString(User.EMAIL));
+        Log.d(TAG, documentSnapshot.getString(User.TEAM));
+        user.setName(documentSnapshot.getString(User.NAME));
+        user.setEmail(documentSnapshot.getString(User.EMAIL));
+        if(documentSnapshot.contains(User.TEAM)){
+            user.setTeamId(documentSnapshot.getString(User.TEAM));
+        }
+        return user;
+    }
+
+
+
+    private Route snapshotToRoute(DocumentSnapshot documentSnapshot){
+        Route r = new Route();
         Log.d(TAG, documentSnapshot.getString(User.NAME));
         Log.d(TAG, documentSnapshot.getString(User.EMAIL));
         Log.d(TAG, documentSnapshot.getString(User.TEAM));

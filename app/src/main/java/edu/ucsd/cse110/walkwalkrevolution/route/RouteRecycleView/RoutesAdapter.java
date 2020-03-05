@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import edu.ucsd.cse110.walkwalkrevolution.R;
 import edu.ucsd.cse110.walkwalkrevolution.RoutesActivity;
 import edu.ucsd.cse110.walkwalkrevolution.RoutesDetailActivity;
@@ -48,6 +50,8 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
             duration = (TextView) itemView.findViewById(R.id.duration);
             date = (TextView) itemView.findViewById(R.id.date);
         }
+
+        FirebaseFirestore de = FirebaseFirestore.getInstance();
     }
 
     @Override
@@ -67,10 +71,7 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
             public void onClick(View view) {
                 int index = RoutesActivity.recyclerView.getChildAdapterPosition(view);
                 Route item = routes.get(index);
-
-
                 openRoutesDetailActivity(view, item);
-
             }
         });
         return viewHolder;

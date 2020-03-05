@@ -8,12 +8,15 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import edu.ucsd.cse110.walkwalkrevolution.team.Team;
+
 public class ProposeScreenActivity extends AppCompatActivity {
 
     Button schdWalk, wthdWalk, afterBtn;
     TextView screenTitle, walkName;
     View one, two;
 
+    private Team teamTest;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,6 +39,11 @@ public class ProposeScreenActivity extends AppCompatActivity {
                 screenTitle.setText("Scheduled Walk");
                 one.setVisibility(View.GONE);
                 two.setVisibility(View.VISIBLE);
+
+                teamTest = new Team();
+                WalkWalkRevolution.getUserService().getTeam(teamTest, WalkWalkRevolution.getUser());
+                String s = teamTest.getUsers().get(0).getName();
+                screenTitle.setText(s);
             }
         });
 
