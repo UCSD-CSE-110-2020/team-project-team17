@@ -40,76 +40,56 @@ public class ProposalFirestoreService implements ProposalService {
     }
 
     @Override
-    public void addProposal(Route route, User user) {
+    public void addProposal(String routeId, String userId) {
         CollectionReference routes = db.collection(ROUTE_KEY);
         Map<String, Object> data = new HashMap<>();
-        data.put("routeId", route.getId());
-        data.put("teamId", user.getTeamId());
+        data.put("routeId", routeId);
+        data.put("teamId", userId);
         proposals.add(data).addOnFailureListener(error -> {
             Log.e(TAG, error.getLocalizedMessage());
         });
     }
 
-    @Override
-    public Route getProposal(User user) {
-        String teamId = user.getTeamId();
-        String routeId = "";
-        Query query = proposals.whereEqualTo("teamId", teamId);
-        query.get()
-        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        Log.d(TAG, document.getId() + " => " + document.getData());
-                    }
-                } else {
-                    Log.d(TAG, "Error getting documents: ", task.getException());
-                }
-            }
-        });
+    //TODO: FIX
+ //   @Override
+//    public Route getProposal(User user) {
+//        String teamId = user.getTeamId();
+//        String routeId = "";
+//        Query query = proposals.whereEqualTo("teamId", teamId);
+//        query.get()
+//        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    for (QueryDocumentSnapshot document : task.getResult()) {
+//                        Log.d(TAG, document.getId() + " => " + document.getData());
+//                    }
+//                } else {
+//                    Log.d(TAG, "Error getting documents: ", task.getException());
+//                }
+//            }
+//        });
+//
+//    }
 
-    }
-
-    private Route snapshotToRoute(DocumentSnapshot documentSnapshot){
-        Route.Builder builder = new Route.Builder();
-        if(documentSnapshot.contains(Route.TITLE)){
-            builder.setTitle(documentSnapshot.getString(Route.TITLE));
-        }
-        if(documentSnapshot.contains(Route.LOCATION)){
-            builder.setTitle(documentSnapshot.getString(Route.LOCATION));
-        }
-        if(documentSnapshot.contains(Route.NOTES)){
-            builder.setTitle(documentSnapshot.getString(Route.NOTES));
-        }
-        if(documentSnapshot.contains(Route.DESCRIPTION_TAGS)){
-            builder.setTitle(documentSnapshot.getString(Route.DESCRIPTION_TAGS));
-        }
-        if(documentSnapshot.contains(Route.USER_ID)){
-            builder.setUserId(documentSnapshot.getString(Route.USER_ID));
-        }
-        return builder.build();
-    }
-
-    @Override
-    public List<Route> getRoutes(User user) {
-        List<Route> r = new ArrayList<>();
-        routes.orderBy(Route.TITLE, Query.Direction.ASCENDING).whereEqualTo(Route.USER_ID, user.getEmail())
-                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for(DocumentSnapshot documentSnapshot: queryDocumentSnapshots.getDocuments()){
-                    Route route = snapshotToRoute(documentSnapshot);
-                    r.add(route);
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, e.getLocalizedMessage());
-            }
-        });
-        return r;
-    }
+//    private Route snapshotToRoute(DocumentSnapshot documentSnapshot){
+//        Route.Builder builder = new Route.Builder();
+//        if(documentSnapshot.contains(Route.TITLE)){
+//            builder.setTitle(documentSnapshot.getString(Route.TITLE));
+//        }
+//        if(documentSnapshot.contains(Route.LOCATION)){
+//            builder.setTitle(documentSnapshot.getString(Route.LOCATION));
+//        }
+//        if(documentSnapshot.contains(Route.NOTES)){
+//            builder.setTitle(documentSnapshot.getString(Route.NOTES));
+//        }
+//        if(documentSnapshot.contains(Route.DESCRIPTION_TAGS)){
+//            builder.setTitle(documentSnapshot.getString(Route.DESCRIPTION_TAGS));
+//        }
+//        if(documentSnapshot.contains(Route.USER_ID)){
+//            builder.setUserId(documentSnapshot.getString(Route.USER_ID));
+//        }
+//        return builder.build();
+//    }
 
 }

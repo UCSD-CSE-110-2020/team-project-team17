@@ -7,8 +7,8 @@ import edu.ucsd.cse110.walkwalkrevolution.user.User;
 
 public interface ProposalService {
 
-    void addProposal(Route route, User user);
-    Route getProposal(User user);
+    void addProposal(String routeId, String userId);
+   // Route getProposal(User user);
     //List<Route> getRoutes(User user);
 
 }

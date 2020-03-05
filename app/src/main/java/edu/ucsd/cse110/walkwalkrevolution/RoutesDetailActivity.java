@@ -2,6 +2,7 @@ package edu.ucsd.cse110.walkwalkrevolution;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -12,13 +13,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Activity;
 import edu.ucsd.cse110.walkwalkrevolution.activity.ActivityUtils;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
+import edu.ucsd.cse110.walkwalkrevolution.proposal.ProposalService;
 import edu.ucsd.cse110.walkwalkrevolution.route.Route;
 import edu.ucsd.cse110.walkwalkrevolution.route.RouteRecycleView.RoutesAdapter;
+import edu.ucsd.cse110.walkwalkrevolution.user.User;
+import edu.ucsd.cse110.walkwalkrevolution.user.persistence.BaseUserDao;
+import edu.ucsd.cse110.walkwalkrevolution.user.persistence.UserSharedPreferenceDao;
 
 public class RoutesDetailActivity extends AppCompatActivity {
 
     public static final String ROUTE = "edu.ucsd.cse110.walkwalkrevolution.ROUTE";
     public static final String ROUTE_ID = "edu.ucsd.cse110.walkwalkrevolution.ROUTE_ID";
+
     public long id;
 
     private TextView title;
@@ -92,7 +98,8 @@ public class RoutesDetailActivity extends AppCompatActivity {
         proposal.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v)
             {
-                if (!route.getProposed()) {
+                //TODO: Create and use ps.proposalActive()
+                if (true) {
 //                    Intent intent = new Intent(v.getContext(), WalkActivity.class);
 //                    intent.putExtra(ROUTE, 1);
 //                    intent.putExtra(ROUTE_ID, id);
@@ -100,8 +107,10 @@ public class RoutesDetailActivity extends AppCompatActivity {
 //                    finish();
 //                    v.getContext().startActivity(intent);
                     Toast.makeText(RoutesDetailActivity.this, "Proposed route", Toast.LENGTH_SHORT).show();
-                    route.setProposed();
-                    WalkWalkRevolution.getRouteDao().setRoute(route);
+                    ProposalService ps = WalkWalkRevolution.getProposalService();
+                    //TODO: String routeId =
+                    String teamId = WalkWalkRevolution.getUser().getEmail();
+                    ps.addProposal(route.getTitle(), "teamId");
                 }
                 else {
                     Toast.makeText(RoutesDetailActivity.this, "Already proposed", Toast.LENGTH_SHORT).show();
