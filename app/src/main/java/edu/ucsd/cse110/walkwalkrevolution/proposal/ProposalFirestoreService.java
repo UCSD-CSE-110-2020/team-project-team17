@@ -9,6 +9,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -45,7 +46,14 @@ public class ProposalFirestoreService implements ProposalService {
         Map<String, Object> data = new HashMap<>();
         data.put("routeId", routeId);
         data.put("teamId", userId);
-        proposals.add(data).addOnFailureListener(error -> {
+        proposals.add(data)
+            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+            }
+        })
+                .addOnFailureListener(error -> {
             Log.e(TAG, error.getLocalizedMessage());
         });
     }

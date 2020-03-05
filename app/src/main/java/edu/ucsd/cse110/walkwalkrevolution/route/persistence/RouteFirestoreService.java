@@ -16,6 +16,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.ucsd.cse110.walkwalkrevolution.WalkWalkRevolution;
 import edu.ucsd.cse110.walkwalkrevolution.route.Route;
 import edu.ucsd.cse110.walkwalkrevolution.user.User;
 
@@ -37,6 +38,8 @@ public class RouteFirestoreService implements RouteService {
             @Override
             public void onSuccess(DocumentReference documentReference) {
                 Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                route.setRouteId(documentReference.getId());
+                WalkWalkRevolution.getRouteDao().setRoute(route);
             }
         }).addOnFailureListener(error -> {
             Log.e(TAG, error.getLocalizedMessage());

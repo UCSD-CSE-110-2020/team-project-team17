@@ -22,7 +22,9 @@ public class Route {
     public static final String LOCATION = "location";
     public static final String NOTES = "notes";
     public static final String DESCRIPTION_TAGS = "descriptionTags";
+    public static final String DEFAULT_ID = "not stored in cloud";
 
+    private String routeId;
     private long id;
     @JsonIgnore
     private String userId;
@@ -87,6 +89,7 @@ public class Route {
                  @JsonProperty("descriptionTags") String descriptionTags,
                  @JsonProperty("notes") String notes,
                  @JsonProperty("activity") Activity activity){
+        this.routeId = DEFAULT_ID;
         this.id = id;
         this.title = title;
         this.location = location;
@@ -97,15 +100,22 @@ public class Route {
 
     //Used for testing
     public Route(long id, String title, Activity activity){
+        this.routeId = DEFAULT_ID;
         this.id = id;
         this.title = title;
         this.activity = activity;
     }
 
     public Route(String title, Activity activity){
+        this.routeId = DEFAULT_ID;
         this.id = WalkWalkRevolution.getRouteDao().getNextId();
         this.title = title;
         this.activity = activity;
+    }
+
+    public String getRouteId() { return routeId; }
+    public void setRouteId(String routeId) {
+        this.routeId =  routeId;
     }
 
     public long getId(){
