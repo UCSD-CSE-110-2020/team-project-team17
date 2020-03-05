@@ -12,8 +12,8 @@ public class Invitation {
 
     private final String TAG = "Invitation";
 
-    private final String TO = "to";
-    private final String FROM = "from";
+    public static final String TO = "to";
+    public static final String FROM = "from";
 
     private User sender;
     private User receiver;
@@ -30,6 +30,8 @@ public class Invitation {
         WalkWalkRevolution.getUserService().getReceiver(this, receiverEmail);
     }
 
+    // empty constructor
+    public Invitation(){ }
 
     public Map<String, String> toMap(){
         Log.d(TAG, WalkWalkRevolution.getUser().getEmail());
@@ -49,6 +51,10 @@ public class Invitation {
 
     public void setReceiver(User user){
         this.receiver = user;
+    }
+
+    public void acceptInvitation(){
+        this.receiver.setTeamId(this.sender.getTeamId());
     }
 
 }

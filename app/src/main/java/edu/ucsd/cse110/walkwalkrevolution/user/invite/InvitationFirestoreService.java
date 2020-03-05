@@ -2,8 +2,17 @@ package edu.ucsd.cse110.walkwalkrevolution.user.invite;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
 
 import edu.ucsd.cse110.walkwalkrevolution.WalkWalkRevolution;
 import edu.ucsd.cse110.walkwalkrevolution.user.User;
@@ -20,7 +29,6 @@ public class InvitationFirestoreService implements InvitationService {
                 .collection(INVITATION_KEY);
     }
 
-    //TODO: From invite sender's POV, allow them to make invite and send to database
     @Override
     public void addInvite(Invitation invite){
         invites.add(invite.toMap()).addOnFailureListener(error -> {
@@ -28,14 +36,33 @@ public class InvitationFirestoreService implements InvitationService {
         });
     }
 
-    //TODO: From invite receiver's POV, allow them to accept/decline invite
     @Override
-    public void confirmInvite(Invitation invite){
-        //TODO: Improve implementation
-//        WalkWalkRevolution.getUser().setTeamId(invite.getSenderTeamId());
+    public Invitation getInvite(User user){
+        ArrayList<Invitation> inv = new ArrayList<Invitation>();
+        invites.orderBy(Invitation.TO, Query.Direction.ASCENDING).whereEqualTo(Invitation.TO, user.getEmail())
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(DocumentSnapshot documentSnapshot: queryDocumentSnapshots.getDocuments()){
+                    Invitation invite = snapshotToInvitation(documentSnapshot);
+                    Log.d(TAG, invite.getSender().toString() + "-->" + invite.getReceiver().toString());
+                    inv.add(invite);
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, e.getLocalizedMessage());
+            }
+        });
+        return inv.isEmpty() ? null : inv.get(0);
     }
 
-    @Override
-    public Invitation getInvite(){ return null; }
+    private Invitation snapshotToInvitation(DocumentSnapshot documentSnapshot){
+        User sender = null; //TODO: Retrieve sender
+        User reciever = null; //TODO: Retrieve reciever
+        Invitation invite = new Invitation(sender, reciever);
+        return invite;
+    }
 
 }
