@@ -25,6 +25,7 @@ public class Route {
     public static final String PROPOSED = "proposed";
 
     private long id;
+    private String firestoreId;
     @JsonIgnore
     private String userId;
     private String title;
@@ -32,7 +33,7 @@ public class Route {
     private String descriptionTags;
     private Activity activity;
     private String notes;
-    private Boolean proposed;
+    private boolean proposed;
 
     public static class Builder {
         String title;
@@ -40,7 +41,8 @@ public class Route {
         String notes;
         String description;
         String userId;
-        Boolean proposed;
+        boolean proposed;
+        String firestoreId;
         Activity activity;
 
         public Builder setTitle(String title){
@@ -68,13 +70,13 @@ public class Route {
             return this;
         }
 
-        public Builder setProposed() {
+        public Builder setProposed(boolean proposed) {
             this.proposed = true;
             return this;
         }
 
-        public Builder clearProposed() {
-            this.proposed = false;
+        public Builder setFirestoreId(String id){
+            this.firestoreId = id;
             return this;
         }
 
@@ -90,16 +92,20 @@ public class Route {
             if(notes != null) route.setLocation(notes);
             if(description != null) route.setDescriptionTags(description);
             if(userId != null) route.setUserId(userId);
+            route.setProposed(proposed);
+            route.setFirestoreId(firestoreId);
             return route;
         }
     }
 
-    public Route(@JsonProperty("id") long id, @JsonProperty("title") String title,
+    public Route(@JsonProperty("id") long id, @JsonProperty("firestoreId") String firestoreId,
+                 @JsonProperty("title") String title,
                  @JsonProperty("location") String location,
                  @JsonProperty("descriptionTags") String descriptionTags,
                  @JsonProperty("notes") String notes,
                  @JsonProperty("activity") Activity activity){
         this.id = id;
+        this.firestoreId = firestoreId;
         this.title = title;
         this.location = location;
         this.descriptionTags = descriptionTags;
@@ -107,6 +113,8 @@ public class Route {
         this.proposed = false;
         this.activity = activity;
     }
+
+    public Route(){}
 
     //Used for testing
     public Route(long id, String title, Activity activity){
@@ -179,12 +187,17 @@ public class Route {
         this.notes = notes;
     }
 
-    public void setProposed() { this.proposed = true; }
-
-    public void clearProposed() { this.proposed = false; }
+    public void setProposed(boolean proposed) { this.proposed = proposed; }
 
     public Boolean getProposed() { return this.proposed; }
 
+    public String getFirestoreId() {
+        return this.firestoreId;
+    }
+
+    public void setFirestoreId(String firestoreId) {
+        this.firestoreId = firestoreId;
+    }
 
     public Map<String, String> toMap(){
         Map<String, String> map = new HashMap<>();

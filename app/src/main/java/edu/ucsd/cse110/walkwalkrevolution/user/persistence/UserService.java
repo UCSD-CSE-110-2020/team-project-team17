@@ -11,6 +11,6 @@ public interface UserService {
     void addUser(User user);
     void refresh();
     void getTeam(Team team, User user);
-    void getTeamRoutes(Routes r, User user);
+//    void getTeamRoutes(Routes r, User user);
 
 }

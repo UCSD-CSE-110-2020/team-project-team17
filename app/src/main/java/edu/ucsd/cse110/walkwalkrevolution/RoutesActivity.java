@@ -11,8 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import com.google.firebase.firestore.FirebaseFirestore;
-
 import edu.ucsd.cse110.walkwalkrevolution.route.RouteRecycleView.RoutesAdapter;
 
 public class RoutesActivity extends AppCompatActivity {
@@ -21,9 +19,6 @@ public class RoutesActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
 
     Button yourRoutes, teammateRoutes;
-
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,14 +41,16 @@ public class RoutesActivity extends AppCompatActivity {
         yourRoutes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               recyclerView.setVisibility(View.VISIBLE);
+//               recyclerView.setVisibility(View.VISIBLE);
+                adapter.updateRoute();
             }
         });
 
         teammateRoutes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                recyclerView.setVisibility(View.GONE);
+//                recyclerView.setVisibility(View.GONE);
+                adapter.updateTeam();
             }
         });
 
@@ -62,7 +59,7 @@ public class RoutesActivity extends AppCompatActivity {
     @Override
     protected void onStart(){
         super.onStart();
-        adapter.updateList();
+        adapter.updateRoute();
     }
 
     @Override

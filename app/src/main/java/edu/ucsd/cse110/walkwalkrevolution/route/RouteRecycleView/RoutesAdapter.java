@@ -2,6 +2,7 @@ package edu.ucsd.cse110.walkwalkrevolution.route.RouteRecycleView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.ucsd.cse110.walkwalkrevolution.R;
 import edu.ucsd.cse110.walkwalkrevolution.RoutesActivity;
 import edu.ucsd.cse110.walkwalkrevolution.RoutesDetailActivity;
@@ -18,17 +22,32 @@ import edu.ucsd.cse110.walkwalkrevolution.activity.Activity;
 import edu.ucsd.cse110.walkwalkrevolution.activity.ActivityUtils;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
 import edu.ucsd.cse110.walkwalkrevolution.route.Route;
+import edu.ucsd.cse110.walkwalkrevolution.route.RouteObserver;
 import edu.ucsd.cse110.walkwalkrevolution.route.Routes;
+import edu.ucsd.cse110.walkwalkrevolution.user.User;
 
-public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder> {
+public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder> implements RouteObserver {
 
     private Routes routes;
+    private List<Route> mRoutes;
+
     public static final String EXTRA_TEXT = "edu.ucsd.cse110.walkwalkrevolution.EXTRA_TEXT";
     //private Context context;
 
     public RoutesAdapter() {
         routes = new Routes();
+        routes.subscribe(this);
+        mRoutes = new ArrayList<>();
+        updateRoute();
         //this.context = context;
+    }
+
+    @Override
+    public void update(List<Route> routes){
+        for(Route route: routes){
+            mRoutes.add(route);
+        }
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -51,7 +70,6 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
             date = (TextView) itemView.findViewById(R.id.date);
         }
 
-        FirebaseFirestore de = FirebaseFirestore.getInstance();
     }
 
     @Override
@@ -70,7 +88,7 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
             @Override
             public void onClick(View view) {
                 int index = RoutesActivity.recyclerView.getChildAdapterPosition(view);
-                Route item = routes.get(index);
+                Route item = mRoutes.get(index);
                 openRoutesDetailActivity(view, item);
             }
         });
@@ -88,7 +106,7 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
     @Override
     public void onBindViewHolder(RoutesAdapter.ViewHolder viewHolder, int position) {
         // Get the data model based on position
-        Route route = routes.get(position);
+        Route route = mRoutes.get(position);
 
         // Set item views based on your views and data model
         TextView routeTitle = viewHolder.routeTitle;
@@ -111,11 +129,16 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
     // Returns the total count of items in the list
     @Override
     public int getItemCount() {
-        return routes.getSize();
+        return mRoutes.size();
     }
 
-    public void updateList() {
-        routes = new Routes();
-        notifyDataSetChanged();
+    public void updateTeam() {
+        mRoutes = new ArrayList<>();
+        routes.getTeamRoutes();
+    }
+
+    public void updateRoute(){
+        mRoutes = new ArrayList<>();
+        routes.getRoutes();
     }
 }

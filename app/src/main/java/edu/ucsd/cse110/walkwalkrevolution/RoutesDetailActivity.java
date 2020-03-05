@@ -100,7 +100,7 @@ public class RoutesDetailActivity extends AppCompatActivity {
 //                    finish();
 //                    v.getContext().startActivity(intent);
                     Toast.makeText(RoutesDetailActivity.this, "Proposed route", Toast.LENGTH_SHORT).show();
-                    route.setProposed();
+                    route.setProposed(true);
                     WalkWalkRevolution.getRouteDao().setRoute(route);
                 }
                 else {
