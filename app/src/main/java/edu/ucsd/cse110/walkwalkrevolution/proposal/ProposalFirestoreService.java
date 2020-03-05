@@ -53,7 +53,8 @@ public class ProposalFirestoreService implements ProposalService {
     //TODO: FIX
  //   @Override
 //    public Route getProposal(User user) {
-//        String teamId = user.getTeamId();
+//        String teamId = user.
+//   getTeamId();
 //        String routeId = "";
 //        Query query = proposals.whereEqualTo("teamId", teamId);
 //        query.get()

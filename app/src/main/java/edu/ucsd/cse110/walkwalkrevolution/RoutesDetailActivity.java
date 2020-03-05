@@ -100,17 +100,15 @@ public class RoutesDetailActivity extends AppCompatActivity {
             {
                 //TODO: Create and use ps.proposalActive()
                 if (true) {
-//                    Intent intent = new Intent(v.getContext(), WalkActivity.class);
-//                    intent.putExtra(ROUTE, 1);
-//                    intent.putExtra(ROUTE_ID, id);
-//                    intent.putExtra("route_title", route.getTitle());
-//                    finish();
-//                    v.getContext().startActivity(intent);
                     Toast.makeText(RoutesDetailActivity.this, "Proposed route", Toast.LENGTH_SHORT).show();
                     ProposalService ps = WalkWalkRevolution.getProposalService();
                     //TODO: String routeId =
                     String teamId = WalkWalkRevolution.getUser().getEmail();
-                    ps.addProposal(route.getTitle(), "teamId");
+                    ps.addProposal(route.getTitle(), teamId);
+
+                    Intent intent = new Intent(v.getContext(), ProposeScreenActivity.class);
+                    finish();
+                    v.getContext().startActivity(intent);
                 }
                 else {
                     Toast.makeText(RoutesDetailActivity.this, "Already proposed", Toast.LENGTH_SHORT).show();

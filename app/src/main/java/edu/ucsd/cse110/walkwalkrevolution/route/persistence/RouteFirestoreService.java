@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -32,7 +33,12 @@ public class RouteFirestoreService implements RouteService {
 
     @Override
     public void addRoute(Route route) {
-        routes.add(route.toMap()).addOnFailureListener(error -> {
+        routes.add(route.toMap()).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+            }
+        }).addOnFailureListener(error -> {
             Log.e(TAG, error.getLocalizedMessage());
         });
     }
