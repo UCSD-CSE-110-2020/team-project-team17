@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import edu.ucsd.cse110.walkwalkrevolution.ProposeScreenActivity;
 import edu.ucsd.cse110.walkwalkrevolution.route.Route;
 import edu.ucsd.cse110.walkwalkrevolution.route.persistence.RouteFirestoreService;
 import edu.ucsd.cse110.walkwalkrevolution.user.User;
@@ -28,6 +29,7 @@ import edu.ucsd.cse110.walkwalkrevolution.user.User;
 
 public class ProposalFirestoreService implements ProposalService {
     public static String activeProposal = "";
+    public static Route proposedRoute = null;
 
     private CollectionReference proposals;
     private FirebaseFirestore db;
@@ -39,6 +41,43 @@ public class ProposalFirestoreService implements ProposalService {
     public ProposalFirestoreService(){
         db = FirebaseFirestore.getInstance();
         proposals = db.collection(PROPOSAL_KEY);
+    }
+
+    @Override
+    public void getProposalRoute(String teamId, ProposeScreenActivity act) {
+       proposals.whereEqualTo("teamId", teamId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                DocumentReference docRef = db.collection(ROUTE_KEY).document((String) document.get("routeId"));
+                                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            DocumentSnapshot document = task.getResult();
+                                            if (document.exists()) {
+                                                Log.d(TAG, "DocumentSnapshot data: ");
+
+                                                proposedRoute = new Route(document.getData());
+                                                act.displayRouteDetail(proposedRoute);
+                                            } else {
+                                                Log.d(TAG, "No such document");
+                                            }
+                                        } else {
+                                            Log.d(TAG, "get failed with ", task.getException());
+                                        }
+                                    }
+                                });
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
     }
 
     @Override
@@ -69,6 +108,7 @@ public class ProposalFirestoreService implements ProposalService {
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "DocumentSnapshot successfully deleted!");
                         activeProposal = "";
+                        proposedRoute = null;
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

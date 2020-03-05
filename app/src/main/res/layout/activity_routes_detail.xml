@@ -175,6 +175,29 @@
         android:text=""
         android:textSize="20dp" />
 
+    <TextView
+        android:id="@+id/Note"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tag4"
+        android:layout_marginTop="14dp"
+        android:layout_marginLeft="20dp"
+        android:text="Notes:"
+        android:textSize="20dp" />
+
+    <TextView
+        android:id="@+id/Note_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/Note"
+        android:layout_above="@id/btn_ll"
+        android:layout_marginTop="14dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="15dp"
+        android:text="test"
+        android:textSize="20dp" />
+
 
     <LinearLayout
         android:id="@+id/btn_ll"
@@ -201,29 +224,6 @@
             android:text="@string/start_walk_btn" />
 
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/Note"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tag4"
-        android:layout_marginTop="14dp"
-        android:layout_marginLeft="20dp"
-        android:text="Notes:"
-        android:textSize="20dp" />
-
-    <TextView
-        android:id="@+id/Note_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/Note"
-        android:layout_above="@id/btn_ll"
-        android:layout_marginTop="14dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="15dp"
-        android:text="test"
-        android:textSize="20dp" />
 
 
 </RelativeLayout>

@@ -98,6 +98,14 @@ public class Route {
         this.activity = activity;
     }
 
+    public Route(Map<String, Object> map) {
+        this.title = (String) map.get(TITLE);
+        this.descriptionTags = (String) map.get(DESCRIPTION_TAGS);
+        this.location = (String) map.get(LOCATION);
+        this.notes = (String) map.get(NOTES);
+        this.activity = null;
+    }
+
     //Used for testing
     public Route(long id, String title, Activity activity){
         this.routeId = DEFAULT_ID;

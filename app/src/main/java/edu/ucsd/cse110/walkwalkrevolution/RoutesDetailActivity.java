@@ -104,7 +104,7 @@ public class RoutesDetailActivity extends AppCompatActivity {
                 if (activeProposal.equals("") ) {
                     Toast.makeText(RoutesDetailActivity.this, "Proposed route", Toast.LENGTH_SHORT).show();
                     ProposalService ps = WalkWalkRevolution.getProposalService();
-                    String teamId = WalkWalkRevolution.getUser().getEmail();
+                    String teamId = WalkWalkRevolution.getUser().getTeamId();
                     ps.addProposal(route.getRouteId(), teamId);
 
                     Intent intent = new Intent(v.getContext(), ProposeScreenActivity.class);
