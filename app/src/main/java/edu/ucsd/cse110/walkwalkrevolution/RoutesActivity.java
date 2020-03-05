@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import edu.ucsd.cse110.walkwalkrevolution.route.RouteRecycleView.RoutesAdapter;
 
@@ -15,6 +17,8 @@ public class RoutesActivity extends AppCompatActivity {
     public static RecyclerView recyclerView;
     RoutesAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
+
+    Button yourRoutes, teammateRoutes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +33,26 @@ public class RoutesActivity extends AppCompatActivity {
 
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+
+        yourRoutes = findViewById(R.id.your_routes);
+        teammateRoutes = findViewById(R.id.teammate_routes);
+
+
+        ///*
+        yourRoutes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               recyclerView.setVisibility(View.VISIBLE);
+            }
+        });
+
+        teammateRoutes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                recyclerView.setVisibility(View.GONE);
+            }
+        });
+
     }
 
     @Override
@@ -39,7 +63,7 @@ public class RoutesActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.add_button_menu, menu);
+        getMenuInflater().inflate(R.menu.add_propose_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -51,11 +75,21 @@ public class RoutesActivity extends AppCompatActivity {
         if (id == R.id.add_button) {
             createRouteActivity();
         }
+
+        if (id == R.id.proposeScreen_button) {
+            createProposeScreenActivity();
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
     public void createRouteActivity() {
         Intent createRoute = new Intent(this, CreateRouteActivity.class);
         startActivity(createRoute);
+    }
+
+    public void createProposeScreenActivity() {
+        Intent create = new Intent(this, ProposeScreenActivity.class);
+        startActivity(create);
     }
 }
