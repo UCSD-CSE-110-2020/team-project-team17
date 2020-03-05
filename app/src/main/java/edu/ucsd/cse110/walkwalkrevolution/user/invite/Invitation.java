@@ -1,5 +1,7 @@
 package edu.ucsd.cse110.walkwalkrevolution.user.invite;
 
+import android.util.Log;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,6 +9,8 @@ import edu.ucsd.cse110.walkwalkrevolution.WalkWalkRevolution;
 import edu.ucsd.cse110.walkwalkrevolution.user.User;
 
 public class Invitation {
+
+    private final String TAG = "Invitation";
 
     private final String TO = "to";
     private final String FROM = "from";
@@ -28,6 +32,9 @@ public class Invitation {
     public Invitation(String receiverEmail){
         super();
         this.receiver = WalkWalkRevolution.getUserService().getUser(receiverEmail);
+        if(this.receiver == null){
+            Log.e(TAG, "Could not get receiver from email.");
+        }
     }
 
     public Map<String, String> toMap(){

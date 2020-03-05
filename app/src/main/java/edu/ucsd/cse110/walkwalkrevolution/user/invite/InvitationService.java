@@ -7,5 +7,6 @@ public interface InvitationService {
 
     void addInvite(Invitation invite);
     void confirmInvite(Invitation invite);
+    Invitation getInvite();
 
 }

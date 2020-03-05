@@ -3,10 +3,13 @@ package edu.ucsd.cse110.walkwalkrevolution;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.renderscript.Script;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import edu.ucsd.cse110.walkwalkrevolution.user.invite.Invitation;
 
 public class TeamInviteActivity extends AppCompatActivity {
 
@@ -28,9 +31,14 @@ public class TeamInviteActivity extends AppCompatActivity {
                     emailEditText.setError("You dummy. Fill this in right.");
                 } else {
                     // TODO Send the invite.
-
-                    Toast.makeText(getApplicationContext(), "Sent Invite", Toast.LENGTH_LONG).show();
-                    finish();
+                    Invitation invite = new Invitation(emailEditText.getText().toString());
+                    if(invite.getReceiver() == null) {
+                        emailEditText.setError("Could not find user associated with this email.");
+                    } else {
+                        WalkWalkRevolution.getInvitationService().addInvite(invite);
+                        Toast.makeText(getApplicationContext(), "Sent Invite", Toast.LENGTH_LONG).show();
+                        finish();
+                    }
                 }
             }
         });

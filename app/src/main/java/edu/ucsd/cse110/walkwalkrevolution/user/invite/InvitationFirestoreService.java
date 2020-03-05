@@ -14,8 +14,6 @@ public class InvitationFirestoreService implements InvitationService {
 
     private final String TAG = "InvitationFirestoreService";
     private final String INVITATION_KEY = "invitation";
-    private final String TO = "to";
-    private final String FROM = "from";
 
     public InvitationFirestoreService(){
         invites = FirebaseFirestore.getInstance()
@@ -35,5 +33,8 @@ public class InvitationFirestoreService implements InvitationService {
     public void confirmInvite(Invitation invite){
         WalkWalkRevolution.getUser().setTeamId(invite.getSenderTeamId());
     }
+
+    @Override
+    public Invitation getInvite(){ return null; }
 
 }
