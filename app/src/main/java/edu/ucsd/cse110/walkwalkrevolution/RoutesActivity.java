@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import edu.ucsd.cse110.walkwalkrevolution.route.RouteRecycleView.MockRoutesAdapter;
 import edu.ucsd.cse110.walkwalkrevolution.route.RouteRecycleView.RoutesAdapter;
 
 public class RoutesActivity extends AppCompatActivity {
@@ -19,6 +20,8 @@ public class RoutesActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
 
     Button yourRoutes, teammateRoutes;
+
+    public static boolean teammateTest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +53,11 @@ public class RoutesActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 //                recyclerView.setVisibility(View.GONE);
-                adapter.updateTeam();
+                if(teammateTest) {
+                    adapter = new MockRoutesAdapter();
+                } else {
+                    adapter.updateTeam();
+                }
             }
         });
 

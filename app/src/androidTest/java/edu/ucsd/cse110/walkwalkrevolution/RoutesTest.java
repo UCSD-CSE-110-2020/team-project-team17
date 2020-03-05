@@ -100,4 +100,18 @@ public class RoutesTest {
             });
         }
     }
+
+    @Test
+    public void emptyTeammateView(){
+
+        try(ActivityScenario<RoutesActivity> scenario = ActivityScenario.launch(RoutesActivity.class)){
+            scenario.onActivity(activity -> {
+                RoutesActivity.teammateTest = true;
+                activity.findViewById(R.id.teammate_routes).performClick();
+
+                RecyclerView currentRecyclerView = ((RecyclerView) activity.findViewById(R.id.routes));
+                assertEquals(0, currentRecyclerView.getAdapter().getItemCount());
+            });
+        }
+    }
 }
