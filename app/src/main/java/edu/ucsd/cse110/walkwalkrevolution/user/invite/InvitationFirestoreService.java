@@ -20,7 +20,7 @@ public class InvitationFirestoreService implements InvitationService {
                 .collection(INVITATION_KEY);
     }
 
-    //TODO: From invite sender's POV, allow them to make invite and send to database
+    //Add an invite to the database. Should only be called from the Sender's phone.
     @Override
     public void addInvite(Invitation invite){
         invites.add(invite.toMap()).addOnFailureListener(error -> {
@@ -28,11 +28,11 @@ public class InvitationFirestoreService implements InvitationService {
         });
     }
 
-    //TODO: From invite receiver's POV, allow them to accept/decline invite
+    //TODO: Confirm the invite on the receiver's end, then delete from the database.
     @Override
     public void confirmInvite(Invitation invite){
-        //TODO: Improve implementation
-//        WalkWalkRevolution.getUser().setTeamId(invite.getSenderTeamId());
+        invite.acceptInvite();
+        //Delete the invite from the database.
     }
 
     @Override
