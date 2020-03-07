@@ -22,8 +22,10 @@ import edu.ucsd.cse110.walkwalkrevolution.activity.ActivityUtils;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.Steps;
 import edu.ucsd.cse110.walkwalkrevolution.route.Route;
+import edu.ucsd.cse110.walkwalkrevolution.route.RouteUtils;
 
 import static edu.ucsd.cse110.walkwalkrevolution.RoutesDetailActivity.ROUTE_ID;
+import static edu.ucsd.cse110.walkwalkrevolution.route.RouteRecycleView.RoutesAdapter.ROUTE;
 
 public class WalkActivity extends AppCompatActivity implements Observer {
 
@@ -110,7 +112,11 @@ public class WalkActivity extends AppCompatActivity implements Observer {
                 updateWalkSteps();
                 if(i == 1 && j == 0 && s != 0)
                 {
-                    saveWalk(s);
+                    try {
+                        saveWalk(s);
+                    } catch (Exception e){
+                        throw new RuntimeException(e.getLocalizedMessage());
+                    }
                 }
                 else if(i==0 && j==1)
                 {
@@ -167,7 +173,7 @@ public class WalkActivity extends AppCompatActivity implements Observer {
         startActivity(createRoute);
     }
 
-    public void saveWalk(long id){
+    public void saveWalk(long id) throws Exception {
         Route route = WalkWalkRevolution.getRouteDao().getRoute(id);
         Map<String, String> data = new HashMap<String, String>(){{
             put(Walk.STEP_COUNT, steps.getText().toString());
@@ -179,7 +185,8 @@ public class WalkActivity extends AppCompatActivity implements Observer {
         WalkWalkRevolution.getRouteDao().addRoute(route);
 
         Intent i = new Intent(this, RoutesDetailActivity.class);
-        i.putExtra(TEST, id);
+        String serialized = RouteUtils.serialize(route);
+        i.putExtra(ROUTE, serialized);
         startActivity(i);
         finish();
     }
