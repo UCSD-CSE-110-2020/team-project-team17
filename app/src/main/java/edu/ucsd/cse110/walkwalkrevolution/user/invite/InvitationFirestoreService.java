@@ -29,7 +29,8 @@ public class InvitationFirestoreService implements InvitationService {
                 .collection(INVITATION_KEY);
     }
 
-    @Override
+
+    //Add an invite to the database. Should only be called from the Sender's phone.
     public void addInvite(Invitation invite){
         invites.add(invite.toMap()).addOnFailureListener(error -> {
             Log.e(TAG, error.getLocalizedMessage());
@@ -56,6 +57,14 @@ public class InvitationFirestoreService implements InvitationService {
             }
         });
         return inv.isEmpty() ? null : inv.get(0);
+    }
+
+
+    //TODO: Confirm the invite on the receiver's end, then delete from the database.
+    @Override
+    public void confirmInvite(Invitation invite){
+        invite.acceptInvite();
+        //Delete the invite from the database.
     }
 
     private Invitation snapshotToInvitation(DocumentSnapshot documentSnapshot){

@@ -53,7 +53,15 @@ public class Invitation {
         this.receiver = user;
     }
 
-    public void acceptInvitation(){
+    public void acceptInvite(){
+        //Verify that this user is the receiver? [Skipped for now TODO?]
+        if(this.receiver.getEmail() != WalkWalkRevolution.getUser().getEmail()){
+            Log.e(TAG, "Failed to verify this user as the receiver; changing their team anyway.");
+        }
+
+        //TODO: Re-query the sender to get their newest teamId
+
+        //Change receiver's (this user's) team to the team of the sender.
         this.receiver.setTeamId(this.sender.getTeamId());
     }
 
