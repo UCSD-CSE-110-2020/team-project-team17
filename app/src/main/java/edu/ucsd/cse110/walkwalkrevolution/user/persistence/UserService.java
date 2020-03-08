@@ -12,5 +12,6 @@ public interface UserService {
     void refresh();
     void getTeam(Team team, User user);
     void getReceiver(Invitation invitation, String userEmail);
+    void getSender(Invitation invitation, String userEmail);
 
 }

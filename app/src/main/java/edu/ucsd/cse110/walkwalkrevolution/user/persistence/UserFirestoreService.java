@@ -133,4 +133,25 @@ public class UserFirestoreService implements UserService{
         });
     }
 
+    @Override
+    public void getSender(Invitation invitation, String userEmail){
+        users.document(userEmail).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.exists()) {
+                    User user = snapshotToUser(documentSnapshot);
+                    Log.d(TAG, "User retrieved: " + user.getName() + ": " + user.getEmail());
+                    invitation.setSender(user.getEmail());
+                    invitation.set
+                    WalkWalkRevolution.getInvitationService().addInvite(invitation);
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, e.getLocalizedMessage());
+            }
+        });
+    }
+
 }

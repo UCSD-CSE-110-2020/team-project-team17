@@ -3,9 +3,15 @@ package edu.ucsd.cse110.walkwalkrevolution;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import edu.ucsd.cse110.walkwalkrevolution.user.invite.Invitation;
+import edu.ucsd.cse110.walkwalkrevolution.user.invite.InvitationService;
+import edu.ucsd.cse110.walkwalkrevolution.user.invite.Invitations;
+
+// This is the screen where a user can accept/decline team invitations.
 public class TeamInvitationActivity extends AppCompatActivity {
 
     TextView invitationText;
@@ -17,10 +23,37 @@ public class TeamInvitationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_team_invitation);
 
-        invitationText = findViewById(R.id.invite_text);
         acceptBtn = findViewById(R.id.accept_button);
         cancelBtn = findViewById(R.id.cancel_button);
 
-        //TODO: integrate team invitation functionality with screen
+        InvitationService is = WalkWalkRevolution.getInvitationService();
+
+        //Retrieve invitations from the database
+        Invitations invitations = new Invitations();
+        is.getInvite(WalkWalkRevolution.getUser().getEmail(), this);
+
+
+        //TODO: Accept the invitation: change user's team to sender's team and delete invitation
+        acceptBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+
+            }
+        });
+
+        //TODO: Cancel the invitation: delete the invitation
+        cancelBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+
+            }
+        });
+    }
+
+    public void displayInvitation(Invitation invite){
+        invitationText = findViewById(R.id.invite_text);
+        if(invite == null){
+            invitationText.setText(getResources().getString(R.string.no_invitation_text));
+        }
     }
 }
