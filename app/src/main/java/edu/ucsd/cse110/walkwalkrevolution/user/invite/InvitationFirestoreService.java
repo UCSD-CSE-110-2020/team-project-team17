@@ -58,27 +58,11 @@ public class InvitationFirestoreService implements InvitationService {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
-                                DocumentReference docRef = db.collection(INVITATION_KEY).document((String) document.get(Invitation.TO));
-                                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                        if (task.isSuccessful()) {
-                                            DocumentSnapshot document = task.getResult();
-                                            if (document.exists()) {
-                                                Log.d(TAG, "DocumentSnapshot data: ");
 
-                                                invite = new Invitation(document.getData());
-                                                act.displayInvitation(invite);
-                                                activeInviteId = document.getId();
+                                invite = new Invitation(document.getData());
+                                act.displayInvitation(invite);
+                                activeInviteId = document.getId();
 
-                                            } else {
-                                                Log.d(TAG, "No such document");
-                                            }
-                                        } else {
-                                            Log.d(TAG, "get failed with ", task.getException());
-                                        }
-                                    }
-                                });
                             }
                         } else {
                             act.displayInvitation(null);
@@ -86,23 +70,6 @@ public class InvitationFirestoreService implements InvitationService {
                         }
                     }
                 });
-        // Query invitation for invites send to this user.
-        /*invites.orderBy(Invitation.TO, Query.Direction.ASCENDING).whereEqualTo(Invitation.TO, user.getEmail())
-                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for(DocumentSnapshot documentSnapshot: queryDocumentSnapshots.getDocuments()){
-                    Invitation invite = snapshotToInvitation(documentSnapshot);
-                    Log.d(TAG, invite.getSender().toString() + "-->" + invite.getReceiver().toString());
-                    invitations.addInvitation(invite);
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, e.getLocalizedMessage());
-            }
-        });*/
     }
 
 
@@ -126,16 +93,4 @@ public class InvitationFirestoreService implements InvitationService {
                     }
                 });
     }
-
-//    private Invitation snapshotToInvitation(DocumentSnapshot documentSnapshot){
-//        User sender = null;
-//        User reciever = WalkWalkRevolution.getUser();
-//        if(sender == null){
-//            Log.e(TAG, "Could not generate sender data.");
-//            return null;
-//        }
-//        Invitation invite = new Invitation(sender, reciever);
-//        return invite;
-//    }
-
 }
