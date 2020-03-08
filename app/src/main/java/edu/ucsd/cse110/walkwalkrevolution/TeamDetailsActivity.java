@@ -19,7 +19,7 @@ import edu.ucsd.cse110.walkwalkrevolution.user.persistence.UserFirestoreService;
 
 public class TeamDetailsActivity extends AppCompatActivity {
 
-    public static boolean testMode;
+    public static boolean testMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +30,7 @@ public class TeamDetailsActivity extends AppCompatActivity {
 
         TeamAdapter adapter;
 
-        if(true){
+        if(testMode){
             adapter = new TeamAdapter(new Team(new ArrayList<User>())); // Empty list
             adapter.update(Team.generateTestEntries(50));         // Update to 50 list
         } else {
