@@ -28,7 +28,6 @@ public class TeamInvitationActivity extends AppCompatActivity {
         acceptBtn = findViewById(R.id.accept_button);
         cancelBtn = findViewById(R.id.cancel_button);
 
-        Toast.makeText(getApplicationContext(), "Retrieving invitations.", Toast.LENGTH_SHORT).show();
         InvitationService is = WalkWalkRevolution.getInvitationService();
 
         //Retrieve invitations from the database

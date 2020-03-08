@@ -33,6 +33,7 @@ public class InvitationFirestoreService implements InvitationService {
     private final String INVITATION_KEY = "invitation";
 
     public InvitationFirestoreService(){
+        db = FirebaseFirestore.getInstance();
         invites = FirebaseFirestore.getInstance()
                 .collection(INVITATION_KEY);
     }
@@ -80,6 +81,7 @@ public class InvitationFirestoreService implements InvitationService {
                                 });
                             }
                         } else {
+                            act.displayInvitation(null);
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
                     }

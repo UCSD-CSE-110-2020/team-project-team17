@@ -32,7 +32,7 @@ public class TeamDetailsActivity extends AppCompatActivity {
 
         TeamAdapter adapter;
 
-        if(!true){
+        if(true){
             adapter = new TeamAdapter(new Team(new ArrayList<User>())); // Empty list
             adapter.update(Team.generateTestEntries(50));         // Update to 50 list
         } else {
