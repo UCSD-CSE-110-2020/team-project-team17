@@ -14,7 +14,7 @@
         android:layout_marginEnd="56dp"
         android:text=""
         android:textColor="@color/white"
-        android:textSize="25sp"
+        android:textSize="20sp"
         android:translationZ="1sp"
         app:layout_constraintBottom_toBottomOf="@id/invite_text_bg"
         app:layout_constraintEnd_toEndOf="@id/invite_text_bg"
@@ -47,7 +47,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="12pt"
             android:text="@android:string/ok" />
 
         <Button
@@ -55,7 +54,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="12pt"
             android:text="@android:string/no" />
     </LinearLayout>
 

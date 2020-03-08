@@ -8,16 +8,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import edu.ucsd.cse110.walkwalkrevolution.team.Team;
 import edu.ucsd.cse110.walkwalkrevolution.team.TeamRecycleView.TeamAdapter;
 import edu.ucsd.cse110.walkwalkrevolution.user.User;
-import edu.ucsd.cse110.walkwalkrevolution.user.persistence.UserFirestoreService;
 
 public class TeamDetailsActivity extends AppCompatActivity {
 
@@ -32,7 +28,7 @@ public class TeamDetailsActivity extends AppCompatActivity {
 
         TeamAdapter adapter;
 
-        if(true){
+        if(!true){
             adapter = new TeamAdapter(new Team(new ArrayList<User>())); // Empty list
             adapter.update(Team.generateTestEntries(50));         // Update to 50 list
         } else {

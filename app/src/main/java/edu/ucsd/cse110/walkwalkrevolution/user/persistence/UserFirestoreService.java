@@ -12,6 +12,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -111,8 +112,6 @@ public class UserFirestoreService implements UserService{
         return user;
     }
 
-    //Added for functionality with Invitations --Justin
-    //Assumed to work if users is arranged by email.
     @Override
     public void getReceiver(Invitation invitation, String userEmail){
         users.document(userEmail).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -133,25 +132,32 @@ public class UserFirestoreService implements UserService{
         });
     }
 
+    //Queries for the sender's team, and sets user's team to it.
     @Override
     public void getSender(Invitation invitation, String userEmail){
-        users.document(userEmail).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if(documentSnapshot.exists()) {
-                    User user = snapshotToUser(documentSnapshot);
-                    Log.d(TAG, "User retrieved: " + user.getName() + ": " + user.getEmail());
-                    invitation.setSenderEmail(user.getEmail());
-                    invitation.setSenderName(user.getName());
-                    WalkWalkRevolution.getInvitationService().addInvite(invitation);
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, e.getLocalizedMessage());
-            }
-        });
+        users.whereEqualTo(User.EMAIL, userEmail )
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+
+                                User me = WalkWalkRevolution.getUser();
+
+                                me.setTeamId((String) document.getData().get(User.TEAM));
+                                Log.i(TAG, "New team: " + WalkWalkRevolution.getUser().getTeamId());
+                                users.document(me.getEmail()).set(me.toMap()).addOnFailureListener(error -> {
+                                    Log.e(TAG, error.getLocalizedMessage());
+                                });
+
+                            }
+                        } else {
+                            Log.e(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
     }
 
 }

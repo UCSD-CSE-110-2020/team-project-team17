@@ -16,11 +16,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
-
 import edu.ucsd.cse110.walkwalkrevolution.TeamInvitationActivity;
-import edu.ucsd.cse110.walkwalkrevolution.WalkWalkRevolution;
-import edu.ucsd.cse110.walkwalkrevolution.user.User;
 
 public class InvitationFirestoreService implements InvitationService {
     public static Invitation invite;
@@ -47,7 +43,6 @@ public class InvitationFirestoreService implements InvitationService {
     }
 
     //Retrieve invitation sent to userEmail and display it to TeamInvitationActivity
-    // TODO: Retrieve an invitation and display on the screen.
     @Override
     public void getInvite(String userEmail, TeamInvitationActivity act){
         invites.whereEqualTo(Invitation.TO, userEmail )
@@ -62,8 +57,9 @@ public class InvitationFirestoreService implements InvitationService {
                                 invite = new Invitation(document.getData());
                                 act.displayInvitation(invite);
                                 activeInviteId = document.getId();
-
+                                return;
                             }
+                            act.displayInvitation(null);
                         } else {
                             act.displayInvitation(null);
                             Log.d(TAG, "Error getting documents: ", task.getException());
@@ -72,8 +68,6 @@ public class InvitationFirestoreService implements InvitationService {
                 });
     }
 
-
-    //TODO: Test this.
     @Override
     public void deleteInvite(){
         invites.document(activeInviteId)

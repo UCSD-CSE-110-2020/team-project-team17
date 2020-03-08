@@ -6,11 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import edu.ucsd.cse110.walkwalkrevolution.user.invite.Invitation;
 import edu.ucsd.cse110.walkwalkrevolution.user.invite.InvitationService;
-import edu.ucsd.cse110.walkwalkrevolution.user.invite.Invitations;
 
 // This is the screen where a user can accept/decline team invitations.
 public class TeamInvitationActivity extends AppCompatActivity {
@@ -61,9 +59,8 @@ public class TeamInvitationActivity extends AppCompatActivity {
             invitationText.setText(getResources().getString(R.string.no_invitation_text));
             return;
         }
-        Toast.makeText(getApplicationContext(), "Found an invite!", Toast.LENGTH_LONG).show();
         this.invite = invite;
-        String inviteInfo = String.format("%s has sent you a team invitation! Join?", invite.getSenderName());
+        String inviteInfo = String.format("%s\n has sent you a \nteam invitation! \nJoin?", invite.getSenderName());
         invitationText.setText(inviteInfo);
     }
 }
