@@ -45,7 +45,6 @@ public class RoutesDetailActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String serialized = intent.getStringExtra(RoutesAdapter.ROUTE);
-        boolean isTeam = intent.getBooleanExtra(RoutesAdapter.TEAM, false);
 
         try {
             route = RouteUtils.deserialize(serialized);
@@ -71,7 +70,7 @@ public class RoutesDetailActivity extends AppCompatActivity {
 
         title.setText(route.getTitle());
 
-        if(!isTeam) {
+        if(Boolean.parseBoolean(route.getActivity().getDetail(Activity.EXIST))) {
             steps.setText(route.getActivity().getDetail(Walk.STEP_COUNT));
             miles.setText(route.getActivity().getDetail(Walk.MILES));
             duration.setText(route.getActivity().getDetail(Walk.DURATION));
@@ -101,9 +100,7 @@ public class RoutesDetailActivity extends AppCompatActivity {
             public void onClick(View v)
             {
                 Intent intent = new Intent(v.getContext(), WalkActivity.class);
-                intent.putExtra(ROUTE, 1);
-                intent.putExtra(ROUTE_ID, id);
-                intent.putExtra("route_title", route.getTitle());
+                intent.putExtra(WalkActivity.ROUTE, serialized);
                 finish();
                 v.getContext().startActivity(intent);
             }

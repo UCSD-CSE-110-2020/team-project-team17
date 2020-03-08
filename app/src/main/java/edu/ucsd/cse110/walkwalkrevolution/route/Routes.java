@@ -2,6 +2,7 @@ package edu.ucsd.cse110.walkwalkrevolution.route;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +18,7 @@ public class Routes implements RoutesSubject, TeamObserver {
 
     List<Route> routes;
     List<RoutesObserver> observers;
+    Map<String, Route> overrideTeamRoutes;
     Team t;
 
     public Routes() {
@@ -43,6 +45,9 @@ public class Routes implements RoutesSubject, TeamObserver {
     }
 
     public void add(Route route){
+        if(overrideTeamRoutes.containsKey(route.getFirestoreId())){
+            route.setActivity(overrideTeamRoutes.get(route.getFirestoreId()).getActivity());
+        }
         this.routes.add(route);
     }
 
@@ -55,7 +60,7 @@ public class Routes implements RoutesSubject, TeamObserver {
         getRoutesFromDao();
         List<Activity> activities = new ArrayList<>();
         for(Route route: routes){
-            if(Long.parseLong(route.getActivity().getDetail(Walk.STEP_COUNT)) > 0){
+            if(Boolean.parseBoolean(route.getActivity().getDetail(Activity.EXIST))){
                 activities.add(route.getActivity());
             }
         }
@@ -81,6 +86,18 @@ public class Routes implements RoutesSubject, TeamObserver {
         });
     }
 
+    private void getOverridenRoutes(){
+        overrideTeamRoutes = new HashMap<>();
+        Map<String, ?> override = WalkWalkRevolution.getRouteDao().getTeamRoutes();
+        for(Map.Entry<String, ?> entry: override.entrySet()) {
+            try {
+                overrideTeamRoutes.put(entry.getKey(), RouteUtils.deserialize(entry.getValue().toString()));
+            } catch (Exception e) {
+                throw new RuntimeException(e.getMessage());
+            }
+        }
+    }
+
     public void getLocal(){
         routes = new ArrayList<>();
         getRoutesFromDao();
@@ -89,14 +106,21 @@ public class Routes implements RoutesSubject, TeamObserver {
 
     public void getTeamRoutes(){
         routes = new ArrayList<>();
+        getOverridenRoutes();
         t = new Team();
         t.subscribe(this);
     }
 
     @Override
     public void update(List<User> users){
-        for(User u: users){
-            WalkWalkRevolution.getRouteService().getRoutes(this, u);
+        if(users.size() == 1) {
+            notifyObservers();
+        } else {
+            for (User u : users) {
+                if(u.getEmail().equals(WalkWalkRevolution.getUser().getEmail()))
+                    continue;
+                WalkWalkRevolution.getRouteService().getRoutes(this, u);
+            }
         }
     }
 

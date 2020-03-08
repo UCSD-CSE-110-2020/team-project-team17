@@ -8,9 +8,13 @@ public interface BaseRouteDao {
 
     void addRoute(Route route);
 
+    void addTeamRoute(Route route);
+
     Route getRoute(long routeId);
 
     Map<String, ?> getAllRoutes();
+
+    Map<String, ?> getTeamRoutes();
 
     long getNextId();
 

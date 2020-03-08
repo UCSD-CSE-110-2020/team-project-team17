@@ -9,7 +9,7 @@ import edu.ucsd.cse110.walkwalkrevolution.user.User;
 public interface RouteService {
 
     void addRoute(Route route);
-    Route getRoute(String routeId);
+    void updateRoute(Route route);
     void getRoutes(Routes rList, User user);
 
 }
