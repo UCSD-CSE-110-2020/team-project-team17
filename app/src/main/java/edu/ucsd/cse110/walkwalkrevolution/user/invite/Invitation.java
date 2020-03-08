@@ -15,23 +15,23 @@ public class Invitation {
 
     public static final String TO = "to";
     public static final String FROM = "from";
-    public static final String TEAM = "team";
+    public static final String FROM_E = "from (email)";
 
-    private User sender;
-    private User receiver;
+    private String senderName;
     private String senderEmail;
-    private String receiverEmail;
-    private String teamId;
+    private String receiver;
 
 
     //assumption that only *this* user makes the invitation
     public Invitation(User sender, User receiver){
-        this.sender = sender;
-        this.receiver = receiver;
+        this.senderEmail = sender.getEmail();
+        this.senderName = sender.getName();
+        this.receiver = receiver.getEmail();
     }
 
     public Invitation(User sender, String receiverEmail){
-        this.sender = sender;
+        this.senderEmail = sender.getEmail();
+        this.senderName = sender.getName();
         WalkWalkRevolution.getUserService().getReceiver(this, receiverEmail);
     }
 
@@ -39,16 +39,17 @@ public class Invitation {
     public Invitation(){ }
 
     public Invitation(Map<String, Object> map){
-        this.senderEmail = (String) map.get(FROM);
-        this.receiverEmail = (String) map.get(TO);
-        this.teamId = (String) map.get(TEAM);
+        this.senderName = (String) map.get(FROM);
+        this.senderEmail = (String) map.get(FROM_E);
+        this.receiver = (String) map.get(TO);
     }
 
     public Map<String, String> toMap(){
         Log.d(TAG, WalkWalkRevolution.getUser().getEmail());
         Map<String, String> map = new HashMap<>();
-        map.put(FROM, this.sender.getName());
-        map.put(TO, this.receiver.getEmail());
+        map.put(FROM, this.senderName);
+        map.put(FROM_E, this.senderEmail);
+        map.put(TO, this.receiver);
         return map;
     }
 
@@ -56,31 +57,33 @@ public class Invitation {
     //    return this.sender;
     //}
 
-    public User getReceiver(){
+    public String getReceiver(){
         return this.receiver;
     }
 
-    public String getSender() { return this.senderEmail; }
+    public String getSenderName() { return this.senderName; }
 
-    public void setReceiver(User user){
-        this.receiver = user;
+    public String getSenderEmail() {return this.senderEmail; }
+
+    public void setReceiver(String receiver){
+        this.receiver = receiver;
     }
 
-    public void setSender(String senderEmail) { this.senderEmail = senderEmail; }
-
-    public void setTeam(String teamId){this.teamId = teamId; }
+    public void setSenderName(String senderName) {this.senderName = senderName;}
+    public void setSenderEmail(String senderEmail) {this.senderEmail = senderEmail;}
 
     public void acceptInvite(){
         String myEmail = WalkWalkRevolution.getUser().getEmail();
         //Verify that this user is the receiver? [Skipped for now TODO?]
-        if(this.receiver.getEmail() != WalkWalkRevolution.getUser().getEmail()){
+        if(!this.receiver.equals(WalkWalkRevolution.getUser().getEmail())){
             Log.e(TAG, "Failed to verify this user as the receiver; changing their team anyway.");
         }
 
         //TODO: Re-query the sender to get their newest teamId
+        String newTeamId = "";
 
         //Change receiver's (this user's) team to the team of the sender.
-        this.receiver.setTeamId(this.sender.getTeamId());
+        WalkWalkRevolution.getUser().setTeamId(newTeamId);
     }
 
 }

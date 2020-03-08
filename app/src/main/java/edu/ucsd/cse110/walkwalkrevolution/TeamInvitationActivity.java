@@ -14,6 +14,7 @@ import edu.ucsd.cse110.walkwalkrevolution.user.invite.Invitations;
 // This is the screen where a user can accept/decline team invitations.
 public class TeamInvitationActivity extends AppCompatActivity {
 
+    Invitation invite;
     TextView invitationText;
     Button acceptBtn;
     Button cancelBtn;
@@ -37,7 +38,11 @@ public class TeamInvitationActivity extends AppCompatActivity {
         acceptBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-
+                if(invite != null){
+                    invite.acceptInvite();
+                }
+                is.deleteInvite();
+                finish();
             }
         });
 
@@ -45,7 +50,7 @@ public class TeamInvitationActivity extends AppCompatActivity {
         cancelBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-
+                is.deleteInvite();
             }
         });
     }
@@ -54,6 +59,11 @@ public class TeamInvitationActivity extends AppCompatActivity {
         invitationText = findViewById(R.id.invite_text);
         if(invite == null){
             invitationText.setText(getResources().getString(R.string.no_invitation_text));
+            return;
         }
+
+        this.invite = invite;
+        String inviteInfo = String.format("%s has sent you a team invitation! Join?", invite.getSenderName());
+        invitationText.setText(inviteInfo);
     }
 }

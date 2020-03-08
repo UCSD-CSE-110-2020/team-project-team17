@@ -121,7 +121,7 @@ public class UserFirestoreService implements UserService{
                 if(documentSnapshot.exists()) {
                     User user = snapshotToUser(documentSnapshot);
                     Log.d(TAG, "User retrieved: " + user.getName() + ": " + user.getEmail());
-                    invitation.setReceiver(user);
+                    invitation.setReceiver(user.getEmail());
                     WalkWalkRevolution.getInvitationService().addInvite(invitation);
                 }
             }
@@ -141,8 +141,8 @@ public class UserFirestoreService implements UserService{
                 if(documentSnapshot.exists()) {
                     User user = snapshotToUser(documentSnapshot);
                     Log.d(TAG, "User retrieved: " + user.getName() + ": " + user.getEmail());
-                    invitation.setSender(user.getEmail());
-                    invitation.set
+                    invitation.setSenderEmail(user.getEmail());
+                    invitation.setSenderName(user.getName());
                     WalkWalkRevolution.getInvitationService().addInvite(invitation);
                 }
             }

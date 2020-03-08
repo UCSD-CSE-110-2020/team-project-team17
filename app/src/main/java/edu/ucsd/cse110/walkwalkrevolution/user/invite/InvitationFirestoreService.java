@@ -24,6 +24,7 @@ import edu.ucsd.cse110.walkwalkrevolution.user.User;
 
 public class InvitationFirestoreService implements InvitationService {
     public static Invitation invite;
+    private static String activeInviteId;
 
     private CollectionReference invites;
     private FirebaseFirestore db;
@@ -44,6 +45,7 @@ public class InvitationFirestoreService implements InvitationService {
         });
     }
 
+    //Retrieve invitation sent to userEmail and display it to TeamInvitationActivity
     @Override
     public void getInvite(String userEmail, TeamInvitationActivity act){
         invites.whereEqualTo(Invitation.TO, userEmail )
@@ -65,6 +67,7 @@ public class InvitationFirestoreService implements InvitationService {
 
                                                 invite = new Invitation(document.getData());
                                                 act.displayInvitation(invite);
+                                                activeInviteId = document.getId();
 
                                             } else {
                                                 Log.d(TAG, "No such document");
@@ -102,9 +105,23 @@ public class InvitationFirestoreService implements InvitationService {
 
     //TODO: Confirm the invite on the receiver's end, then delete from the database.
     @Override
-    public void confirmInvite(Invitation invite){
-        invite.acceptInvite();
-        //Delete the invite from the database.
+    public void deleteInvite(){
+        invites.document(activeInviteId)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                        activeInviteId = "";
+                        invite = null;
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error deleting document", e);
+                    }
+                });
     }
 
     private Invitation snapshotToInvitation(DocumentSnapshot documentSnapshot){
