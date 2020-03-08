@@ -26,7 +26,7 @@ public class UserFirestoreService implements UserService{
     public CollectionReference users;
 
     private final String TAG = "UserFirestoreService";
-    private final String USER_KEY = "user";
+    public final static String USER_KEY = "user";
 
     public UserFirestoreService() {
         users = FirebaseFirestore.getInstance().collection(USER_KEY);
@@ -68,6 +68,9 @@ public class UserFirestoreService implements UserService{
                         User t = snapshotToUser(document);
                         WalkWalkRevolution.getUser().setTeamId(t.getTeamId());
                         Log.d(TAG, "Document exists!");
+                        //Subscribe to notifications in user's team
+                        String topic = WalkWalkRevolution.getUser().getTeamId().replace("@", "");
+                        WalkWalkRevolution.subscribeToNotificationsTopic(topic);
                     }
                 } else {
                     Log.d(TAG, "Failed with: ", task.getException());

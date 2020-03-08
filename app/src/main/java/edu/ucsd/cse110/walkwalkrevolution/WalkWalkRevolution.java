@@ -2,12 +2,15 @@ package edu.ucsd.cse110.walkwalkrevolution;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -221,6 +224,19 @@ public class WalkWalkRevolution extends Application {
 
     public static InvitationService getInvitationService() {
         return invitationService;
+    }
+
+    public static void subscribeToNotificationsTopic(String topic) {
+        FirebaseMessaging.getInstance().subscribeToTopic(topic)
+                .addOnCompleteListener(task -> {
+                            String msg = "Subscribed to notifications";
+                            if (!task.isSuccessful()) {
+                                msg = "Subscribe to notifications failed";
+                            }
+                            Log.d("Notification", msg);
+                            Toast.makeText(WalkWalkRevolution.getContext(), msg, Toast.LENGTH_LONG).show();
+                        }
+                );
     }
 
 }
