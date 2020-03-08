@@ -77,8 +77,11 @@ public class CreateRouteActivity extends AppCompatActivity {
                     if(!TextUtils.isEmpty(notes.getText())) {
                         builder.setNotes(notes.getText().toString());
                     }
-                    builder.setDescription(tags);
-                    Log.d("desc-tags", "tags " + tags);
+                    if(!tags.isEmpty()) {
+                        Log.d("desc-tags", "tags " + tags);
+                        builder.setDescription(tags);
+                    }
+
                     builder.setUserId(WalkWalkRevolution.getUser().getEmail());
 
                     Route route = builder.build();

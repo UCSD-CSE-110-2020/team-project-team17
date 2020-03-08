@@ -10,7 +10,7 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner getTestRunner()
     }
     buildTypes {
         release {
@@ -48,9 +48,20 @@ dependencies {
     testImplementation 'androidx.test.ext:truth:1.2.0'
     testImplementation 'androidx.test:rules:1.2.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     androidTestImplementation 'androidx.test:rules:1.2.0'
     androidTestImplementation 'org.mockito:mockito-core:2.24.5'
+    androidTestImplementation 'org.mockito:mockito-android:3.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.2.0'
+    androidTestImplementation 'androidx.annotation:annotation:1.1.0'
+    androidTestImplementation 'io.cucumber:cucumber-android:4.2.2'
+    androidTestImplementation 'io.cucumber:cucumber-picocontainer:4.2.2'
+}
+
+def getTestRunner() {
+    project.hasProperty('cucumber') ?
+            "edu.ucsd.cse110.walkwalkrevolution.CucumberTestRunner" :
+            "androidx.test.runner.AndroidJUnitRunner"
 }
 
 apply plugin: 'com.google.gms.google-services'

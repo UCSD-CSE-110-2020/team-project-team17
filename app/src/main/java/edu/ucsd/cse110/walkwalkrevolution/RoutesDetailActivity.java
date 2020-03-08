@@ -13,12 +13,15 @@ import edu.ucsd.cse110.walkwalkrevolution.activity.ActivityUtils;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
 import edu.ucsd.cse110.walkwalkrevolution.route.Route;
 import edu.ucsd.cse110.walkwalkrevolution.route.RouteRecycleView.RoutesAdapter;
+import edu.ucsd.cse110.walkwalkrevolution.route.RouteUtils;
 
 public class RoutesDetailActivity extends AppCompatActivity {
 
     public static final String ROUTE = "edu.ucsd.cse110.walkwalkrevolution.ROUTE";
     public static final String ROUTE_ID = "edu.ucsd.cse110.walkwalkrevolution.ROUTE_ID";
+    public Route route;
     public long id;
+    public boolean isTeam;
 
     private TextView title;
     private TextView steps;
@@ -41,13 +44,15 @@ public class RoutesDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_routes_detail);
 
         Intent intent = getIntent();
-        if(intent.hasExtra(RoutesAdapter.EXTRA_TEXT)) {
-            id = intent.getLongExtra(RoutesAdapter.EXTRA_TEXT, 0);
-        } else {
-            id = intent.getLongExtra(WalkActivity.TEST, 0);
-        }
+        String serialized = intent.getStringExtra(RoutesAdapter.ROUTE);
+        boolean isTeam = intent.getBooleanExtra(RoutesAdapter.TEAM, false);
 
-        Route route = WalkWalkRevolution.getRouteDao().getRoute(id);
+        try {
+            route = RouteUtils.deserialize(serialized);
+            id = route.getId();
+        } catch (Exception e){
+            throw new RuntimeException(e.getLocalizedMessage());
+        }
 
         title = (TextView) findViewById(R.id.title1);
         steps = (TextView) findViewById(R.id.numOfSteps);
@@ -65,12 +70,30 @@ public class RoutesDetailActivity extends AppCompatActivity {
         tag5 = (TextView) findViewById(R.id.tag5);
 
         title.setText(route.getTitle());
-        steps.setText(route.getActivity().getDetail(Walk.STEP_COUNT));
-        miles.setText(route.getActivity().getDetail(Walk.MILES));
-        duration.setText(route.getActivity().getDetail(Walk.DURATION));
+
+        if(!isTeam) {
+            steps.setText(route.getActivity().getDetail(Walk.STEP_COUNT));
+            miles.setText(route.getActivity().getDetail(Walk.MILES));
+            duration.setText(route.getActivity().getDetail(Walk.DURATION));
+            date.setText(ActivityUtils.timeToMonthDay(
+                    ActivityUtils.stringToTime(route.getActivity().getDetail(Activity.DATE))));
+
+        } else {
+            TextView stepTitle = findViewById(R.id.Steps);
+            TextView milesTitle = findViewById(R.id.Miles);
+            TextView durationTitle = findViewById(R.id.dur);
+
+            stepTitle.setVisibility(View.GONE);
+            milesTitle.setVisibility(View.GONE);
+            durationTitle.setVisibility(View.GONE);
+            steps.setVisibility(View.GONE);
+            miles.setVisibility(View.GONE);
+            duration.setVisibility(View.GONE);
+            date.setVisibility(View.GONE);
+        }
+
+
         location.setText(route.getLocation());
-        date.setText(ActivityUtils.timeToMonthDay(
-                ActivityUtils.stringToTime(route.getActivity().getDetail(Activity.DATE))));
         setTags(route.getDescriptionTags());
         note.setText(route.getNotes());
 
