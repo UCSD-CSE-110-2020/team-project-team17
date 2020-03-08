@@ -22,6 +22,7 @@
             android:name=".RoutesActivity"
             android:exported="true" />
         <activity android:name=".RoutesDetailActivity" />
+        <activity android:name=".TeamInvitationActivity" android:exported="true" />
         <activity
             android:name=".CreateRouteActivity"
             android:windowSoftInputMode="adjustPan|adjustResize" />

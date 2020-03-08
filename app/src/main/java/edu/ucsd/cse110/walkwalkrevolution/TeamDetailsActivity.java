@@ -23,7 +23,6 @@ import edu.ucsd.cse110.walkwalkrevolution.user.persistence.UserFirestoreService;
 public class TeamDetailsActivity extends AppCompatActivity {
 
     public static boolean testMode;
-    Button seeInvitations;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,13 +30,6 @@ public class TeamDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_team_details);
 
         RecyclerView rvUsers = findViewById(R.id.rvUsers);
-        seeInvitations = findViewById(R.id.see_invitations_button);
-        seeInvitations.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                teamInvitationActivity();
-            }
-        });
 
         TeamAdapter adapter;
 
@@ -55,7 +47,7 @@ public class TeamDetailsActivity extends AppCompatActivity {
     // Make menu / toolbar the one with an add button.
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.add_button_menu, menu);
+        getMenuInflater().inflate(R.menu.add_or_list_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -66,6 +58,8 @@ public class TeamDetailsActivity extends AppCompatActivity {
 
         if (id == R.id.add_button) {
             teamInviteActivity();
+        } else if (id == R.id.list_button){
+            teamInvitationActivity();
         }
         return super.onOptionsItemSelected(item);
     }
