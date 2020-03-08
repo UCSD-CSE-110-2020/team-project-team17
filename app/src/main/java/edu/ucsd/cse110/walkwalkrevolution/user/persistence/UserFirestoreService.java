@@ -23,7 +23,7 @@ import edu.ucsd.cse110.walkwalkrevolution.user.User;
 
 public class UserFirestoreService implements UserService{
 
-    private CollectionReference users;
+    public CollectionReference users;
 
     private final String TAG = "UserFirestoreService";
     private final String USER_KEY = "user";

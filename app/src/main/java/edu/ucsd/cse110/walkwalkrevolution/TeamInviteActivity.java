@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import edu.ucsd.cse110.walkwalkrevolution.invitation.Invitation;
+
 public class TeamInviteActivity extends AppCompatActivity {
 
     private EditText emailEditText;
@@ -24,19 +26,17 @@ public class TeamInviteActivity extends AppCompatActivity {
         sendInviteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!isValidEmail(emailEditText.getText().toString())){
-                    emailEditText.setError("You dummy. Fill this in right.");
-                } else {
-                    // TODO Send the invite.
-
-                    Toast.makeText(getApplicationContext(), "Sent Invite", Toast.LENGTH_LONG).show();
-                    finish();
-                }
+                // TODO Send the invite.
+                Invitation invitation = new Invitation(emailEditText.getText().toString(),
+                        WalkWalkRevolution.getUser().getEmail(),
+                        WalkWalkRevolution.getUser().getName());
+                WalkWalkRevolution.getInvitationService().addInvitation(invitation);
+                finish();
             }
         });
     }
 
-    private boolean isValidEmail(String email){
-        return !(email.length() == 0); // TODO this
-    }
+//    private boolean isValidEmail(String email){
+//        return !(email.length() == 0); // TODO this
+//    }
 }
