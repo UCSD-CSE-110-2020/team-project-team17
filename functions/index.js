@@ -15,7 +15,7 @@ exports.addDefaultTeam = functions.firestore
     });
 
 exports.sendTeamNotifications = functions.firestore
-   .document('user/{userId}/')
+   .document('user/{userId}')
    .onUpdate((snap, context) => {
      // Get an object with the current document value.
      // If the document does not exist, it has been deleted.
@@ -23,7 +23,7 @@ exports.sendTeamNotifications = functions.firestore
 
      if (document) {
 
-       var t = document.team.replace("@", "")
+       var t = document.team.replace('@', '')
 
        var message = {
          notification: {
@@ -45,5 +45,5 @@ exports.sendTeamNotifications = functions.firestore
          });
      }
 
-     return "document was null or emtpy";
+     return "document was null or empty";
    });
