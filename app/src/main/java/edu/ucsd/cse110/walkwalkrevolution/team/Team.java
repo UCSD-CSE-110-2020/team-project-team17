@@ -40,11 +40,7 @@ public class Team implements TeamSubject{
 
     public void notifyObservers() {
         for(TeamObserver obs: observers){
-            if(obs == null){
-                unsubscribe(obs);
-            } else {
-                obs.update(users);
-            }
+            obs.update(users);
         }
     }
 
