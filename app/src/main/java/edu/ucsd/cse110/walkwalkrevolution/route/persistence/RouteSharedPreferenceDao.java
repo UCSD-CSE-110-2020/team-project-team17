@@ -17,6 +17,7 @@ public class RouteSharedPreferenceDao implements BaseRouteDao {
     private static final String SP_ROUTE = "ROUTE";
     private static final String NEXT_ID_KEY = "NEXT_ID";
     private static final String T_ROUTE = "T_ROUTE";
+    private static final String F_ROUTE = "F_ROUTE";
 
     @Override
     public void addRoute(Route route) {
@@ -57,6 +58,18 @@ public class RouteSharedPreferenceDao implements BaseRouteDao {
     }
 
     @Override
+    public void addFavorite(Route route) {
+        Context context = WalkWalkRevolution.getContext();
+        SharedPreferences sp = context.getSharedPreferences(F_ROUTE, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+
+        editor.putString(route.getFirestoreId(), "");
+
+        editor.apply();
+    }
+
+
+    @Override
     public Route getRoute(long routeId) {
         Context context = WalkWalkRevolution.getContext();
         SharedPreferences sp = context.getSharedPreferences(SP_ROUTE, MODE_PRIVATE);
@@ -84,6 +97,24 @@ public class RouteSharedPreferenceDao implements BaseRouteDao {
     }
 
     @Override
+    public boolean isFavorite(Route route) {
+        Context context = WalkWalkRevolution.getContext();
+        SharedPreferences sp = context.getSharedPreferences(F_ROUTE, MODE_PRIVATE);
+        return sp.contains(route.getFirestoreId());
+    }
+
+    @Override
+    public void removeFavorite(Route route) {
+        Context context = WalkWalkRevolution.getContext();
+        SharedPreferences sp = context.getSharedPreferences(F_ROUTE, MODE_PRIVATE);
+        if(isFavorite(route)){
+            SharedPreferences.Editor editor = sp.edit();
+            editor.remove(route.getFirestoreId());
+            editor.apply();
+        }
+    }
+
+    @Override
     public Map<String, ?> getAllRoutes() {
         Context context = WalkWalkRevolution.getContext();
         SharedPreferences sp = context.getSharedPreferences(SP_ROUTE, MODE_PRIVATE);
@@ -93,6 +124,13 @@ public class RouteSharedPreferenceDao implements BaseRouteDao {
             routes.put(entry.getKey().toString(), entry.getValue().toString());
         }
         return routes;
+    }
+
+    @Override
+    public boolean walkedTeamRoute(Route route) {
+        Context context = WalkWalkRevolution.getContext();
+        SharedPreferences sp = context.getSharedPreferences(T_ROUTE, MODE_PRIVATE);
+        return sp.contains(route.getFirestoreId());
     }
 
     @Override

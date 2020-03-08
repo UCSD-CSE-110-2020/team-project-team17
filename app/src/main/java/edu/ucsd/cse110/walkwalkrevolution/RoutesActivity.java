@@ -56,6 +56,11 @@ public class RoutesActivity extends AppCompatActivity {
     @Override
     protected void onStart(){
         super.onStart();
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
         adapter.updateRoute();
     }
 

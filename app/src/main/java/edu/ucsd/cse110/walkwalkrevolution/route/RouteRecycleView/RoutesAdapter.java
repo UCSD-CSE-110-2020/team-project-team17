@@ -16,6 +16,7 @@ import java.util.List;
 import edu.ucsd.cse110.walkwalkrevolution.R;
 import edu.ucsd.cse110.walkwalkrevolution.RoutesActivity;
 import edu.ucsd.cse110.walkwalkrevolution.RoutesDetailActivity;
+import edu.ucsd.cse110.walkwalkrevolution.WalkWalkRevolution;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Activity;
 import edu.ucsd.cse110.walkwalkrevolution.activity.ActivityUtils;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
@@ -47,6 +48,8 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
         public TextView miles;
         public TextView duration;
         public TextView date;
+        public TextView favorite;
+        public TextView walked;
 
         public ViewHolder(View itemView) {
             // Stores the itemView in a public final member variable that can be used
@@ -58,6 +61,8 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
             miles = (TextView) itemView.findViewById(R.id.miles);
             duration = (TextView) itemView.findViewById(R.id.duration);
             date = (TextView) itemView.findViewById(R.id.date);
+            favorite = itemView.findViewById(R.id.favorite);
+            walked = itemView.findViewById(R.id.walked);
         }
     }
 
@@ -112,8 +117,14 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
         TextView miles = viewHolder.miles;
         TextView duration = viewHolder.duration;
         TextView date = viewHolder.date;
+        TextView favorite = viewHolder.favorite;
+        TextView walked = viewHolder.walked;
 
         if(Boolean.parseBoolean(route.getActivity().getDetail(Activity.EXIST))) {
+            steps.setVisibility(View.VISIBLE);
+            miles.setVisibility(View.VISIBLE);
+            duration.setVisibility(View.VISIBLE);
+            date.setVisibility(View.VISIBLE);
             steps.setText(route.getActivity().getDetail(Walk.STEP_COUNT));
 
             miles.setText(route.getActivity().getDetail(Walk.MILES));
@@ -123,10 +134,29 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
             date.setText(ActivityUtils.timeToMonthDay(
                     ActivityUtils.stringToTime(route.getActivity().getDetail(Activity.DATE))));
         } else {
-            steps.setText("");
-            miles.setText("");
-            duration.setText("");
-            date.setText("");
+            steps.setVisibility(View.INVISIBLE);
+            miles.setVisibility(View.INVISIBLE);
+            duration.setVisibility(View.INVISIBLE);
+            date.setVisibility(View.INVISIBLE);
+        }
+
+        favorite.setBackgroundResource(R.drawable.img_star_blue);
+        walked.setBackgroundResource(R.drawable.img_green_check);
+
+
+        if(WalkWalkRevolution.getRouteDao().isFavorite(route)) {
+            favorite.setVisibility(View.VISIBLE);
+        } else {
+            favorite.setVisibility(View.INVISIBLE);
+        }
+
+        if(route.getUserId().equals(WalkWalkRevolution.getUser().getEmail()) &&
+                Boolean.parseBoolean(route.getActivity().getDetail(Activity.EXIST)) ||
+                !route.getUserId().equals(WalkWalkRevolution.getUser().getEmail()) &&
+                        WalkWalkRevolution.getRouteDao().walkedTeamRoute(route)){
+            walked.setVisibility(View.VISIBLE);
+        } else {
+            walked.setVisibility(View.INVISIBLE);
         }
     }
 

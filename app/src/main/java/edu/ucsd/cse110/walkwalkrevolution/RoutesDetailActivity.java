@@ -4,9 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import edu.ucsd.cse110.walkwalkrevolution.activity.Activity;
 import edu.ucsd.cse110.walkwalkrevolution.activity.ActivityUtils;
@@ -38,6 +41,9 @@ public class RoutesDetailActivity extends AppCompatActivity {
     private TextView tag5;
 
     private Button start;
+    private ToggleButton favorite;
+
+    private TextView walked;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,6 +111,35 @@ public class RoutesDetailActivity extends AppCompatActivity {
                 v.getContext().startActivity(intent);
             }
         });
+
+        favorite = findViewById(R.id.favorite);
+
+        favorite.setChecked(WalkWalkRevolution.getRouteDao().isFavorite(route));
+        if(WalkWalkRevolution.getRouteDao().isFavorite(route)) {
+            favorite.setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.img_star_blue));
+        } else {
+            favorite.setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.img_star_grey));
+        }
+        favorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    favorite.setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.img_star_blue));
+                    WalkWalkRevolution.getRouteDao().addFavorite(route);
+                } else {
+                    favorite.setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.img_star_grey));
+                    WalkWalkRevolution.getRouteDao().removeFavorite(route);
+                }
+            }
+        });
+
+        walked = findViewById(R.id.walked);
+        if(route.getUserId().equals(WalkWalkRevolution.getUser().getEmail()) &&
+                Boolean.parseBoolean(route.getActivity().getDetail(Activity.EXIST)) ||
+        !route.getUserId().equals(WalkWalkRevolution.getUser().getEmail()) &&
+                WalkWalkRevolution.getRouteDao().walkedTeamRoute(route)){
+            walked.setBackgroundResource(R.drawable.img_green_check);
+        }
 
     }
 

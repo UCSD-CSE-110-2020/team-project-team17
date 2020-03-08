@@ -7,12 +7,11 @@
         android:id="@+id/title1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="32dp"
-        android:layout_marginTop="14dp"
-        android:text="HELLO"
         android:layout_marginLeft="20dp"
+        android:layout_marginTop="14dp"
         android:layout_marginRight="20dp"
-        />
+        android:text="HELLO"
+        android:textSize="32dp" />
 
     <TextView
         android:id="@+id/location"
@@ -207,6 +206,28 @@
         android:layout_marginBottom="15dp"
         android:text="test"
         android:textSize="20dp" />
+
+    <ToggleButton
+        android:id="@+id/favorite"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginRight="20dp"
+        android:layout_toEndOf="@+id/title1"
+        android:textOn=""
+        android:textOff="" />
+
+    <TextView
+        android:id="@+id/walked"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginRight="20dp"
+        android:layout_toEndOf="@+id/favorite"/>
 
 
 </RelativeLayout>
