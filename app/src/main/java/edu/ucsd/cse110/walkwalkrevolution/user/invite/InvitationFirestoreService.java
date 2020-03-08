@@ -46,6 +46,7 @@ public class InvitationFirestoreService implements InvitationService {
     }
 
     //Retrieve invitation sent to userEmail and display it to TeamInvitationActivity
+    // TODO: Retrieve an invitation and display on the screen.
     @Override
     public void getInvite(String userEmail, TeamInvitationActivity act){
         invites.whereEqualTo(Invitation.TO, userEmail )
@@ -103,7 +104,7 @@ public class InvitationFirestoreService implements InvitationService {
     }
 
 
-    //TODO: Confirm the invite on the receiver's end, then delete from the database.
+    //TODO: Test this.
     @Override
     public void deleteInvite(){
         invites.document(activeInviteId)
@@ -124,15 +125,15 @@ public class InvitationFirestoreService implements InvitationService {
                 });
     }
 
-    private Invitation snapshotToInvitation(DocumentSnapshot documentSnapshot){
-        User sender = null; //TODO: Retrieve sender
-        User reciever = WalkWalkRevolution.getUser();
-        if(sender == null){
-            Log.e(TAG, "Could not generate sender data.");
-            return null;
-        }
-        Invitation invite = new Invitation(sender, reciever);
-        return invite;
-    }
+//    private Invitation snapshotToInvitation(DocumentSnapshot documentSnapshot){
+//        User sender = null;
+//        User reciever = WalkWalkRevolution.getUser();
+//        if(sender == null){
+//            Log.e(TAG, "Could not generate sender data.");
+//            return null;
+//        }
+//        Invitation invite = new Invitation(sender, reciever);
+//        return invite;
+//    }
 
 }

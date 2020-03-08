@@ -19,7 +19,6 @@ import edu.ucsd.cse110.walkwalkrevolution.team.TeamRecycleView.TeamAdapter;
 import edu.ucsd.cse110.walkwalkrevolution.user.User;
 import edu.ucsd.cse110.walkwalkrevolution.user.persistence.UserFirestoreService;
 
-//TODO: Redesign to see both Invite and Invitations buttons
 public class TeamDetailsActivity extends AppCompatActivity {
 
     public static boolean testMode;
