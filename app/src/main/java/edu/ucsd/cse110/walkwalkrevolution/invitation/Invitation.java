@@ -9,6 +9,7 @@ public class Invitation {
     public static final String FROM = "from";
     public static final String SENDER = "sender";
 
+    private String firestoreId;
     private String to;
     private String from;
     private String sender;
@@ -29,6 +30,14 @@ public class Invitation {
 
     public String getSender(){
         return sender;
+    }
+
+    public String getFirestoreId(){
+        return firestoreId;
+    }
+
+    public void setFirestoreId(String fid){
+        this.firestoreId = fid;
     }
 
     public Map<String, String> toMap(){

@@ -10,4 +10,6 @@ import edu.ucsd.cse110.walkwalkrevolution.user.User;
 public interface InvitationService {
     void addInvitation(Invitation invitation);
     void getInvitations(Invitations invitations, User user);
+    void acceptInvite(Invitation invitation);
+    void deleteInvite(Invitation invitation);
 }

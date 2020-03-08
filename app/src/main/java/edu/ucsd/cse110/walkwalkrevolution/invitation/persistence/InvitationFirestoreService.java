@@ -6,6 +6,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -15,6 +16,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import edu.ucsd.cse110.walkwalkrevolution.WalkWalkRevolution;
@@ -28,7 +30,7 @@ public class InvitationFirestoreService implements InvitationService {
     public CollectionReference invitations;
 
     private final String TAG = "InvitationFirestoreService";
-    private final String INVITATION_KEY = "blinvitation";
+    private final String INVITATION_KEY = "invitation";
 
     public InvitationFirestoreService(){
         invitations = FirebaseFirestore.getInstance().collection(INVITATION_KEY);
@@ -75,6 +77,7 @@ public class InvitationFirestoreService implements InvitationService {
                         Log.d(TAG, document.getId() + "=>" + data);
                         Invitation invitation = snapshotToInvite(document);
                         Log.d(TAG, document.getId() + "=>" + invitation.toMap());
+                        invitation.setFirestoreId(document.getId());
                         t.add(invitation);
                     }
                     t.notifyObservers();
@@ -83,6 +86,57 @@ public class InvitationFirestoreService implements InvitationService {
                 }
             }
         });
+    }
+
+    @Override
+    public void acceptInvite(Invitation invitation){
+        ((UserFirestoreService)WalkWalkRevolution.getUserService())
+                .users.document(invitation.getFrom()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    String teamId = document.getString(User.TEAM);
+                    Log.d(TAG, "teamId: " + teamId);
+                    Map<String, String> data = WalkWalkRevolution.getUser().toMap();
+                    data.put(User.TEAM, teamId);
+                    ((UserFirestoreService)WalkWalkRevolution.getUserService())
+                            .users.document(WalkWalkRevolution.getUser().getEmail()).set(data)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    WalkWalkRevolution.getUser().setTeamId(teamId);
+                                    deleteInvite(invitation);
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.e(TAG, e.getLocalizedMessage());
+                                }
+                            });
+                } else {
+                    Log.d(TAG, "Failed with: ", task.getException());
+                }
+            }
+        });
+    }
+
+    @Override
+    public void deleteInvite(Invitation invitation){
+        invitations.document(invitation.getFirestoreId())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, e.getLocalizedMessage());
+                    }
+                });
     }
 
     private Invitation snapshotToInvite(DocumentSnapshot documentSnapshot){
