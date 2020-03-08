@@ -139,6 +139,11 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
         return rList.size();
     }
 
+    public void add(Route route){
+        this.rList.add(route);
+        notifyDataSetChanged();
+    }
+
     public void update(List<Route> rList) {
         for(Route r: rList){
             this.rList.add(r);
@@ -156,5 +161,9 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
         this.isTeam = false;
         rList = new ArrayList<>();
         routes.getLocal();
+    }
+
+    public Routes getRoutes(){
+        return routes;
     }
 }
