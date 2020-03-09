@@ -17,6 +17,10 @@ public class Invitations implements InvitationSubject{
                 getInvitations(this, WalkWalkRevolution.getUser());
     }
 
+    public Invitations(List<Invitation> invitations){
+        this.invitations = invitations;
+    }
+
     public void add(Invitation invitation){
         this.invitations.add(invitation);
     }
