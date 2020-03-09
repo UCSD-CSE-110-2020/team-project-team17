@@ -168,7 +168,6 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
 
     public void add(Route route){
         this.rList.add(route);
-        notifyDataSetChanged();
     }
 
     public void update(List<Route> rList) {

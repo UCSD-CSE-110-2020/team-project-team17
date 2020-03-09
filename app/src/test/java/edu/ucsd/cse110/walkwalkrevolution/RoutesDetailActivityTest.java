@@ -2,6 +2,7 @@ package edu.ucsd.cse110.walkwalkrevolution;
 
 import android.content.Intent;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -36,12 +37,13 @@ public class RoutesDetailActivityTest {
 
     private RoutesDetailActivity activityRoutes;
     private String serializedRoute;
+    private Route route;
 
     @Before
     public void setUp() {
         WalkWalkRevolution.setUserDao(new MockUserDao());
         WalkWalkRevolution.setRouteDao(new MockRouteDao());
-        WalkWalkRevolution.setUser(new User(1, 528*12, "", ""));
+        WalkWalkRevolution.setUser(new User(1, 528*12, "", "dummyUID"));
 
         Activity activity;
 
@@ -55,10 +57,12 @@ public class RoutesDetailActivityTest {
         activity.setDate();
 
 
-        Route route = new Route("test", activity);
+        route = new Route("test", activity);
         route.setLocation("location test");
         route.setNotes("Testing the notes field to see it it actually shows");
         route.setDescriptionTags("a,b,c,d,e");
+        route.setUserId("dummyUID");
+        route.setFirestoreId("dummyFID");
 
         try {
             serializedRoute = RouteUtils.serialize(route);
@@ -140,5 +144,30 @@ public class RoutesDetailActivityTest {
         activityRoutes = Robolectric.buildActivity(RoutesDetailActivity.class, intent).create().get();
         TextView notes = activityRoutes.findViewById(R.id.Note_view);
         assertEquals(notes.getText().toString(), "Testing the notes field to see it it actually shows");
+    }
+
+    @Test
+    public void testFavorite(){
+        WalkWalkRevolution.getRouteDao().addFavorite(route);
+        Intent intent = new Intent();
+        intent.putExtra(RoutesAdapter.ROUTE, serializedRoute);
+        activityRoutes = Robolectric.buildActivity(RoutesDetailActivity.class, intent).create().get();
+        ToggleButton favorite = activityRoutes.findViewById(R.id.favorite);
+        assertEquals(true , favorite.isChecked());
+
+        favorite.performClick();
+
+        assertEquals(false, WalkWalkRevolution.getRouteDao().isFavorite(route));
+        assertEquals(false, favorite.isChecked());
+    }
+
+    @Test
+    public void testWalked(){
+        Intent intent = new Intent();
+        intent.putExtra(RoutesAdapter.ROUTE, serializedRoute);
+        activityRoutes = Robolectric.buildActivity(RoutesDetailActivity.class, intent).create().get();
+        TextView walked = activityRoutes.findViewById(R.id.walked);
+
+        assertEquals(true, activityRoutes.isWalked);
     }
 }

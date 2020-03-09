@@ -86,7 +86,7 @@ public class Routes implements RoutesSubject, TeamObserver {
         });
     }
 
-    private void getOverridenRoutes(){
+    public void updateOverridenRoutes(){
         overrideTeamRoutes = new HashMap<>();
         Map<String, ?> override = WalkWalkRevolution.getRouteDao().getTeamRoutes();
         for(Map.Entry<String, ?> entry: override.entrySet()) {
@@ -98,6 +98,10 @@ public class Routes implements RoutesSubject, TeamObserver {
         }
     }
 
+    public Map<String, Route> getOverridenRoutes(){
+        return new HashMap<>(overrideTeamRoutes);
+    }
+
     public void getLocal(){
         routes = new ArrayList<>();
         getRoutesFromDao();
@@ -106,7 +110,7 @@ public class Routes implements RoutesSubject, TeamObserver {
 
     public void getTeamRoutes(){
         routes = new ArrayList<>();
-        getOverridenRoutes();
+        updateOverridenRoutes();
         t = new Team();
         t.subscribe(this);
     }

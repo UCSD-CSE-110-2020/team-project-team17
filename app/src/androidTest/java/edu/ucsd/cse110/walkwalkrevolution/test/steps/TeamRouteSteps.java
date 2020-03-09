@@ -1,5 +1,7 @@
 package edu.ucsd.cse110.walkwalkrevolution.test.steps;
 
+import android.os.SystemClock;
+
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.rule.ActivityTestRule;
@@ -20,9 +22,12 @@ import cucumber.api.java.en.When;
 import edu.ucsd.cse110.walkwalkrevolution.RoutesActivity;
 import edu.ucsd.cse110.walkwalkrevolution.R;
 import edu.ucsd.cse110.walkwalkrevolution.WalkWalkRevolution;
+import edu.ucsd.cse110.walkwalkrevolution.activity.Activity;
+import edu.ucsd.cse110.walkwalkrevolution.activity.EmptyActivity;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
 import edu.ucsd.cse110.walkwalkrevolution.route.Route;
 import edu.ucsd.cse110.walkwalkrevolution.route.RouteRecycleView.RoutesAdapter;
+import edu.ucsd.cse110.walkwalkrevolution.route.persistence.MockRouteDao;
 import edu.ucsd.cse110.walkwalkrevolution.route.persistence.RouteService;
 import edu.ucsd.cse110.walkwalkrevolution.route.persistence.RouteServiceFactory;
 import edu.ucsd.cse110.walkwalkrevolution.user.User;
@@ -56,6 +61,7 @@ public class TeamRouteSteps {
     private RouteServiceFactory routeServiceFactory;
     private UserService userService;
     private UserServiceFactory userServiceFactory;
+    private User self;
 
     public TeamRouteSteps() {
     }
@@ -78,6 +84,14 @@ public class TeamRouteSteps {
 
         WalkWalkRevolution.createUserService();
         WalkWalkRevolution.createRouteService();
+
+        WalkWalkRevolution.setRouteDao(new MockRouteDao());
+
+        self = new User();
+        self.setEmail("dummyEmail");
+
+        WalkWalkRevolution.setRouteDao(new MockRouteDao());
+        WalkWalkRevolution.setUser(self);
 
         Intents.init();
         nameIdMap.put("team", "team_button");
@@ -116,16 +130,24 @@ public class TeamRouteSteps {
 
     @And("^there's a route with the title (.*)")
     public void thereExistsARoute(String title) throws Throwable {
+        Route route = new Route(title, new EmptyActivity());
+        route.setUserId("xxxx");
+        route.setFirestoreId(title);
+
+        User user = new User();
+        user.setEmail("xx");
+
         doAnswer(invocation -> {
             RecyclerView recyclerView = (RecyclerView)
                     mActivityTestRule.getActivity().findViewById(R.id.routes);
-            ((RoutesAdapter)recyclerView.getAdapter()).getRoutes().update(Arrays.asList(new User()));
+            ((RoutesAdapter)recyclerView.getAdapter()).getRoutes().update(Arrays.asList(user, self));
             return null;
         }).when(userService).getTeam(any(), any());
         doAnswer(invocation -> {
             RecyclerView recyclerView = (RecyclerView)
                     mActivityTestRule.getActivity().findViewById(R.id.routes);
-            ((RoutesAdapter)recyclerView.getAdapter()).getRoutes().add(new Route(title, new Walk()));
+            ((RoutesAdapter)recyclerView.getAdapter()).getRoutes().add(route);
+            System.out.println(((RoutesAdapter) recyclerView.getAdapter()).getRoutes().get(0).toMap());
             ((RoutesAdapter)recyclerView.getAdapter()).getRoutes().notifyObservers();
             return null;
         }).when(routeService).getRoutes(any(), any());
@@ -145,6 +167,12 @@ public class TeamRouteSteps {
         onView(withId(R.id.routes)).check(matches(hasDescendant(withText(title))));
     }
 
+    @And("^the list contains a route with (\\d+) steps")
+    public void containsRouteWithSteps(int steps){
+        assertNotEquals(0, getRVCount());
+        onView(withId(R.id.routes)).check(matches(hasDescendant(withText(Integer.toString(steps)))));
+    }
+
 //    @Then("^the answer is (\\d+)$")
 //    public void theAnswerIs(int number) throws Throwable {
 //        onView(withId(R.id.answer))
@@ -155,6 +183,22 @@ public class TeamRouteSteps {
     @Then("^the list is empty")
     public void listIsEmpty() throws Throwable {
         assertEquals(0, getRVCount());
+    }
+
+    @And("^the user walked (\\d+) steps with (.*)")
+    public void recordOwnStep(int steps, String id){
+        Activity activity = new Walk();
+        activity.setDetail(Walk.STEP_COUNT, Integer.toString(steps));
+        System.out.println(id);
+        Route r = new Route(id, activity);
+        r.setFirestoreId(id);
+        WalkWalkRevolution.getRouteDao().addTeamRoute(r);
+
+        RecyclerView recyclerView = (RecyclerView)
+                mActivityTestRule.getActivity().findViewById(R.id.routes);
+        ((RoutesAdapter)recyclerView.getAdapter()).getRoutes().updateOverridenRoutes();
+        System.out.println(((RoutesAdapter)recyclerView.getAdapter()).getRoutes()
+                .getOverridenRoutes().get(id).toMap());
     }
 
     private int getRVCount(){

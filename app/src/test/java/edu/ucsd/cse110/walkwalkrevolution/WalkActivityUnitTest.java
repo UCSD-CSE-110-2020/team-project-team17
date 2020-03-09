@@ -22,11 +22,13 @@ import org.robolectric.shadows.ShadowApplication;
 import org.robolectric.shadows.ShadowLooper;
 
 
+import edu.ucsd.cse110.walkwalkrevolution.activity.EmptyActivity;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessServiceFactory;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.Steps;
 import edu.ucsd.cse110.walkwalkrevolution.activity.ActivityUtils;
 import edu.ucsd.cse110.walkwalkrevolution.route.Route;
+import edu.ucsd.cse110.walkwalkrevolution.route.RouteUtils;
 import edu.ucsd.cse110.walkwalkrevolution.route.persistence.MockRouteDao;
 import edu.ucsd.cse110.walkwalkrevolution.route.persistence.RouteService;
 import edu.ucsd.cse110.walkwalkrevolution.route.persistence.RouteServiceFactory;
@@ -128,9 +130,12 @@ public class WalkActivityUnitTest {
     }
 
     @Test
-    public void testRouteTitleExtra(){
+    public void testRouteTitleExtra() throws Exception {
+        Route route = new Route(1, "Route", new EmptyActivity());
+        String serialized = RouteUtils.serialize(route);
+
         Bundle bundle = new Bundle();
-        bundle.putString("route_title", "Blueberry Lane");
+        bundle.putString(WalkActivity.ROUTE, serialized);
         bundle.putString("test", "");
 
         Intent intent = new Intent();

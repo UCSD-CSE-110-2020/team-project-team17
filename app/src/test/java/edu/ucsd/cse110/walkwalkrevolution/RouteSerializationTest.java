@@ -8,6 +8,7 @@ import java.util.Map;
 
 import edu.ucsd.cse110.walkwalkrevolution.activity.Activity;
 import edu.ucsd.cse110.walkwalkrevolution.activity.ActivityUtils;
+import edu.ucsd.cse110.walkwalkrevolution.activity.EmptyActivity;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
 import edu.ucsd.cse110.walkwalkrevolution.route.Route;
 import edu.ucsd.cse110.walkwalkrevolution.route.RouteUtils;
@@ -18,7 +19,7 @@ public class RouteSerializationTest {
 
     @Test
     public void serializeRouteWithNoActivity() throws Exception{
-        Activity activity = new Walk();
+        Activity activity = new EmptyActivity();
         LocalDateTime time = LocalDateTime.of(2020, 01, 01, 0, 0);
         activity.setDate(time);
 
@@ -31,10 +32,8 @@ public class RouteSerializationTest {
         Route deserial = RouteUtils.deserialize(jsonString);
         assertEquals(1, deserial.getId());
         assertEquals("Route1", deserial.getTitle());
-        assertEquals(4, deserial.getActivity().getDetails().size());
-        assertEquals("0", deserial.getActivity().getDetail(Walk.STEP_COUNT));
-        assertEquals("0", deserial.getActivity().getDetail(Walk.DURATION));
-        assertEquals("0", deserial.getActivity().getDetail(Walk.MILES));
+        assertEquals(2, deserial.getActivity().getDetails().size());
+        assertEquals("false", deserial.getActivity().getDetail(Activity.EXIST));
         assertEquals(time, ActivityUtils.stringToTime(deserial.getActivity().getDetail(Activity.DATE)));
     }
 
@@ -55,7 +54,7 @@ public class RouteSerializationTest {
         assertEquals(1, deserial.getId());
         assertEquals("Route1", deserial.getTitle());
         assertEquals("Location", deserial.getLocation());
-        assertEquals(4, deserial.getActivity().getDetails().size());
+        assertEquals(5, deserial.getActivity().getDetails().size());
         assertEquals("0", deserial.getActivity().getDetail(Walk.STEP_COUNT));
         assertEquals("0", deserial.getActivity().getDetail(Walk.DURATION));
         assertEquals("0", deserial.getActivity().getDetail(Walk.MILES));
@@ -78,7 +77,7 @@ public class RouteSerializationTest {
         Route deserial = RouteUtils.deserialize(jsonString);
         assertEquals(1, deserial.getId());
         assertEquals("Route1", deserial.getTitle());
-        assertEquals(4, deserial.getActivity().getDetails().size());
+        assertEquals(5, deserial.getActivity().getDetails().size());
         assertEquals("500", deserial.getActivity().getDetail(Walk.STEP_COUNT));
         assertEquals("5:00", deserial.getActivity().getDetail(Walk.DURATION));
         assertEquals("0.25", deserial.getActivity().getDetail(Walk.MILES));
@@ -103,7 +102,7 @@ public class RouteSerializationTest {
         Route deserial = RouteUtils.deserialize(jsonString);
         assertEquals(1, deserial.getId());
         assertEquals("Route1", deserial.getTitle());
-        assertEquals(4, deserial.getActivity().getDetails().size());
+        assertEquals(5, deserial.getActivity().getDetails().size());
         assertEquals("500", deserial.getActivity().getDetail(Walk.STEP_COUNT));
         assertEquals("5:00", deserial.getActivity().getDetail(Walk.DURATION));
         assertEquals("0.25", deserial.getActivity().getDetail(Walk.MILES));

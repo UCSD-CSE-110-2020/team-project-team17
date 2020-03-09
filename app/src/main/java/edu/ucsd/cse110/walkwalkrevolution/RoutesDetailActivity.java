@@ -44,6 +44,7 @@ public class RoutesDetailActivity extends AppCompatActivity {
     private ToggleButton favorite;
 
     private TextView walked;
+    public boolean isWalked;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,11 +135,14 @@ public class RoutesDetailActivity extends AppCompatActivity {
         });
 
         walked = findViewById(R.id.walked);
+        walked.setVisibility(View.GONE);
+        isWalked = false;
         if(route.getUserId().equals(WalkWalkRevolution.getUser().getEmail()) &&
                 Boolean.parseBoolean(route.getActivity().getDetail(Activity.EXIST)) ||
         !route.getUserId().equals(WalkWalkRevolution.getUser().getEmail()) &&
                 WalkWalkRevolution.getRouteDao().walkedTeamRoute(route)){
             walked.setBackgroundResource(R.drawable.img_green_check);
+            isWalked = true;
         }
 
     }
