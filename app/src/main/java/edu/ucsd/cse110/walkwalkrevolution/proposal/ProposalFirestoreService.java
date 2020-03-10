@@ -70,7 +70,7 @@ public class ProposalFirestoreService implements ProposalService {
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void aVoid) {
-                                                    Log.d(TAG, "DocumentSnapshot successfully written!");
+                                                    Log.d(TAG, "DocumentSnapshot successfully written! Scheduled");
                                                 }
                                             })
                                             .addOnFailureListener(new OnFailureListener() {
@@ -144,6 +144,7 @@ public class ProposalFirestoreService implements ProposalService {
 
     @Override
     public void withdrawProposal(String teamId, ProposeScreenActivity act) {
+        Log.d(TAG,  "dc");
         proposals.whereEqualTo("teamId", teamId)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -152,6 +153,7 @@ public class ProposalFirestoreService implements ProposalService {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 if (document.exists()) {
+                                    Log.d("MONKEYS", "dc");
                                     proposals.document(document.getId())
                                             .delete()
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -159,6 +161,7 @@ public class ProposalFirestoreService implements ProposalService {
                                                 public void onSuccess(Void aVoid) {
                                                     Log.d(TAG, "DocumentSnapshot successfully deleted!");
                                                     proposedRoute = null;
+                                                    userProposed = "";
                                                     act.renderPage();
                                                 }
                                             })
@@ -170,6 +173,7 @@ public class ProposalFirestoreService implements ProposalService {
                                             });
                                 }
                                 else {
+                                    Log.d("MONKEYS", "noiooo");
                                     Log.d(TAG, "No such document");
                                 }
                             }

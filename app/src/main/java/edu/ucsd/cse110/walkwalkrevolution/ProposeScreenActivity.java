@@ -2,6 +2,7 @@ package edu.ucsd.cse110.walkwalkrevolution;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -70,7 +71,7 @@ public class ProposeScreenActivity extends AppCompatActivity {
 
     private ProposeScreenActivity psa = this;
     public void renderPage() {
-
+        Log.d("HELLOM", WalkWalkRevolution.getUser().getTeamId());
         if (ProposalFirestoreService.userProposed.equals("")) {
             one.setVisibility(View.GONE);
             two.setVisibility(View.GONE);
@@ -132,6 +133,7 @@ public class ProposeScreenActivity extends AppCompatActivity {
                     one.setVisibility(View.GONE);
                     two.setVisibility(View.GONE);
                     ProposalService ps = WalkWalkRevolution.getProposalService();
+                    Log.d("HELLOM", WalkWalkRevolution.getUser().getTeamId());
                     ps.withdrawProposal(WalkWalkRevolution.getUser().getTeamId(), psa);
                     ProposalFirestoreService.userProposed = "";
                 }
