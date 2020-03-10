@@ -10,8 +10,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,6 +29,7 @@ import edu.ucsd.cse110.walkwalkrevolution.fitness.Steps;
 import edu.ucsd.cse110.walkwalkrevolution.route.Routes;
 import edu.ucsd.cse110.walkwalkrevolution.user.User;
 import edu.ucsd.cse110.walkwalkrevolution.team.Team;
+import edu.ucsd.cse110.walkwalkrevolution.user.persistence.UserFirestoreService;
 
 public class HomeActivity extends AppCompatActivity implements Observer {
 
@@ -276,5 +279,4 @@ public class HomeActivity extends AppCompatActivity implements Observer {
             return null;
         else return activities.get(l-1);
     }
-
 }

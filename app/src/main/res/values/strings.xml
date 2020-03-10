@@ -24,4 +24,6 @@
     <string name="team_email_prompt">Please enter your teammate\'s email address</string>
     <string name="individual">Individual</string>
     <string name="team">Team</string>
+    <string name="no_invitation_text">No invitation was found.</string>
+
 </resources>

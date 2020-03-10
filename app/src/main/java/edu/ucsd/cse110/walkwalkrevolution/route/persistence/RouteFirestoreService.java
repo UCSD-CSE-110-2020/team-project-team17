@@ -27,7 +27,7 @@ import edu.ucsd.cse110.walkwalkrevolution.user.User;
 
 public class RouteFirestoreService implements RouteService {
 
-    private CollectionReference routes;
+    public CollectionReference routes;
 
     private final String TAG = "RouteFirestoreService";
     private final String ROUTE_KEY = "route";
