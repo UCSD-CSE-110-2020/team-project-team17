@@ -53,6 +53,7 @@ public class RoutesDetailActivityTest {
 
         activity = new Walk(data);
         activity.setDate();
+        activity.setExist(true);
 
 
         Route route = new Route("test", activity);

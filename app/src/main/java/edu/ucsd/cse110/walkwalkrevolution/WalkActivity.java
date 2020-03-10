@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.Observable;
 import java.util.Observer;
 
+import edu.ucsd.cse110.walkwalkrevolution.activity.Activity;
 import edu.ucsd.cse110.walkwalkrevolution.activity.ActivityUtils;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.Steps;
@@ -37,8 +38,8 @@ public class WalkActivity extends AppCompatActivity implements Observer {
     long walkSteps;
     long currentTotalSteps;
 
-    int i, j;
-    long s;
+    Route route;
+    String serialized;
 
     private TextView steps;
     private TextView miles;
@@ -89,9 +90,15 @@ public class WalkActivity extends AppCompatActivity implements Observer {
         }
 
         Intent intent = getIntent();
-        i = intent.getIntExtra(RoutesDetailActivity.ROUTE, 0);
-        j = intent.getIntExtra(HomeActivity.PRE_EXISTING_ROUTE, 0);
-        s = intent.getLongExtra(ROUTE_ID, 0);
+        if(intent.hasExtra(Route.ROUTE)) {
+            serialized = intent.getStringExtra(Route.ROUTE);
+            try{
+                route = RouteUtils.deserialize(serialized);
+            } catch (Exception e){
+                throw new RuntimeException(e.getLocalizedMessage());
+            }
+        }
+
         mock = findViewById(R.id.mock_button);
         mock.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,18 +114,18 @@ public class WalkActivity extends AppCompatActivity implements Observer {
             public void onClick(View view) {
                 //checks if intent is from HomeActivity or RouteDetailActivity
                 WalkWalkRevolution.getFitnessService().updateStepCount();
+                updateWalkSteps();
                 HomeActivity.getStepSubject().deleteObserver(current);
 
-                updateWalkSteps();
-                if(i == 1 && j == 0 && s != 0)
+                if(route != null)
                 {
                     try {
-                        saveWalk(s);
+                        saveWalk(route);
                     } catch (Exception e){
                         throw new RuntimeException(e.getLocalizedMessage());
                     }
                 }
-                else if(i==0 && j==1)
+                else
                 {
                     createRouteActivity();
                 }
@@ -173,16 +180,21 @@ public class WalkActivity extends AppCompatActivity implements Observer {
         startActivity(createRoute);
     }
 
-    public void saveWalk(long id) throws Exception {
-        Route route = WalkWalkRevolution.getRouteDao().getRoute(id);
+    public void saveWalk(Route route) throws Exception {
         Map<String, String> data = new HashMap<String, String>(){{
             put(Walk.STEP_COUNT, steps.getText().toString());
             put(Walk.MILES, miles.getText().toString());
             put(Walk.DURATION, timer.getText().toString());
         }};
-        route.getActivity().setDetails(data);
-        route.getActivity().setDate();
+
+        Activity activity = new Walk(data);
+        activity.setExist(true);
+        activity.setDate();
+
+        route.setActivity(activity);
+
         WalkWalkRevolution.getRouteDao().addRoute(route);
+        WalkWalkRevolution.getRouteService().updateRoute(route);
 
         Intent i = new Intent(this, RoutesDetailActivity.class);
         String serialized = RouteUtils.serialize(route);

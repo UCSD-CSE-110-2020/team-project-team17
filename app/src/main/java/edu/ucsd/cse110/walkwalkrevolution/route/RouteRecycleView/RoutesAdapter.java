@@ -15,6 +15,7 @@ import java.util.List;
 import edu.ucsd.cse110.walkwalkrevolution.R;
 import edu.ucsd.cse110.walkwalkrevolution.RoutesActivity;
 import edu.ucsd.cse110.walkwalkrevolution.RoutesDetailActivity;
+import edu.ucsd.cse110.walkwalkrevolution.WalkWalkRevolution;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Activity;
 import edu.ucsd.cse110.walkwalkrevolution.activity.ActivityUtils;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
@@ -31,13 +32,10 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
     public static final String TEAM = "TEAM";
     //private Context context;
 
-    private boolean isTeam;
-
     public RoutesAdapter() {
         routes = new Routes();
         routes.subscribe(this);
         rList = new ArrayList<>();
-        this.isTeam = false;
         updateRoute();
         //this.context = context;
     }
@@ -97,7 +95,6 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
         Intent intent = new Intent(view.getContext(), RoutesDetailActivity.class);
         String serialized = RouteUtils.serialize(item);
         intent.putExtra(ROUTE, serialized);
-        intent.putExtra(TEAM, isTeam);
         view.getContext().startActivity(intent);
     }
 
@@ -116,7 +113,7 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
         TextView duration = viewHolder.duration;
         TextView date = viewHolder.date;
 
-        if(!isTeam) {
+        if(route.getActivity().isExist()) {
             steps.setText(route.getActivity().getDetail(Walk.STEP_COUNT));
 
             miles.setText(route.getActivity().getDetail(Walk.MILES));
@@ -152,13 +149,11 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
     }
 
     public void updateTeam() {
-        this.isTeam = true;
         rList = new ArrayList<>();
         routes.getTeamRoutes();
     }
 
     public void updateRoute(){
-        this.isTeam = false;
         rList = new ArrayList<>();
         routes.getLocal();
     }

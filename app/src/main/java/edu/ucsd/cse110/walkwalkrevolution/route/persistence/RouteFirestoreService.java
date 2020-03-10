@@ -22,6 +22,7 @@ import java.util.Map;
 
 import edu.ucsd.cse110.walkwalkrevolution.WalkWalkRevolution;
 import edu.ucsd.cse110.walkwalkrevolution.route.Route;
+import edu.ucsd.cse110.walkwalkrevolution.route.RouteUtils;
 import edu.ucsd.cse110.walkwalkrevolution.route.Routes;
 import edu.ucsd.cse110.walkwalkrevolution.user.User;
 
@@ -51,45 +52,43 @@ public class RouteFirestoreService implements RouteService {
         });
     }
 
-    //TODO: FIX W/ OBSERVER PATTERN (FIRESTORE IS ASYNC)
     @Override
-    public Route getRoute(String routeId) {
-        List<Route> r = new ArrayList<>();
-        routes.document(routeId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                Route route = snapshotToRoute(documentSnapshot);
-                Log.d(TAG, "Route retrieved: " + route.getTitle());
-                r.add(route);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
+    public void updateRoute(Route route) {
+        Map<String, String> data = route.toMap();
+        routes.document(route.getFirestoreId()).set(data).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.d(TAG, e.getLocalizedMessage());
             }
         });
-        return r.isEmpty() ? null : r.get(0);
     }
 
     private Route snapshotToRoute(DocumentSnapshot documentSnapshot){
-        Route.Builder builder = new Route.Builder();
-        if(documentSnapshot.contains(Route.TITLE)){
-            builder.setTitle(documentSnapshot.getString(Route.TITLE));
+//        Route.Builder builder = new Route.Builder();
+//        if(documentSnapshot.contains(Route.TITLE)){
+//            builder.setTitle(documentSnapshot.getString(Route.TITLE));
+//        }
+//        if(documentSnapshot.contains(Route.LOCATION)){
+//            builder.setLocation(documentSnapshot.getString(Route.LOCATION));
+//        }
+//        if(documentSnapshot.contains(Route.NOTES)){
+//            builder.setNotes(documentSnapshot.getString(Route.NOTES));
+//        }
+//        if(documentSnapshot.contains(Route.DESCRIPTION_TAGS)){
+//            builder.setDescription(documentSnapshot.getString(Route.DESCRIPTION_TAGS));
+//        }
+//        if(documentSnapshot.contains(Route.USER_ID)){
+//            builder.setUserId(documentSnapshot.getString(Route.USER_ID));
+//        }
+        Route route;
+        try {
+            route = RouteUtils.deserialize(documentSnapshot.getString(Route.ROUTE));
+        } catch (Exception e) {
+            throw new RuntimeException(e.getLocalizedMessage());
         }
-        if(documentSnapshot.contains(Route.LOCATION)){
-            builder.setLocation(documentSnapshot.getString(Route.LOCATION));
-        }
-        if(documentSnapshot.contains(Route.NOTES)){
-            builder.setNotes(documentSnapshot.getString(Route.NOTES));
-        }
-        if(documentSnapshot.contains(Route.DESCRIPTION_TAGS)){
-            builder.setDescription(documentSnapshot.getString(Route.DESCRIPTION_TAGS));
-        }
-        if(documentSnapshot.contains(Route.USER_ID)){
-            builder.setUserId(documentSnapshot.getString(Route.USER_ID));
-        }
-        builder.setFirestoreId(documentSnapshot.getId());
-        return builder.build();
+        route.setUserId(documentSnapshot.getString(Route.USER_ID));
+        route.setFirestoreId(documentSnapshot.getId());
+        return route;
     }
 
     @Override

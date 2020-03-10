@@ -55,7 +55,7 @@ public class Routes implements RoutesSubject, TeamObserver {
         getRoutesFromDao();
         List<Activity> activities = new ArrayList<>();
         for(Route route: routes){
-            if(Long.parseLong(route.getActivity().getDetail(Walk.STEP_COUNT)) > 0){
+            if(route.getActivity().isExist()){
                 activities.add(route.getActivity());
             }
         }

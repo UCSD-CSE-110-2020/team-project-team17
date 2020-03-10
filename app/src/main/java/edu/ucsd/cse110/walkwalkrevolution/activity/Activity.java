@@ -16,9 +16,11 @@ public class Activity {
     private Map<String, String> details;
 
     public static final String DATE = "DATE";
+    public static final String EXIST = "EXIST";
 
     public Activity() {
         this.details = new HashMap<>();
+        setExist(true);
         setDate();
     }
 
@@ -50,6 +52,18 @@ public class Activity {
 
     public void setDate(LocalDateTime dt){
         setDetail(DATE, ActivityUtils.timeToString(dt));
+    }
+
+    public void setExist(boolean exist) {
+        if(exist){
+            setDetail(EXIST, "true");
+        } else {
+            setDetail(EXIST, "false");
+        }
+    }
+
+    public boolean isExist() {
+        return Boolean.parseBoolean(getDetail(EXIST));
     }
 
 }
