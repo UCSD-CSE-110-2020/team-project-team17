@@ -14,11 +14,13 @@ import org.robolectric.annotation.Config;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import edu.ucsd.cse110.walkwalkrevolution.activity.Activity;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
 import edu.ucsd.cse110.walkwalkrevolution.route.Route;
 import edu.ucsd.cse110.walkwalkrevolution.route.RouteRecycleView.RoutesAdapter;
+import edu.ucsd.cse110.walkwalkrevolution.route.RouteUtils;
 import edu.ucsd.cse110.walkwalkrevolution.route.persistence.MockRouteDao;
 import edu.ucsd.cse110.walkwalkrevolution.user.User;
 import edu.ucsd.cse110.walkwalkrevolution.user.persistence.MockUserDao;
@@ -33,7 +35,7 @@ import static junit.framework.TestCase.assertNotNull;
 public class RoutesDetailActivityTest {
 
     private RoutesDetailActivity activityRoutes;
-    private long id;
+    private String serializedRoute;
 
     @Before
     public void setUp() {
@@ -58,7 +60,11 @@ public class RoutesDetailActivityTest {
         route.setNotes("Testing the notes field to see it it actually shows");
         route.setDescriptionTags("a,b,c,d,e");
 
-        id = route.getId();
+        try {
+            serializedRoute = RouteUtils.serialize(route);
+        } catch (Exception e) {
+            //
+        }
 
         WalkWalkRevolution.getRouteDao().addRoute(route);
 
@@ -67,7 +73,7 @@ public class RoutesDetailActivityTest {
     @Test
     public void testRouteTitleDetail(){
         Intent intent = new Intent();
-        intent.putExtra(RoutesAdapter.EXTRA_TEXT, id);
+        intent.putExtra(RoutesAdapter.ROUTE, serializedRoute);
         activityRoutes = Robolectric.buildActivity(RoutesDetailActivity.class, intent).create().get();
         TextView routeTitle = activityRoutes.findViewById(R.id.title1);
         assertEquals(routeTitle.getText().toString(), "test");
@@ -76,7 +82,7 @@ public class RoutesDetailActivityTest {
     @Test
     public void testLocationDetail(){
         Intent intent = new Intent();
-        intent.putExtra(RoutesAdapter.EXTRA_TEXT, id);
+        intent.putExtra(RoutesAdapter.ROUTE, serializedRoute);
         activityRoutes = Robolectric.buildActivity(RoutesDetailActivity.class, intent).create().get();
         TextView location = activityRoutes.findViewById(R.id.location_text);
         assertEquals(location.getText().toString(), "location test");
@@ -85,7 +91,7 @@ public class RoutesDetailActivityTest {
     @Test
     public void testSteps(){
         Intent intent = new Intent();
-        intent.putExtra(RoutesAdapter.EXTRA_TEXT, id);
+        intent.putExtra(RoutesAdapter.ROUTE, serializedRoute);
         activityRoutes = Robolectric.buildActivity(RoutesDetailActivity.class, intent).create().get();
         TextView steps = activityRoutes.findViewById(R.id.numOfSteps);
         assertEquals(steps.getText().toString(), "1000");
@@ -94,7 +100,7 @@ public class RoutesDetailActivityTest {
     @Test
     public void testMiles(){
         Intent intent = new Intent();
-        intent.putExtra(RoutesAdapter.EXTRA_TEXT, id);
+        intent.putExtra(RoutesAdapter.ROUTE, serializedRoute);
         activityRoutes = Robolectric.buildActivity(RoutesDetailActivity.class, intent).create().get();
         TextView miles = activityRoutes.findViewById(R.id.numOfMiles);
         assertEquals(miles.getText().toString(), "2");
@@ -103,7 +109,7 @@ public class RoutesDetailActivityTest {
     @Test
     public void testDuration(){
         Intent intent = new Intent();
-        intent.putExtra(RoutesAdapter.EXTRA_TEXT, id);
+        intent.putExtra(RoutesAdapter.ROUTE, serializedRoute);
         activityRoutes = Robolectric.buildActivity(RoutesDetailActivity.class, intent).create().get();
         TextView duration = activityRoutes.findViewById(R.id.numOfDur);
         assertEquals(duration.getText().toString(), "00:01");
@@ -112,7 +118,7 @@ public class RoutesDetailActivityTest {
     @Test
     public void testTags(){
         Intent intent = new Intent();
-        intent.putExtra(RoutesAdapter.EXTRA_TEXT, id);
+        intent.putExtra(RoutesAdapter.ROUTE, serializedRoute);
         activityRoutes = Robolectric.buildActivity(RoutesDetailActivity.class, intent).create().get();
         TextView tag1 = activityRoutes.findViewById(R.id.tag1);
         TextView tag2 = activityRoutes.findViewById(R.id.tag2);
@@ -130,7 +136,7 @@ public class RoutesDetailActivityTest {
     @Test
     public void testNotes(){
         Intent intent = new Intent();
-        intent.putExtra(RoutesAdapter.EXTRA_TEXT, id);
+        intent.putExtra(RoutesAdapter.ROUTE, serializedRoute);
         activityRoutes = Robolectric.buildActivity(RoutesDetailActivity.class, intent).create().get();
         TextView notes = activityRoutes.findViewById(R.id.Note_view);
         assertEquals(notes.getText().toString(), "Testing the notes field to see it it actually shows");

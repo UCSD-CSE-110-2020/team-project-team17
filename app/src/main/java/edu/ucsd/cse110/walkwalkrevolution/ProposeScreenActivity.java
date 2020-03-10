@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -18,6 +20,9 @@ import edu.ucsd.cse110.walkwalkrevolution.route.Route;
 import edu.ucsd.cse110.walkwalkrevolution.route.RouteRecycleView.RoutesAdapter;
 
 public class ProposeScreenActivity extends AppCompatActivity {
+
+    public static Boolean scheduled = false;
+    public static String userProposed = "";
 
     Button schdWalk, wthdWalk, afterBtn;
     TextView screenTitle;
@@ -34,6 +39,7 @@ public class ProposeScreenActivity extends AppCompatActivity {
     private TextView tag3;
     private TextView tag4;
     private TextView tag5;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,35 +58,50 @@ public class ProposeScreenActivity extends AppCompatActivity {
         one = findViewById(R.id.buttons_layout);
         two = findViewById(R.id.buttons_after);
 
-        schdWalk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                screenTitle.setText("Scheduled Walk");
-                one.setVisibility(View.GONE);
-                two.setVisibility(View.VISIBLE);
-            }
-        });
 
-        wthdWalk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                screenTitle.setText("No Proposed Walk");
-                one.setVisibility(View.GONE);
-                two.setVisibility(View.GONE);
-                ProposalService ps = WalkWalkRevolution.getProposalService();
-                ps.withdrawProposal();
-            }
-        });
 
-        afterBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                screenTitle.setText("No Proposed Walk");
-                one.setVisibility(View.GONE);
-                two.setVisibility(View.GONE);
-            }
-        });
+        if (!WalkWalkRevolution.getUser().getEmail().equals(userProposed)) {
+            one.setVisibility(View.GONE);
+            two.setVisibility(View.GONE);
+            title.setText("No Proposed Walk");
+            location.setVisibility(View.GONE);
+            tag1.setVisibility(View.GONE);
+            tag2.setVisibility(View.GONE);
+            tag3.setVisibility(View.GONE);
+            tag4.setVisibility(View.GONE);
+            tag5.setVisibility(View.GONE);
+            note.setVisibility(View.GONE);
+        }
+        else {
+            schdWalk.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    screenTitle.setText("Scheduled Walk");
+                    one.setVisibility(View.GONE);
+                    two.setVisibility(View.VISIBLE);
+                }
+            });
 
+            wthdWalk.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    one.setVisibility(View.GONE);
+                    two.setVisibility(View.GONE);
+                    ProposalService ps = WalkWalkRevolution.getProposalService();
+                    ps.withdrawProposal(WalkWalkRevolution.getUser().getTeamId());
+                    userProposed = "";
+                }
+            });
+
+            afterBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    screenTitle.setText("No Proposed Walk");
+                    one.setVisibility(View.GONE);
+                    two.setVisibility(View.GONE);
+                }
+            });
+        }
 
     }
 

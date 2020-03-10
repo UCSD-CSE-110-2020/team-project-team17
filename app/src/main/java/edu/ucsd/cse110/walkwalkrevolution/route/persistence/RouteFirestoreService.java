@@ -4,20 +4,25 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import edu.ucsd.cse110.walkwalkrevolution.WalkWalkRevolution;
 import edu.ucsd.cse110.walkwalkrevolution.route.Route;
+import edu.ucsd.cse110.walkwalkrevolution.route.Routes;
 import edu.ucsd.cse110.walkwalkrevolution.user.User;
 
 public class RouteFirestoreService implements RouteService {
@@ -37,9 +42,9 @@ public class RouteFirestoreService implements RouteService {
         routes.add(route.toMap()).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
-                Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
-                route.setRouteId(documentReference.getId());
-                WalkWalkRevolution.getRouteDao().setRoute(route);
+                route.setFirestoreId(documentReference.getId());
+                WalkWalkRevolution.getRouteDao().addRoute(route);
+                Log.d(TAG, WalkWalkRevolution.getRouteDao().getRoute(route.getId()).getFirestoreId());
             }
         }).addOnFailureListener(error -> {
             Log.e(TAG, error.getLocalizedMessage());
@@ -72,40 +77,42 @@ public class RouteFirestoreService implements RouteService {
             builder.setTitle(documentSnapshot.getString(Route.TITLE));
         }
         if(documentSnapshot.contains(Route.LOCATION)){
-            builder.setTitle(documentSnapshot.getString(Route.LOCATION));
+            builder.setLocation(documentSnapshot.getString(Route.LOCATION));
         }
         if(documentSnapshot.contains(Route.NOTES)){
-            builder.setTitle(documentSnapshot.getString(Route.NOTES));
+            builder.setNotes(documentSnapshot.getString(Route.NOTES));
         }
         if(documentSnapshot.contains(Route.DESCRIPTION_TAGS)){
-            builder.setTitle(documentSnapshot.getString(Route.DESCRIPTION_TAGS));
+            builder.setDescription(documentSnapshot.getString(Route.DESCRIPTION_TAGS));
         }
         if(documentSnapshot.contains(Route.USER_ID)){
             builder.setUserId(documentSnapshot.getString(Route.USER_ID));
         }
+        builder.setFirestoreId(documentSnapshot.getId());
         return builder.build();
     }
 
-    //TODO: FIX W/ OBSERVER PATTERN (FIRESTORE IS ASYNC)
     @Override
-    public List<Route> getRoutes(User user) {
-        List<Route> r = new ArrayList<>();
+    public void getRoutes(Routes rList, User user) {
+        Log.d(TAG, "Getting Routes for " +user.getEmail());
         routes.orderBy(Route.TITLE, Query.Direction.ASCENDING).whereEqualTo(Route.USER_ID, user.getEmail())
-                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for(DocumentSnapshot documentSnapshot: queryDocumentSnapshots.getDocuments()){
-                    Route route = snapshotToRoute(documentSnapshot);
-                    r.add(route);
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for(QueryDocumentSnapshot document: task.getResult()) {
+                        Map<String, Object> data = document.getData();
+                        Log.d(TAG, document.getId() + "=>" + data);
+                        Route route = snapshotToRoute(document);
+                        Log.d(TAG, document.getId() + "=>" + route.toMap());
+                        rList.add(route);
+                    }
+                    rList.notifyObservers();
+                } else {
+                    Log.d(TAG, "Failed with: ", task.getException());
                 }
             }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, e.getLocalizedMessage());
-            }
         });
-        return r;
     }
 
 }
