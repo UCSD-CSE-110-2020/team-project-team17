@@ -69,8 +69,11 @@ public class UserFirestoreService implements UserService{
                         WalkWalkRevolution.getUser().setTeamId(t.getTeamId());
                         Log.d(TAG, "Document exists!");
                         //Subscribe to notifications in user's team
-                        String topic = WalkWalkRevolution.getUser().getTeamId().replace("@", "");
-                        WalkWalkRevolution.subscribeToNotificationsTopic(topic);
+                        String teamTopic = WalkWalkRevolution.getUser().getTeamId().replace("@", "");
+                        WalkWalkRevolution.subscribeToNotificationsTopic(teamTopic);
+
+                        String inviteTopic = WalkWalkRevolution.getUser().getEmail().replace("@", ".");
+                        WalkWalkRevolution.subscribeToNotificationsTopic(inviteTopic);
                     }
                 } else {
                     Log.d(TAG, "Failed with: ", task.getException());
