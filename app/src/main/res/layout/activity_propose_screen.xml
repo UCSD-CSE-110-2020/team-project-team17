@@ -28,12 +28,11 @@
     <ScrollView
         android:id="@+id/scv"
         android:layout_width="match_parent"
-
         android:layout_height="wrap_content"
         android:layout_above="@+id/buttons_layout"
         android:layout_below="@+id/title1"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="65dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="80dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -45,7 +44,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
 
             <TextView
                 android:id="@+id/location"
@@ -154,8 +152,82 @@
                 android:layout_marginBottom="15dp"
                 android:text="test"
                 android:textSize="20dp" />
+
+            <LinearLayout
+                android:id="@+id/AccptDeclnLayoutTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/field1"
+                android:layout_marginTop="14dp"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="0dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <TextView
+                    android:id="@+id/Accepted"
+                    android:gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="ACCEPTED" />
+
+                <TextView
+                    android:id="@+id/DeclineBT"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:text="DECLINE                (Bad Time)" />
+
+                <TextView
+                    android:id="@+id/DeclineNAGR"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:text="DECLINE                (Not A Good Route)" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/AccptDeclnLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/buttons_layout"
+                android:layout_below="@+id/AccptDeclnLayoutTitle"
+                android:layout_marginTop="1dp"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="0dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/ACCPTEDlist"
+                    android:layout_width="125dp"
+                    android:layout_height="match_parent" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/DCLNEBTlist"
+                    android:layout_width="129dp"
+                    android:layout_height="match_parent" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/DCLNENAGRlist"
+                    android:layout_width="123dp"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
+
+
+
+
+
 
 
     <LinearLayout
