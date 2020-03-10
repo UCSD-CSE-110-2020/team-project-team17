@@ -8,10 +8,12 @@ import edu.ucsd.cse110.walkwalkrevolution.route.RouteUtils;
 public class MockRouteDao implements BaseRouteDao {
 
     Map<Long, String> persisted;
+    Map<String, String> team;
     long nextId;
 
     public MockRouteDao(){
         this.persisted = new HashMap<>();
+        this.team = new HashMap<>();
         this.nextId = 1;
     }
 
@@ -19,6 +21,15 @@ public class MockRouteDao implements BaseRouteDao {
     public void addRoute(Route route) {
         try {
             persisted.put(route.getId(), RouteUtils.serialize(route));
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
+    public void addTeamRoute(Route route) {
+        try {
+            team.put(route.getFirestoreId(), RouteUtils.serialize(route));
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -36,6 +47,11 @@ public class MockRouteDao implements BaseRouteDao {
             }
         }
         return null;
+    }
+
+    @Override
+    public Map<String, ?> getTeamRoutes() {
+        return new HashMap<>(team);
     }
 
     @Override

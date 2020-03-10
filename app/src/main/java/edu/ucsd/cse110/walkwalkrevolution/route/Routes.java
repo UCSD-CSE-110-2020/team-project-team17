@@ -2,6 +2,7 @@ package edu.ucsd.cse110.walkwalkrevolution.route;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +18,7 @@ public class Routes implements RoutesSubject, TeamObserver {
 
     List<Route> routes;
     List<RoutesObserver> observers;
+    Map<String, Route> overrideTeamRoutes;
     Team team;
 
     public Routes() {
@@ -43,6 +45,9 @@ public class Routes implements RoutesSubject, TeamObserver {
     }
 
     public void add(Route route){
+        if(overrideTeamRoutes.containsKey(route.getFirestoreId())){
+            route.setActivity(overrideTeamRoutes.get(route.getFirestoreId()).getActivity());
+        }
         this.routes.add(route);
     }
 
@@ -81,6 +86,22 @@ public class Routes implements RoutesSubject, TeamObserver {
         });
     }
 
+    public void updateOverridenRoutes() {
+        overrideTeamRoutes = new HashMap<>();
+        Map<String, ?> override = WalkWalkRevolution.getRouteDao().getTeamRoutes();
+        for(Map.Entry<String, ?> entry: override.entrySet()) {
+            try {
+                overrideTeamRoutes.put(entry.getKey(), RouteUtils.deserialize(entry.getValue().toString()));
+            } catch (Exception e) {
+                throw new RuntimeException(e.getMessage());
+            }
+        }
+    }
+
+    public Map<String, Route> getOverridenRoutes(){
+        return new HashMap<>(overrideTeamRoutes);
+    }
+
     public void getLocal(){
         routes = new ArrayList<>();
         getRoutesFromDao();
@@ -89,6 +110,7 @@ public class Routes implements RoutesSubject, TeamObserver {
 
     public void getTeamRoutes(){
         routes = new ArrayList<>();
+        updateOverridenRoutes();
         team = new Team();
         team.subscribe(this);
     }
