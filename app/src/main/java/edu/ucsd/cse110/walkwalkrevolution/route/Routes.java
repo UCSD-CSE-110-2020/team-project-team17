@@ -95,8 +95,13 @@ public class Routes implements RoutesSubject, TeamObserver {
 
     @Override
     public void update(List<User> users){
-        for(User u: users){
-            WalkWalkRevolution.getRouteService().getRoutes(this, u);
+        if(users.size() == 1){
+            notifyObservers();
+        } else {
+            for (User u : users) {
+                if(!u.getEmail().equals(WalkWalkRevolution.getUser().getEmail()))
+                    WalkWalkRevolution.getRouteService().getRoutes(this, u);
+            }
         }
     }
 

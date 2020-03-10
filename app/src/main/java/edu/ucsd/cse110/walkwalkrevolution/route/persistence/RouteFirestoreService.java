@@ -105,13 +105,14 @@ public class RouteFirestoreService implements RouteService {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for(QueryDocumentSnapshot document: task.getResult()) {
+                        Log.d(TAG, user.getEmail() +":"+document.getString(Route.ROUTE));
                         Map<String, Object> data = document.getData();
                         Log.d(TAG, document.getId() + "=>" + data);
                         Route route = snapshotToRoute(document);
                         Log.d(TAG, document.getId() + "=>" + route.toMap());
                         rList.add(route);
+                        rList.notifyObservers();
                     }
-                    rList.notifyObservers();
                 } else {
                     Log.d(TAG, "Failed with: ", task.getException());
                 }
