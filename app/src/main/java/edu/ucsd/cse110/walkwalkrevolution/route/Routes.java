@@ -17,7 +17,7 @@ public class Routes implements RoutesSubject, TeamObserver {
 
     List<Route> routes;
     List<RoutesObserver> observers;
-    Team t;
+    Team team;
 
     public Routes() {
         routes = new ArrayList<>();
@@ -89,8 +89,8 @@ public class Routes implements RoutesSubject, TeamObserver {
 
     public void getTeamRoutes(){
         routes = new ArrayList<>();
-        t = new Team();
-        t.subscribe(this);
+        team = new Team();
+        team.subscribe(this);
     }
 
     @Override
