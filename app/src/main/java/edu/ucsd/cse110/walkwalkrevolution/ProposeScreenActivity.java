@@ -70,7 +70,7 @@ public class ProposeScreenActivity extends AppCompatActivity {
 
 
 
-        if (WalkWalkRevolution.getUser().getEmail().equals(userProposed)) {
+        if (!WalkWalkRevolution.getUser().getEmail().equals(userProposed)) {
             one.setVisibility(View.GONE);
             two.setVisibility(View.GONE);
             title.setText("No Proposed Walk");
