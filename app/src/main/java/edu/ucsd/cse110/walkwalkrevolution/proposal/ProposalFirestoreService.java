@@ -89,7 +89,7 @@ public class ProposalFirestoreService implements ProposalService {
     }
 
     @Override
-    public void withdrawProposal(String teamId) {
+    public void withdrawProposal(String teamId, ProposeScreenActivity act) {
         proposals.whereEqualTo("teamId", teamId)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -105,6 +105,7 @@ public class ProposalFirestoreService implements ProposalService {
                                                 public void onSuccess(Void aVoid) {
                                                     Log.d(TAG, "DocumentSnapshot successfully deleted!");
                                                     proposedRoute = null;
+                                                    act.renderPage();
                                                 }
                                             })
                                             .addOnFailureListener(new OnFailureListener() {
