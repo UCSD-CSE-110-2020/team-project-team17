@@ -2,12 +2,15 @@ package edu.ucsd.cse110.walkwalkrevolution;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -17,6 +20,8 @@ import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessService;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessServiceFactory;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.StepSubject;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.Steps;
+import edu.ucsd.cse110.walkwalkrevolution.invitation.persistence.InvitationService;
+import edu.ucsd.cse110.walkwalkrevolution.invitation.persistence.InvitationServiceFactory;
 import edu.ucsd.cse110.walkwalkrevolution.route.persistence.BaseRouteDao;
 import edu.ucsd.cse110.walkwalkrevolution.route.persistence.RouteService;
 import edu.ucsd.cse110.walkwalkrevolution.route.persistence.RouteServiceFactory;
@@ -41,6 +46,8 @@ public class WalkWalkRevolution extends Application {
     private static RouteServiceFactory routeServiceFactory;
     private static UserService userService;
     private static UserServiceFactory userServiceFactory;
+    private static InvitationService invitationService;
+    private static InvitationServiceFactory invitationServiceFactory;
 
     private static Steps steps = new Steps();
     private static StepSubject stepTracker;
@@ -62,6 +69,7 @@ public class WalkWalkRevolution extends Application {
 
         routeServiceFactory = new RouteServiceFactory();
         userServiceFactory = new UserServiceFactory();
+        invitationServiceFactory = new InvitationServiceFactory();
         WalkWalkRevolution.context = getApplicationContext();
         fitnessServiceFactory = new FitnessServiceFactory();
         routeDao = new RouteSharedPreferenceDao();
@@ -200,6 +208,35 @@ public class WalkWalkRevolution extends Application {
 
     public static UserService getUserService(){
         return WalkWalkRevolution.userService;
+    }
+
+    public static void setInvitationServiceFactory(InvitationServiceFactory isf){
+        WalkWalkRevolution.invitationServiceFactory = isf;
+    }
+
+    public static InvitationServiceFactory getInvitationServiceFactory(){
+        return invitationServiceFactory;
+    }
+
+    public static void createInvitationService() {
+        WalkWalkRevolution.invitationService = invitationServiceFactory.createInvitationService();
+    }
+
+    public static InvitationService getInvitationService() {
+        return invitationService;
+    }
+
+    public static void subscribeToNotificationsTopic(String topic) {
+        FirebaseMessaging.getInstance().subscribeToTopic(topic)
+                .addOnCompleteListener(task -> {
+                            String msg = "Subscribed to notifications";
+                            if (!task.isSuccessful()) {
+                                msg = "Subscribe to notifications failed";
+                            }
+                            Log.d("Notification", msg);
+                            Toast.makeText(WalkWalkRevolution.getContext(), msg, Toast.LENGTH_LONG).show();
+                        }
+                );
     }
 
 }

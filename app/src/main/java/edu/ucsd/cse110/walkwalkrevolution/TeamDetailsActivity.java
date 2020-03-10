@@ -44,7 +44,7 @@ public class TeamDetailsActivity extends AppCompatActivity {
     // Make menu / toolbar the one with an add button.
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.add_button_menu, menu);
+        getMenuInflater().inflate(R.menu.add_or_list_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -55,6 +55,8 @@ public class TeamDetailsActivity extends AppCompatActivity {
 
         if (id == R.id.add_button) {
             teamInviteActivity();
+        } else if (id == R.id.list_button){
+            teamInvitationActivity();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -62,6 +64,11 @@ public class TeamDetailsActivity extends AppCompatActivity {
     public void teamInviteActivity(){
         Intent createRoute = new Intent(this, TeamInviteActivity.class);
         startActivity(createRoute);
+    }
+
+    public void teamInvitationActivity(){
+        Intent seeInvitation = new Intent(this, TeamInvitationActivity.class);
+        startActivity(seeInvitation);
     }
 
 }
