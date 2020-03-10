@@ -22,7 +22,9 @@ public class Route {
     public static final String LOCATION = "location";
     public static final String NOTES = "notes";
     public static final String DESCRIPTION_TAGS = "descriptionTags";
+    public static final String DEFAULT_ID = "not stored in cloud";
 
+    private String routeId;
     private long id;
     @JsonIgnore
     private String userId;
@@ -67,15 +69,18 @@ public class Route {
             return this;
         }
 
+
         public Builder setActivity(Activity activity){
             this.activity = activity;
             return this;
         }
 
+
         public Builder setFirestoreId(String fid){
             this.firestoreId = fid;
             return this;
         }
+
 
         public Route build(){
             Route route = new Route(title, activity != null ? activity : new Walk());
@@ -94,6 +99,7 @@ public class Route {
                  @JsonProperty("descriptionTags") String descriptionTags,
                  @JsonProperty("notes") String notes,
                  @JsonProperty("activity") Activity activity){
+        this.routeId = DEFAULT_ID;
         this.id = id;
         this.firestoreId = firestoreId;
         this.title = title;
@@ -103,17 +109,32 @@ public class Route {
         this.activity = activity;
     }
 
+    public Route(Map<String, Object> map) {
+        this.title = (String) map.get(TITLE);
+        this.descriptionTags = (String) map.get(DESCRIPTION_TAGS);
+        this.location = (String) map.get(LOCATION);
+        this.notes = (String) map.get(NOTES);
+        this.activity = null;
+    }
+
     //Used for testing
     public Route(long id, String title, Activity activity){
+        this.routeId = DEFAULT_ID;
         this.id = id;
         this.title = title;
         this.activity = activity;
     }
 
     public Route(String title, Activity activity){
+        this.routeId = DEFAULT_ID;
         this.id = WalkWalkRevolution.getRouteDao().getNextId();
         this.title = title;
         this.activity = activity;
+    }
+
+    public String getRouteId() { return routeId; }
+    public void setRouteId(String routeId) {
+        this.routeId =  routeId;
     }
 
     public long getId(){
@@ -171,6 +192,7 @@ public class Route {
     public void setNotes(String notes) {
         this.notes = notes;
     }
+
 
     public String getFirestoreId(){
         return this.firestoreId;

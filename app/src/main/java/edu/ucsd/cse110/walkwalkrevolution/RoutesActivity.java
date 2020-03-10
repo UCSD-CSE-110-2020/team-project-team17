@@ -18,6 +18,7 @@ public class RoutesActivity extends AppCompatActivity {
     RoutesAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
 
+
     private Button indiv, team;
 
     @Override
@@ -33,6 +34,7 @@ public class RoutesActivity extends AppCompatActivity {
 
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+
 
         this.indiv = findViewById(R.id.individual_button);
 
@@ -61,7 +63,7 @@ public class RoutesActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.add_button_menu, menu);
+        getMenuInflater().inflate(R.menu.add_propose_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -73,11 +75,21 @@ public class RoutesActivity extends AppCompatActivity {
         if (id == R.id.add_button) {
             createRouteActivity();
         }
+
+        if (id == R.id.proposeScreen_button) {
+            createProposeScreenActivity();
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
     public void createRouteActivity() {
         Intent createRoute = new Intent(this, CreateRouteActivity.class);
         startActivity(createRoute);
+    }
+
+    public void createProposeScreenActivity() {
+        Intent create = new Intent(this, ProposeScreenActivity.class);
+        startActivity(create);
     }
 }

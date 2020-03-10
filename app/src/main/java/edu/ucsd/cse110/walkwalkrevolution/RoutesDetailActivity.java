@@ -2,23 +2,29 @@ package edu.ucsd.cse110.walkwalkrevolution;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import edu.ucsd.cse110.walkwalkrevolution.activity.Activity;
 import edu.ucsd.cse110.walkwalkrevolution.activity.ActivityUtils;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
+import edu.ucsd.cse110.walkwalkrevolution.proposal.ProposalFirestoreService;
+import edu.ucsd.cse110.walkwalkrevolution.proposal.ProposalService;
 import edu.ucsd.cse110.walkwalkrevolution.route.Route;
 import edu.ucsd.cse110.walkwalkrevolution.route.RouteRecycleView.RoutesAdapter;
+
 import edu.ucsd.cse110.walkwalkrevolution.route.RouteUtils;
 
 public class RoutesDetailActivity extends AppCompatActivity {
 
     public static final String ROUTE = "edu.ucsd.cse110.walkwalkrevolution.ROUTE";
     public static final String ROUTE_ID = "edu.ucsd.cse110.walkwalkrevolution.ROUTE_ID";
+
     public Route route;
     public long id;
     public boolean isTeam;
@@ -38,6 +44,7 @@ public class RoutesDetailActivity extends AppCompatActivity {
     private TextView tag5;
 
     private Button start;
+    private Button proposal;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,9 +66,10 @@ public class RoutesDetailActivity extends AppCompatActivity {
         miles = (TextView) findViewById(R.id.numOfMiles);
         duration = (TextView) findViewById(R.id.numOfDur);
         date = (TextView) findViewById(R.id.numOfDay);
-        location = (TextView) findViewById(R.id.location_text);
+        location = (TextView) findViewById(R.id.dontchagne_location_texttt);
         start = (Button) findViewById(R.id.start_preroute);
-        note = (TextView) findViewById(R.id.Note_view);
+        note = (TextView) findViewById(R.id.dont_changeNoteView);
+        proposal = (Button) findViewById(R.id.propose_walk);
 
         tag1 = (TextView) findViewById(R.id.tag1);
         tag2 = (TextView) findViewById(R.id.tag2);
@@ -106,6 +114,25 @@ public class RoutesDetailActivity extends AppCompatActivity {
                 intent.putExtra("route_title", route.getTitle());
                 finish();
                 v.getContext().startActivity(intent);
+            }
+        });
+
+        proposal.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v)
+            {
+                if ( ProposalFirestoreService.proposedRoute == null ) {
+                    Toast.makeText(RoutesDetailActivity.this, "Proposed route", Toast.LENGTH_SHORT).show();
+                    ProposalService ps = WalkWalkRevolution.getProposalService();
+                    String teamId = WalkWalkRevolution.getUser().getTeamId();
+                    ps.addProposal(route, teamId, WalkWalkRevolution.getUser().getEmail());
+
+                    Intent intent = new Intent(v.getContext(), ProposeScreenActivity.class);
+                    finish();
+                    v.getContext().startActivity(intent);
+                }
+                else {
+                    Toast.makeText(RoutesDetailActivity.this, "A route is already proposed", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

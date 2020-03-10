@@ -33,6 +33,7 @@ public class DummyActivity extends AppCompatActivity {
 
         WalkWalkRevolution.createRouteService();
         WalkWalkRevolution.createUserService();
+        WalkWalkRevolution.createProposalService();
 
         mGoogleSignInClient = WalkWalkRevolution.getGoogleSignInClient();
 

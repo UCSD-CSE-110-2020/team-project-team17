@@ -18,6 +18,7 @@
             android:name=".TeamDetailsActivity"
             android:exported="true" />
         <activity android:name=".MockActivity" />
+        <activity android:name=".ProposeScreenActivity" />
         <activity
             android:name=".RoutesActivity"
             android:exported="true" />

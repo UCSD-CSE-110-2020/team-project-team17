@@ -17,6 +17,8 @@ import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessService;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.FitnessServiceFactory;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.StepSubject;
 import edu.ucsd.cse110.walkwalkrevolution.fitness.Steps;
+import edu.ucsd.cse110.walkwalkrevolution.proposal.ProposalService;
+import edu.ucsd.cse110.walkwalkrevolution.proposal.ProposalServiceFactory;
 import edu.ucsd.cse110.walkwalkrevolution.route.persistence.BaseRouteDao;
 import edu.ucsd.cse110.walkwalkrevolution.route.persistence.RouteService;
 import edu.ucsd.cse110.walkwalkrevolution.route.persistence.RouteServiceFactory;
@@ -28,7 +30,6 @@ import edu.ucsd.cse110.walkwalkrevolution.user.persistence.UserServiceFactory;
 import edu.ucsd.cse110.walkwalkrevolution.user.persistence.UserSharedPreferenceDao;
 
 public class WalkWalkRevolution extends Application {
-
     private static FitnessServiceFactory fitnessServiceFactory;
     private static FitnessService fitnessService;
 
@@ -39,6 +40,8 @@ public class WalkWalkRevolution extends Application {
 
     private static RouteService routeService;
     private static RouteServiceFactory routeServiceFactory;
+    private static ProposalService proposalService;
+    private static ProposalServiceFactory proposalServiceFactory;
     private static UserService userService;
     private static UserServiceFactory userServiceFactory;
 
@@ -62,6 +65,7 @@ public class WalkWalkRevolution extends Application {
 
         routeServiceFactory = new RouteServiceFactory();
         userServiceFactory = new UserServiceFactory();
+        proposalServiceFactory = new ProposalServiceFactory();
         WalkWalkRevolution.context = getApplicationContext();
         fitnessServiceFactory = new FitnessServiceFactory();
         routeDao = new RouteSharedPreferenceDao();
@@ -185,6 +189,16 @@ public class WalkWalkRevolution extends Application {
     public static RouteService getRouteService(){
         return WalkWalkRevolution.routeService;
     }
+
+
+    public static void createProposalService(){
+        WalkWalkRevolution.proposalService = WalkWalkRevolution.proposalServiceFactory.createProposalService();
+    }
+
+    public static ProposalService getProposalService(){
+        return WalkWalkRevolution.proposalService;
+    }
+
 
     public static void setUserServiceFactory(UserServiceFactory usf){
         WalkWalkRevolution.userServiceFactory = usf;
