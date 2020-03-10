@@ -67,7 +67,11 @@ public class ProposeScreenActivity extends AppCompatActivity {
         tag5 = (TextView) findViewById(R.id.tag5);
         one = findViewById(R.id.buttons_layout);
         two = findViewById(R.id.buttons_after);
+        renderPage();
+    }
 
+    private ProposeScreenActivity psa = this;
+    public void renderPage() {
 
 
         if (!WalkWalkRevolution.getUser().getEmail().equals(userProposed)) {
@@ -98,7 +102,8 @@ public class ProposeScreenActivity extends AppCompatActivity {
                     one.setVisibility(View.GONE);
                     two.setVisibility(View.GONE);
                     ProposalService ps = WalkWalkRevolution.getProposalService();
-                    ps.withdrawProposal(WalkWalkRevolution.getUser().getTeamId());
+                    ps.withdrawProposal(WalkWalkRevolution.getUser().getTeamId(), psa);
+
                     userProposed = "";
                 }
             });
@@ -112,8 +117,8 @@ public class ProposeScreenActivity extends AppCompatActivity {
                 }
             });
         }
-
     }
+
 
     public void setTags(String string) {
 
