@@ -17,7 +17,7 @@ public class Routes implements RoutesSubject, TeamObserver {
 
     List<Route> routes;
     List<RoutesObserver> observers;
-    Team t;
+    Team team;
 
     public Routes() {
         routes = new ArrayList<>();
@@ -55,7 +55,7 @@ public class Routes implements RoutesSubject, TeamObserver {
         getRoutesFromDao();
         List<Activity> activities = new ArrayList<>();
         for(Route route: routes){
-            if(Long.parseLong(route.getActivity().getDetail(Walk.STEP_COUNT)) > 0){
+            if(route.getActivity().isExist()){
                 activities.add(route.getActivity());
             }
         }
@@ -89,14 +89,19 @@ public class Routes implements RoutesSubject, TeamObserver {
 
     public void getTeamRoutes(){
         routes = new ArrayList<>();
-        t = new Team();
-        t.subscribe(this);
+        team = new Team();
+        team.subscribe(this);
     }
 
     @Override
     public void update(List<User> users){
-        for(User u: users){
-            WalkWalkRevolution.getRouteService().getRoutes(this, u);
+        if(users.size() == 1){
+            notifyObservers();
+        } else {
+            for (User u : users) {
+                if(!u.getEmail().equals(WalkWalkRevolution.getUser().getEmail()))
+                    WalkWalkRevolution.getRouteService().getRoutes(this, u);
+            }
         }
     }
 

@@ -14,6 +14,7 @@ import java.util.Map;
 
 import edu.ucsd.cse110.walkwalkrevolution.activity.Activity;
 import edu.ucsd.cse110.walkwalkrevolution.activity.ActivityUtils;
+import edu.ucsd.cse110.walkwalkrevolution.activity.EmptyActivity;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
 import edu.ucsd.cse110.walkwalkrevolution.route.Route;
 import edu.ucsd.cse110.walkwalkrevolution.route.RouteRecycleView.RoutesAdapter;
@@ -43,7 +44,7 @@ public class RoutesTest {
 
     @Test
     public void hasStoredRoutes(){
-        Activity walk = new Walk();
+        Activity walk = new EmptyActivity();
         walk.setDate(LocalDateTime.of(2020, 1, 1, 0, 0));
         WalkWalkRevolution.getRouteDao().addRoute(new Route(1, "Route 1", walk));
 
@@ -53,17 +54,17 @@ public class RoutesTest {
                 assertEquals(1, currentRecyclerView.getAdapter().getItemCount());
                 RoutesAdapter.ViewHolder holder = (RoutesAdapter.ViewHolder) currentRecyclerView.findViewHolderForLayoutPosition(0);
                 assertEquals("Route 1", holder.routeTitle.getText().toString());
-                assertEquals("0", holder.steps.getText().toString());
-                assertEquals("0", holder.miles.getText().toString());
-                assertEquals("0", holder.duration.getText().toString());
-                assertEquals("01/01", holder.date.getText().toString());
+                assertEquals("", holder.steps.getText().toString());
+                assertEquals("", holder.miles.getText().toString());
+                assertEquals("", holder.duration.getText().toString());
+                assertEquals("", holder.date.getText().toString());
             });
         }
     }
 
     @Test
     public void hasMultipleStoredRoutes(){
-        Activity walk = new Walk();
+        Activity walk = new EmptyActivity();
         walk.setDate(LocalDateTime.of(2020, 1, 1, 0, 0));
         WalkWalkRevolution.getRouteDao().addRoute(new Route(1, "z", walk));
 
@@ -74,7 +75,10 @@ public class RoutesTest {
             put(Walk.DURATION, "5:00");
             put(Activity.DATE, ActivityUtils.timeToString(time));
         }};
-        WalkWalkRevolution.getRouteDao().addRoute(new Route(2, "a", new Walk(data)));
+        Activity walk2 = new Walk(data);
+        walk2.setExist(true);
+
+        WalkWalkRevolution.getRouteDao().addRoute(new Route(2, "a", walk2));
 
 
         try(ActivityScenario<RoutesActivity> scenario = ActivityScenario.launch(RoutesActivity.class)){
@@ -93,10 +97,10 @@ public class RoutesTest {
 
                 holder = (RoutesAdapter.ViewHolder) currentRecyclerView.findViewHolderForLayoutPosition(1);
                 assertEquals("z", holder.routeTitle.getText().toString());
-                assertEquals("0", holder.steps.getText().toString());
-                assertEquals("0", holder.miles.getText().toString());
-                assertEquals("0", holder.duration.getText().toString());
-                assertEquals("01/01", holder.date.getText().toString());
+                assertEquals("", holder.steps.getText().toString());
+                assertEquals("", holder.miles.getText().toString());
+                assertEquals("", holder.duration.getText().toString());
+                assertEquals("", holder.date.getText().toString());
             });
         }
     }

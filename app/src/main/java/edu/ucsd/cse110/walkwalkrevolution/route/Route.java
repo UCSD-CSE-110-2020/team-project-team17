@@ -11,10 +11,11 @@ import java.util.Map;
 
 import edu.ucsd.cse110.walkwalkrevolution.WalkWalkRevolution;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Activity;
+import edu.ucsd.cse110.walkwalkrevolution.activity.EmptyActivity;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
 
 
-@JsonPropertyOrder({"id", "title", "location", "notes", "activity"})
+@JsonPropertyOrder({"id", "firestore", "userId", "title", "location", "notes", "activity"})
 public class Route {
 
     public static final String USER_ID = "userId";
@@ -22,9 +23,9 @@ public class Route {
     public static final String LOCATION = "location";
     public static final String NOTES = "notes";
     public static final String DESCRIPTION_TAGS = "descriptionTags";
+    public static final String ROUTE = "route";
 
     private long id;
-    @JsonIgnore
     private String userId;
     private String title;
     private String location;
@@ -78,7 +79,7 @@ public class Route {
         }
 
         public Route build(){
-            Route route = new Route(title, activity != null ? activity : new Walk());
+            Route route = new Route(title, activity != null ? activity : new EmptyActivity());
             if(location != null) route.setLocation(location);
             if(notes != null) route.setNotes(notes);
             if(description != null) route.setDescriptionTags(description);
@@ -89,6 +90,7 @@ public class Route {
     }
 
     public Route(@JsonProperty("id") long id, @JsonProperty("firestoreId") String firestoreId,
+                 @JsonProperty("userId") String userId,
                  @JsonProperty("title") String title,
                  @JsonProperty("location") String location,
                  @JsonProperty("descriptionTags") String descriptionTags,
@@ -96,6 +98,7 @@ public class Route {
                  @JsonProperty("activity") Activity activity){
         this.id = id;
         this.firestoreId = firestoreId;
+        this.userId = userId;
         this.title = title;
         this.location = location;
         this.descriptionTags = descriptionTags;
@@ -182,16 +185,13 @@ public class Route {
 
     public Map<String, String> toMap(){
         Map<String, String> map = new HashMap<>();
-        if(title != null)
-            map.put(TITLE, title);
-        if(location != null)
-            map.put(LOCATION, location);
-        if(descriptionTags != null)
-            map.put(DESCRIPTION_TAGS, descriptionTags);
-        if(notes != null)
-            map.put(NOTES, notes);
-        if(userId != null)
-            map.put(USER_ID, userId);
+        map.put(TITLE, title);
+        try {
+            map.put(ROUTE, RouteUtils.serialize(this));
+        } catch (Exception e) {
+            throw new RuntimeException(e.getLocalizedMessage());
+        }
+        map.put(USER_ID, userId);
         return map;
     }
 

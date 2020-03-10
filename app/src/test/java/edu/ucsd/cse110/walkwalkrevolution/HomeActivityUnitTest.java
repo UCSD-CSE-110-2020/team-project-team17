@@ -194,6 +194,7 @@ public class HomeActivityUnitTest {
             put(Activity.DATE, ActivityUtils.timeToString(time));
         }};
         Route route = new Route(1, "Route1", new Walk(data));
+        route.getActivity().setExist(true);
         WalkWalkRevolution.getRouteDao().addRoute(route);
 
         LocalDateTime currTime = LocalDateTime.of(2020, 01, 01, 12, 0);
@@ -224,6 +225,7 @@ public class HomeActivityUnitTest {
             put(Activity.DATE, ActivityUtils.timeToString(time));
         }};
         Route route = new Route(1, "Route1", new Walk(data));
+        route.getActivity().setExist(true);
 
         LocalDateTime time2 = LocalDateTime.of(2020, 01, 01, 0, 5);
         Map<String, String> data2 = new HashMap<String, String>() {{
@@ -233,6 +235,7 @@ public class HomeActivityUnitTest {
             put(Activity.DATE, ActivityUtils.timeToString(time2));
         }};
         Route route2 = new Route(2, "Route2", new Walk(data2));
+        route2.getActivity().setExist(true);
 
         WalkWalkRevolution.getRouteDao().addRoute(route);
         WalkWalkRevolution.getRouteDao().addRoute(route2);

@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.walkwalkrevolution.route.persistence;
 
+import android.app.Activity;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -22,6 +23,7 @@ import java.util.Map;
 
 import edu.ucsd.cse110.walkwalkrevolution.WalkWalkRevolution;
 import edu.ucsd.cse110.walkwalkrevolution.route.Route;
+import edu.ucsd.cse110.walkwalkrevolution.route.RouteUtils;
 import edu.ucsd.cse110.walkwalkrevolution.route.Routes;
 import edu.ucsd.cse110.walkwalkrevolution.user.User;
 
@@ -38,58 +40,60 @@ public class RouteFirestoreService implements RouteService {
     }
 
     @Override
-    public void addRoute(Route route) {
-        routes.add(route.toMap()).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+    public void addRoute(Activity activity, Route route) {
+        routes.add(route.toMap()).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override
-            public void onSuccess(DocumentReference documentReference) {
-                route.setFirestoreId(documentReference.getId());
-                WalkWalkRevolution.getRouteDao().addRoute(route);
-                Log.d(TAG, WalkWalkRevolution.getRouteDao().getRoute(route.getId()).getFirestoreId());
-            }
-        }).addOnFailureListener(error -> {
-            Log.e(TAG, error.getLocalizedMessage());
+            public void onComplete(@NonNull Task<DocumentReference> task) {
+                if (task.isSuccessful()) {
+                    route.setFirestoreId(task.getResult().getId());
+                    WalkWalkRevolution.getRouteDao().addRoute(route);
+                    Log.d(TAG, WalkWalkRevolution.getRouteDao().getRoute(route.getId()).getFirestoreId());
+                    activity.finish();
+                } else {
+                    Log.e(TAG, task.getException().getLocalizedMessage());
+                }
+                }
         });
     }
 
-    //TODO: FIX W/ OBSERVER PATTERN (FIRESTORE IS ASYNC)
     @Override
-    public Route getRoute(String routeId) {
-        List<Route> r = new ArrayList<>();
-        routes.document(routeId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                Route route = snapshotToRoute(documentSnapshot);
-                Log.d(TAG, "Route retrieved: " + route.getTitle());
-                r.add(route);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
+    public void updateRoute(Route route) {
+        Log.d(TAG, route.getFirestoreId());
+        Map<String, String> data = route.toMap();
+        routes.document(route.getFirestoreId()).set(data).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.d(TAG, e.getLocalizedMessage());
             }
         });
-        return r.isEmpty() ? null : r.get(0);
     }
 
     private Route snapshotToRoute(DocumentSnapshot documentSnapshot){
-        Route.Builder builder = new Route.Builder();
-        if(documentSnapshot.contains(Route.TITLE)){
-            builder.setTitle(documentSnapshot.getString(Route.TITLE));
+//        Route.Builder builder = new Route.Builder();
+//        if(documentSnapshot.contains(Route.TITLE)){
+//            builder.setTitle(documentSnapshot.getString(Route.TITLE));
+//        }
+//        if(documentSnapshot.contains(Route.LOCATION)){
+//            builder.setLocation(documentSnapshot.getString(Route.LOCATION));
+//        }
+//        if(documentSnapshot.contains(Route.NOTES)){
+//            builder.setNotes(documentSnapshot.getString(Route.NOTES));
+//        }
+//        if(documentSnapshot.contains(Route.DESCRIPTION_TAGS)){
+//            builder.setDescription(documentSnapshot.getString(Route.DESCRIPTION_TAGS));
+//        }
+//        if(documentSnapshot.contains(Route.USER_ID)){
+//            builder.setUserId(documentSnapshot.getString(Route.USER_ID));
+//        }
+        Route route;
+        try {
+            route = RouteUtils.deserialize(documentSnapshot.getString(Route.ROUTE));
+        } catch (Exception e) {
+            throw new RuntimeException(e.getLocalizedMessage());
         }
-        if(documentSnapshot.contains(Route.LOCATION)){
-            builder.setLocation(documentSnapshot.getString(Route.LOCATION));
-        }
-        if(documentSnapshot.contains(Route.NOTES)){
-            builder.setNotes(documentSnapshot.getString(Route.NOTES));
-        }
-        if(documentSnapshot.contains(Route.DESCRIPTION_TAGS)){
-            builder.setDescription(documentSnapshot.getString(Route.DESCRIPTION_TAGS));
-        }
-        if(documentSnapshot.contains(Route.USER_ID)){
-            builder.setUserId(documentSnapshot.getString(Route.USER_ID));
-        }
-        builder.setFirestoreId(documentSnapshot.getId());
-        return builder.build();
+        route.setUserId(documentSnapshot.getString(Route.USER_ID));
+        route.setFirestoreId(documentSnapshot.getId());
+        return route;
     }
 
     @Override
@@ -101,6 +105,7 @@ public class RouteFirestoreService implements RouteService {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for(QueryDocumentSnapshot document: task.getResult()) {
+                        Log.d(TAG, user.getEmail() +":"+document.getString(Route.ROUTE));
                         Map<String, Object> data = document.getData();
                         Log.d(TAG, document.getId() + "=>" + data);
                         Route route = snapshotToRoute(document);

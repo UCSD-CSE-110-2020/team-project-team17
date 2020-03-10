@@ -19,6 +19,7 @@ import java.util.Map;
 import edu.ucsd.cse110.walkwalkrevolution.DescriptionTags.DescriptionGroup;
 import edu.ucsd.cse110.walkwalkrevolution.DescriptionTags.DescriptionTagsListAdapter;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Activity;
+import edu.ucsd.cse110.walkwalkrevolution.activity.EmptyActivity;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
 import edu.ucsd.cse110.walkwalkrevolution.route.Route;
 
@@ -62,8 +63,9 @@ public class CreateRouteActivity extends AppCompatActivity {
                         }};
                         activity = new Walk(data);
                         activity.setDate();
+                        activity.setExist(true);
                     } else {
-                        activity = new Walk();
+                        activity = new EmptyActivity();
                     }
                     // Initialize route and fill in fields.
 
@@ -87,8 +89,7 @@ public class CreateRouteActivity extends AppCompatActivity {
                     Route route = builder.build();
 
                     WalkWalkRevolution.getRouteDao().addRoute(route);
-                    WalkWalkRevolution.getRouteService().addRoute(route);
-                    finish();
+                    WalkWalkRevolution.getRouteService().addRoute(CreateRouteActivity.this, route);
                 }
             }
         });

@@ -2,6 +2,7 @@ package edu.ucsd.cse110.walkwalkrevolution.route.persistence;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +28,7 @@ public class RouteSharedPreferenceDao implements BaseRouteDao {
 
         try {
             jsonString = RouteUtils.serialize(route);
+            Log.d("RouteSP", jsonString);
         } catch (Exception e) {
             throw new RuntimeException("Invalid Route");
         }

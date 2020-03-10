@@ -20,9 +20,11 @@ import cucumber.api.java.en.When;
 import edu.ucsd.cse110.walkwalkrevolution.RoutesActivity;
 import edu.ucsd.cse110.walkwalkrevolution.R;
 import edu.ucsd.cse110.walkwalkrevolution.WalkWalkRevolution;
+import edu.ucsd.cse110.walkwalkrevolution.activity.EmptyActivity;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
 import edu.ucsd.cse110.walkwalkrevolution.route.Route;
 import edu.ucsd.cse110.walkwalkrevolution.route.RouteRecycleView.RoutesAdapter;
+import edu.ucsd.cse110.walkwalkrevolution.route.persistence.MockRouteDao;
 import edu.ucsd.cse110.walkwalkrevolution.route.persistence.RouteService;
 import edu.ucsd.cse110.walkwalkrevolution.route.persistence.RouteServiceFactory;
 import edu.ucsd.cse110.walkwalkrevolution.user.User;
@@ -57,6 +59,8 @@ public class TeamRouteSteps {
     private UserService userService;
     private UserServiceFactory userServiceFactory;
 
+    private User self;
+
     public TeamRouteSteps() {
     }
 
@@ -78,6 +82,14 @@ public class TeamRouteSteps {
 
         WalkWalkRevolution.createUserService();
         WalkWalkRevolution.createRouteService();
+
+
+        self = new User();
+        self.setEmail("dummyEmail");
+
+        WalkWalkRevolution.setRouteDao(new MockRouteDao());
+        WalkWalkRevolution.setUser(self);
+
 
         Intents.init();
         nameIdMap.put("team", "team_button");
@@ -116,16 +128,22 @@ public class TeamRouteSteps {
 
     @And("^there's a route with the title (.*)")
     public void thereExistsARoute(String title) throws Throwable {
+        Route route = new Route(title, new EmptyActivity());
+        route.setUserId("xxxx");
+        route.setFirestoreId(title);
+
+        User user = new User(1,1,"a","b");
+
         doAnswer(invocation -> {
             RecyclerView recyclerView = (RecyclerView)
                     mActivityTestRule.getActivity().findViewById(R.id.routes);
-            ((RoutesAdapter)recyclerView.getAdapter()).getRoutes().update(Arrays.asList(new User()));
+            ((RoutesAdapter)recyclerView.getAdapter()).getRoutes().update(Arrays.asList(user, self));
             return null;
         }).when(userService).getTeam(any(), any());
         doAnswer(invocation -> {
             RecyclerView recyclerView = (RecyclerView)
                     mActivityTestRule.getActivity().findViewById(R.id.routes);
-            ((RoutesAdapter)recyclerView.getAdapter()).getRoutes().add(new Route(title, new Walk()));
+            ((RoutesAdapter)recyclerView.getAdapter()).getRoutes().add(route);
             ((RoutesAdapter)recyclerView.getAdapter()).getRoutes().notifyObservers();
             return null;
         }).when(routeService).getRoutes(any(), any());
