@@ -9,6 +9,7 @@ import edu.ucsd.cse110.walkwalkrevolution.user.User;
 public interface ProposalService {
 
     void addProposal(Route route, String teamId, String userId);
+    void editProposal(Route route, String teamId, String userId, boolean scheduled);
     void withdrawProposal(String teamId);
     void getProposalRoute(String teamId, ProposeScreenActivity act);
    // Route getProposal(User user);
