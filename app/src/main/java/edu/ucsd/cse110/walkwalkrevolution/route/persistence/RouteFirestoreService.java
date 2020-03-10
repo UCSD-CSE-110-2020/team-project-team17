@@ -111,8 +111,8 @@ public class RouteFirestoreService implements RouteService {
                         Route route = snapshotToRoute(document);
                         Log.d(TAG, document.getId() + "=>" + route.toMap());
                         rList.add(route);
-                        rList.notifyObservers();
                     }
+                    rList.notifyObservers();
                 } else {
                     Log.d(TAG, "Failed with: ", task.getException());
                 }

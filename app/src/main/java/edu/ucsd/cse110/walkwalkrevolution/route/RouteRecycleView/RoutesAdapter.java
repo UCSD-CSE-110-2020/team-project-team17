@@ -142,9 +142,7 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
     }
 
     public void update(List<Route> rList) {
-        for(Route r: rList){
-            this.rList.add(r);
-        }
+        this.rList = new ArrayList<>(rList);
         notifyDataSetChanged();
     }
 
