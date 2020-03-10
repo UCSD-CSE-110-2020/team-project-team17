@@ -3,6 +3,7 @@ package edu.ucsd.cse110.walkwalkrevolution;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -100,8 +101,26 @@ public class HomeActivity extends AppCompatActivity implements Observer {
             WalkWalkRevolution.getUserService().refresh();
         }
 
+        // TODO move this to wherever it should live
+        mapButton();
     }
 
+    public void mapButton(){
+        Button map_button = findViewById(R.id.btn_map_demo);
+
+        map_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + Uri.encode("UCSD Price Center"));
+
+                //  Uri gmmIntentUri = Uri.parse("google.navigation:q=" + Uri.encode("UCSD Price Center")); Directions to query location
+
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                startActivity(mapIntent);
+            }
+        });
+    }
     public void createRouteActivity() {
         Intent createRoute = new Intent(this, CreateRouteActivity.class);
         startActivity(createRoute);
