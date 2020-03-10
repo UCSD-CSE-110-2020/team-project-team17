@@ -181,6 +181,8 @@ public class WalkActivity extends AppCompatActivity implements Observer {
     }
 
     public void saveWalk(Route route) throws Exception {
+        String uid = route.getUserId();
+
         Map<String, String> data = new HashMap<String, String>(){{
             put(Walk.STEP_COUNT, steps.getText().toString());
             put(Walk.MILES, miles.getText().toString());
@@ -193,8 +195,12 @@ public class WalkActivity extends AppCompatActivity implements Observer {
 
         route.setActivity(activity);
 
-        WalkWalkRevolution.getRouteDao().addRoute(route);
-        WalkWalkRevolution.getRouteService().updateRoute(route);
+        if(WalkWalkRevolution.getUser().getEmail().equals(uid)) {
+            WalkWalkRevolution.getRouteDao().addRoute(route);
+            WalkWalkRevolution.getRouteService().updateRoute(route);
+        } else {
+            WalkWalkRevolution.getRouteDao().addTeamRoute(route);
+        }
 
         Intent i = new Intent(this, RoutesDetailActivity.class);
         String serialized = RouteUtils.serialize(route);

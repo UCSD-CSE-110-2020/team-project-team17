@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import edu.ucsd.cse110.walkwalkrevolution.R;
@@ -138,11 +139,17 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
 
     public void add(Route route){
         this.rList.add(route);
+        Collections.sort(rList, (a, b) -> {
+            return a.getTitle().compareTo(b.getTitle());
+        });
         notifyDataSetChanged();
     }
 
     public void update(List<Route> rList) {
         this.rList = new ArrayList<>(rList);
+        Collections.sort(rList, (a, b) -> {
+            return a.getTitle().compareTo(b.getTitle());
+        });
         notifyDataSetChanged();
     }
 

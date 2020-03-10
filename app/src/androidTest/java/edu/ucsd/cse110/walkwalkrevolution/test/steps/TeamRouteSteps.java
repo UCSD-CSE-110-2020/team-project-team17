@@ -20,6 +20,7 @@ import cucumber.api.java.en.When;
 import edu.ucsd.cse110.walkwalkrevolution.RoutesActivity;
 import edu.ucsd.cse110.walkwalkrevolution.R;
 import edu.ucsd.cse110.walkwalkrevolution.WalkWalkRevolution;
+import edu.ucsd.cse110.walkwalkrevolution.activity.Activity;
 import edu.ucsd.cse110.walkwalkrevolution.activity.EmptyActivity;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
 import edu.ucsd.cse110.walkwalkrevolution.route.Route;
@@ -147,6 +148,28 @@ public class TeamRouteSteps {
             ((RoutesAdapter)recyclerView.getAdapter()).getRoutes().notifyObservers();
             return null;
         }).when(routeService).getRoutes(any(), any());
+    }
+
+    @And("^the list contains a route with (\\d+) steps")
+    public void containsRouteWithSteps(int steps){
+        assertNotEquals(0, getRVCount());
+        onView(withId(R.id.routes)).check(matches(hasDescendant(withText(Integer.toString(steps)))));
+    }
+
+    @And("^the user walked (\\d+) steps with (.*)")
+    public void recordOwnStep(int steps, String id){
+        Activity activity = new Walk();
+        activity.setDetail(Walk.STEP_COUNT, Integer.toString(steps));
+        System.out.println(id);
+        Route r = new Route(id, activity);
+        r.setFirestoreId(id);
+        WalkWalkRevolution.getRouteDao().addTeamRoute(r);
+
+        RecyclerView recyclerView = (RecyclerView)
+                mActivityTestRule.getActivity().findViewById(R.id.routes);
+        ((RoutesAdapter)recyclerView.getAdapter()).getRoutes().updateOverridenRoutes();
+        System.out.println(((RoutesAdapter)recyclerView.getAdapter()).getRoutes()
+                .getOverridenRoutes().get(id).toMap());
     }
 
     @And("^the user clicks the (.*) button$")
