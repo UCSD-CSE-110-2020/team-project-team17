@@ -230,7 +230,7 @@ public class Route {
 
     public enum Response {
         ACCEPT,
-        DECLINE_TIME,
+        DECLINE_BAD_TIME,
         DECLINE_BAD_ROUTE;
     }
 }

@@ -91,9 +91,7 @@ public class ProposalFirestoreService implements ProposalService {
             Log.e(TAG, error.getLocalizedMessage());
         });
     }
-
-
-
+/*
     @Override
     public void editProposal(Route route, String teamId, String userId, boolean scheduled) {
         proposals.whereEqualTo("teamId", teamId)
@@ -131,6 +129,51 @@ public class ProposalFirestoreService implements ProposalService {
                 });
     }
 
+ */
+
+    @Override
+    public void editProposal(Route route, String response, String teamId, String userId, boolean scheduled) {
+        proposals.whereEqualTo("teamId", teamId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if (document.exists()) {
+                                    Map<String, Object> data = new HashMap<>();
+                                    Map<String, String> newResponses = route.getResponses();
+                                    if (newResponses.containsKey(userId)) {
+                                        newResponses.replace(userId, response);
+                                    } else {
+                                        newResponses.put(userId, response);
+                                    }
+                                    route.setResponses(newResponses);
+                                    data.put(userId, response);
+                                    data.put("scheduled", scheduled);
+                                    proposals.document(document.getId()).set(data, SetOptions.merge())
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    Log.d(TAG, "DocumentSnapshot successfully edited!");
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Log.w(TAG, "Error editing document", e);
+                                                }
+                                            });
+                                } else {
+                                    Log.d(TAG, "No such document");
+                                }
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
 
     @Override
     public void withdrawProposal(String teamId) {
@@ -193,5 +236,4 @@ public class ProposalFirestoreService implements ProposalService {
                 });
         return response;
     }
-
 }
