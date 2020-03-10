@@ -142,6 +142,7 @@ public class RoutesDetailActivity extends AppCompatActivity {
         !route.getUserId().equals(WalkWalkRevolution.getUser().getEmail()) &&
                 WalkWalkRevolution.getRouteDao().walkedTeamRoute(route)){
             walked.setBackgroundResource(R.drawable.img_green_check);
+            walked.setVisibility(View.VISIBLE);
             isWalked = true;
         }
 
