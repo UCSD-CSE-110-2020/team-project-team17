@@ -66,9 +66,9 @@ public class RoutesDetailActivity extends AppCompatActivity {
         miles = (TextView) findViewById(R.id.numOfMiles);
         duration = (TextView) findViewById(R.id.numOfDur);
         date = (TextView) findViewById(R.id.numOfDay);
-        location = (TextView) findViewById(R.id.location_text);
+        location = (TextView) findViewById(R.id.dontchagne_location_texttt);
         start = (Button) findViewById(R.id.start_preroute);
-        note = (TextView) findViewById(R.id.Note_view);
+        note = (TextView) findViewById(R.id.dont_changeNoteView);
         proposal = (Button) findViewById(R.id.propose_walk);
 
         tag1 = (TextView) findViewById(R.id.tag1);
