@@ -28,7 +28,6 @@ import edu.ucsd.cse110.walkwalkrevolution.user.User;
 
 
 public class ProposalFirestoreService implements ProposalService {
-    public static String activeProposal = "";
     public static Route proposedRoute = null;
 
     private CollectionReference proposals;
@@ -52,26 +51,16 @@ public class ProposalFirestoreService implements ProposalService {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                                DocumentReference docRef = db.collection(ROUTE_KEY).document((String) document.get("routeId"));
-                                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                        if (task.isSuccessful()) {
-                                            DocumentSnapshot document = task.getResult();
-                                            if (document.exists()) {
-                                                Log.d(TAG, "DocumentSnapshot data: ");
-
-                                                proposedRoute = new Route(document.getData());
-                                                act.displayRouteDetail(proposedRoute);
-                                            } else {
-                                                Log.d(TAG, "No such document");
-                                            }
-                                        } else {
-                                            Log.d(TAG, "get failed with ", task.getException());
-                                        }
-                                    }
-                                });
+                                if (document.exists()) {
+                                    Log.d(TAG, document.getId() + " => " + document.getData());
+                                    act.scheduled = (Boolean) document.get("scheduled");
+                                    act.userProposed = (String) document.get("userId");
+                                    proposedRoute = new Route((Map<String, Object>) document.get("route"));
+                                    act.displayRouteDetail(proposedRoute);
+                                }
+                                else {
+                                    Log.d(TAG, "No such document");
+                                }
                             }
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
@@ -81,17 +70,17 @@ public class ProposalFirestoreService implements ProposalService {
     }
 
     @Override
-    public void addProposal(String routeId, String userId) {
-        CollectionReference routes = db.collection(ROUTE_KEY);
+    public void addProposal(Route route, String teamId, String userId) {
         Map<String, Object> data = new HashMap<>();
-        data.put("routeId", routeId);
-        data.put("teamId", userId);
+        data.put("route", route.toMap());
+        data.put("teamId", teamId);
+        data.put("userId", userId);
+        data.put("scheduled", false);
         proposals.add(data)
             .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
                 Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
-                activeProposal = documentReference.getId();
             }
         })
                 .addOnFailureListener(error -> {
@@ -100,23 +89,39 @@ public class ProposalFirestoreService implements ProposalService {
     }
 
     @Override
-    public void withdrawProposal() {
-        proposals.document(activeProposal)
-                .delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
+    public void withdrawProposal(String teamId) {
+        proposals.whereEqualTo("teamId", teamId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
-                        activeProposal = "";
-                        proposedRoute = null;
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error deleting document", e);
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if (document.exists()) {
+                                    proposals.document(document.getId())
+                                            .delete()
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                                                    proposedRoute = null;
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Log.w(TAG, "Error deleting document", e);
+                                                }
+                                            });
+                                }
+                                else {
+                                    Log.d(TAG, "No such document");
+                                }
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
                     }
                 });
     }
-
 }

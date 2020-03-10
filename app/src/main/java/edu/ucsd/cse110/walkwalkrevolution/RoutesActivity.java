@@ -18,7 +18,8 @@ public class RoutesActivity extends AppCompatActivity {
     RoutesAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
 
-    Button yourRoutes, teammateRoutes;
+
+    private Button indiv, team;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,31 +35,30 @@ public class RoutesActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        yourRoutes = findViewById(R.id.your_routes);
-        teammateRoutes = findViewById(R.id.teammate_routes);
 
+        this.indiv = findViewById(R.id.individual_button);
 
-        ///*
-        yourRoutes.setOnClickListener(new View.OnClickListener() {
+        this.indiv.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-               recyclerView.setVisibility(View.VISIBLE);
+            public void onClick(View v) {
+                adapter.updateRoute();
             }
         });
 
-        teammateRoutes.setOnClickListener(new View.OnClickListener() {
+        this.team = findViewById(R.id.team_button);
+
+        this.team.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                recyclerView.setVisibility(View.GONE);
+            public void onClick(View v) {
+                adapter.updateTeam();
             }
         });
-
     }
 
     @Override
     protected void onStart(){
         super.onStart();
-        adapter.updateList();
+        adapter.updateRoute();
     }
 
     @Override

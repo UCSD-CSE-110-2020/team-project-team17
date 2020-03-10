@@ -31,6 +31,7 @@ public class Route {
     private String title;
     private String location;
     private String descriptionTags;
+    private String firestoreId;
     private Activity activity;
     private String notes;
 
@@ -40,6 +41,7 @@ public class Route {
         String notes;
         String description;
         String userId;
+        String firestoreId;
         Activity activity;
 
         public Builder setTitle(String title){
@@ -74,23 +76,32 @@ public class Route {
         }
 
 
+        public Builder setFirestoreId(String fid){
+            this.firestoreId = fid;
+            return this;
+        }
+
+
         public Route build(){
             Route route = new Route(title, activity != null ? activity : new Walk());
             if(location != null) route.setLocation(location);
-            if(notes != null) route.setLocation(notes);
+            if(notes != null) route.setNotes(notes);
             if(description != null) route.setDescriptionTags(description);
             if(userId != null) route.setUserId(userId);
+            if(firestoreId != null) route.setFirestoreId(firestoreId);
             return route;
         }
     }
 
-    public Route(@JsonProperty("id") long id, @JsonProperty("title") String title,
+    public Route(@JsonProperty("id") long id, @JsonProperty("firestoreId") String firestoreId,
+                 @JsonProperty("title") String title,
                  @JsonProperty("location") String location,
                  @JsonProperty("descriptionTags") String descriptionTags,
                  @JsonProperty("notes") String notes,
                  @JsonProperty("activity") Activity activity){
         this.routeId = DEFAULT_ID;
         this.id = id;
+        this.firestoreId = firestoreId;
         this.title = title;
         this.location = location;
         this.descriptionTags = descriptionTags;
@@ -183,7 +194,13 @@ public class Route {
     }
 
 
+    public String getFirestoreId(){
+        return this.firestoreId;
+    }
 
+    public void setFirestoreId(String fid){
+        this.firestoreId = fid;
+    }
 
     public Map<String, String> toMap(){
         Map<String, String> map = new HashMap<>();

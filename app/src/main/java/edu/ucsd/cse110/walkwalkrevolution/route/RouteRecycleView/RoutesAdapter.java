@@ -9,6 +9,9 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.ucsd.cse110.walkwalkrevolution.R;
 import edu.ucsd.cse110.walkwalkrevolution.RoutesActivity;
 import edu.ucsd.cse110.walkwalkrevolution.RoutesDetailActivity;
@@ -16,16 +19,26 @@ import edu.ucsd.cse110.walkwalkrevolution.activity.Activity;
 import edu.ucsd.cse110.walkwalkrevolution.activity.ActivityUtils;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
 import edu.ucsd.cse110.walkwalkrevolution.route.Route;
+import edu.ucsd.cse110.walkwalkrevolution.route.RouteUtils;
 import edu.ucsd.cse110.walkwalkrevolution.route.Routes;
+import edu.ucsd.cse110.walkwalkrevolution.route.RoutesObserver;
 
-public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder> {
+public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder> implements RoutesObserver {
 
+    private List<Route> rList;
     private Routes routes;
-    public static final String EXTRA_TEXT = "edu.ucsd.cse110.walkwalkrevolution.EXTRA_TEXT";
+    public static final String ROUTE = "ROUTE";
+    public static final String TEAM = "TEAM";
     //private Context context;
+
+    private boolean isTeam;
 
     public RoutesAdapter() {
         routes = new Routes();
+        routes.subscribe(this);
+        rList = new ArrayList<>();
+        this.isTeam = false;
+        updateRoute();
         //this.context = context;
     }
 
@@ -66,20 +79,25 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
             @Override
             public void onClick(View view) {
                 int index = RoutesActivity.recyclerView.getChildAdapterPosition(view);
-                Route item = routes.get(index);
+                Route item = rList.get(index);
 
-
-                openRoutesDetailActivity(view, item);
+                //Toast.makeText(context, item.getTitle(), Toast.LENGTH_LONG).show();
+                try {
+                    openRoutesDetailActivity(view, item);
+                } catch (Exception e){
+                    throw new RuntimeException(e.getLocalizedMessage());
+                }
 
             }
         });
         return viewHolder;
     }
 
-    public void openRoutesDetailActivity(View view, Route item) {
+    public void openRoutesDetailActivity(View view, Route item) throws Exception{
         Intent intent = new Intent(view.getContext(), RoutesDetailActivity.class);
-        long id = item.getId();
-        intent.putExtra(EXTRA_TEXT, id);
+        String serialized = RouteUtils.serialize(item);
+        intent.putExtra(ROUTE, serialized);
+        intent.putExtra(TEAM, isTeam);
         view.getContext().startActivity(intent);
     }
 
@@ -87,34 +105,65 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
     @Override
     public void onBindViewHolder(RoutesAdapter.ViewHolder viewHolder, int position) {
         // Get the data model based on position
-        Route route = routes.get(position);
+        Route route = rList.get(position);
 
         // Set item views based on your views and data model
         TextView routeTitle = viewHolder.routeTitle;
         routeTitle.setText(route.getTitle());
 
         TextView steps = viewHolder.steps;
-        steps.setText(route.getActivity().getDetail(Walk.STEP_COUNT));
-
         TextView miles = viewHolder.miles;
-        miles.setText(route.getActivity().getDetail(Walk.MILES));
-
         TextView duration = viewHolder.duration;
-        duration.setText(route.getActivity().getDetail(Walk.DURATION));
-
         TextView date = viewHolder.date;
-        date.setText(ActivityUtils.timeToMonthDay(
-                ActivityUtils.stringToTime(route.getActivity().getDetail(Activity.DATE))));
+
+        if(!isTeam) {
+            steps.setText(route.getActivity().getDetail(Walk.STEP_COUNT));
+
+            miles.setText(route.getActivity().getDetail(Walk.MILES));
+
+            duration.setText(route.getActivity().getDetail(Walk.DURATION));
+
+            date.setText(ActivityUtils.timeToMonthDay(
+                    ActivityUtils.stringToTime(route.getActivity().getDetail(Activity.DATE))));
+        } else {
+            steps.setText("");
+            miles.setText("");
+            duration.setText("");
+            date.setText("");
+        }
     }
 
     // Returns the total count of items in the list
     @Override
     public int getItemCount() {
-        return routes.getSize();
+        return rList.size();
     }
 
-    public void updateList() {
-        routes = new Routes();
+    public void add(Route route){
+        this.rList.add(route);
         notifyDataSetChanged();
+    }
+
+    public void update(List<Route> rList) {
+        for(Route r: rList){
+            this.rList.add(r);
+        }
+        notifyDataSetChanged();
+    }
+
+    public void updateTeam() {
+        this.isTeam = true;
+        rList = new ArrayList<>();
+        routes.getTeamRoutes();
+    }
+
+    public void updateRoute(){
+        this.isTeam = false;
+        rList = new ArrayList<>();
+        routes.getLocal();
+    }
+
+    public Routes getRoutes(){
+        return routes;
     }
 }
