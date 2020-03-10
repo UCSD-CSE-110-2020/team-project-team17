@@ -22,8 +22,6 @@ import edu.ucsd.cse110.walkwalkrevolution.route.RouteRecycleView.RoutesAdapter;
 public class ProposeScreenActivity extends AppCompatActivity {
 
     public static Boolean scheduled = false;
-    public static String userProposed = "";
-
     Button schdWalk, wthdWalk, afterBtn;
     TextView screenTitle;
     View one, two;
@@ -42,6 +40,7 @@ public class ProposeScreenActivity extends AppCompatActivity {
 
     private ScrollView sc;
 
+    private ProposalService ps;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,9 +48,8 @@ public class ProposeScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_propose_screen);
 
         screenTitle = findViewById(R.id.pscreen_title);
-        ProposalService ps = WalkWalkRevolution.getProposalService();
+        ps = WalkWalkRevolution.getProposalService();
         ps.getProposalRoute(WalkWalkRevolution.getUser().getTeamId(), this);
-
 
         schdWalk = findViewById(R.id.schedule_walk);
         wthdWalk = findViewById(R.id.withdraw_walk);
@@ -73,8 +71,7 @@ public class ProposeScreenActivity extends AppCompatActivity {
     private ProposeScreenActivity psa = this;
     public void renderPage() {
 
-
-        if (!WalkWalkRevolution.getUser().getEmail().equals(userProposed)) {
+        if (ProposalFirestoreService.userProposed.equals("")) {
             one.setVisibility(View.GONE);
             two.setVisibility(View.GONE);
             title.setText("No Proposed Walk");
@@ -86,13 +83,46 @@ public class ProposeScreenActivity extends AppCompatActivity {
             tag5.setVisibility(View.GONE);
             note.setVisibility(View.GONE);
         }
+        else if (!WalkWalkRevolution.getUser().getEmail().equals(ProposalFirestoreService.userProposed)) {
+            one.setVisibility(View.GONE);
+            two.setVisibility(View.GONE);
+
+            location.setVisibility(View.VISIBLE);
+            tag1.setVisibility(View.VISIBLE);
+            tag2.setVisibility(View.VISIBLE);
+            tag3.setVisibility(View.VISIBLE);
+            tag4.setVisibility(View.VISIBLE);
+            tag5.setVisibility(View.VISIBLE);
+            note.setVisibility(View.VISIBLE);
+        }
         else {
+            location.setVisibility(View.VISIBLE);
+            tag1.setVisibility(View.VISIBLE);
+            tag2.setVisibility(View.VISIBLE);
+            tag3.setVisibility(View.VISIBLE);
+            tag4.setVisibility(View.VISIBLE);
+            tag5.setVisibility(View.VISIBLE);
+            note.setVisibility(View.VISIBLE);
+
+
+            if (ProposalFirestoreService.scheduled) {
+                one.setVisibility(View.GONE);
+                two.setVisibility(View.VISIBLE);
+            }
+            else {
+                one.setVisibility(View.VISIBLE);
+                two.setVisibility(View.GONE);
+            }
+
             schdWalk.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     screenTitle.setText("Scheduled Walk");
                     one.setVisibility(View.GONE);
                     two.setVisibility(View.VISIBLE);
+                    ProposalFirestoreService.scheduled = true;
+                    ps.scheduleWalk(ProposalFirestoreService.proposedRoute, WalkWalkRevolution.getUser().getTeamId(), WalkWalkRevolution.getUser().getEmail());
+
                 }
             });
 
@@ -103,8 +133,7 @@ public class ProposeScreenActivity extends AppCompatActivity {
                     two.setVisibility(View.GONE);
                     ProposalService ps = WalkWalkRevolution.getProposalService();
                     ps.withdrawProposal(WalkWalkRevolution.getUser().getTeamId(), psa);
-
-                    userProposed = "";
+                    ProposalFirestoreService.userProposed = "";
                 }
             });
 
@@ -153,13 +182,13 @@ public class ProposeScreenActivity extends AppCompatActivity {
     }
 
     public void displayRouteDetail(Route route) {
-
         if (route != null) {
             title.setText(route.getTitle());
             location.setText(route.getLocation());
             setTags(route.getDescriptionTags());
             note.setText(route.getNotes());
         }
+        renderPage();
     }
 
 
