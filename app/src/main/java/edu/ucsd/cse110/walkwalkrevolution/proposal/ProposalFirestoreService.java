@@ -34,6 +34,8 @@ public class ProposalFirestoreService implements ProposalService {
     private CollectionReference proposals;
     private FirebaseFirestore db;
 
+    String response;
+
     private final String TAG = "ProposalFirestoreService";
     private final String PROPOSAL_KEY = "proposal";
     private final String ROUTE_KEY = "route";
@@ -162,5 +164,30 @@ public class ProposalFirestoreService implements ProposalService {
                         }
                     }
                 });
+    }
+
+    @Override
+    public String getResponse(String teamId, String userEmail) {
+        proposals.whereEqualTo("teamId", teamId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()) {
+                            for(QueryDocumentSnapshot document: task.getResult()) {
+                                if (document.exists()) {
+                                    response = document.getString(userEmail);
+                                }
+                                else {
+                                    Log.d(TAG, "No such document");
+                                }
+                            }
+                        }
+                        else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+        return response;
     }
 }
