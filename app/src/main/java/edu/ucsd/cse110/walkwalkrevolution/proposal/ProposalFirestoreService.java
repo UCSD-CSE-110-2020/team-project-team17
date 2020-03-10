@@ -92,6 +92,8 @@ public class ProposalFirestoreService implements ProposalService {
         });
     }
 
+
+
     @Override
     public void editProposal(Route route, String teamId, String userId, boolean scheduled) {
         proposals.whereEqualTo("teamId", teamId)
@@ -128,6 +130,7 @@ public class ProposalFirestoreService implements ProposalService {
                     }
                 });
     }
+
 
     @Override
     public void withdrawProposal(String teamId) {
@@ -190,4 +193,5 @@ public class ProposalFirestoreService implements ProposalService {
                 });
         return response;
     }
+
 }
