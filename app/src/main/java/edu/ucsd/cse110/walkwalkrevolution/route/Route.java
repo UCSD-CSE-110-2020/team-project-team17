@@ -15,7 +15,7 @@ import edu.ucsd.cse110.walkwalkrevolution.activity.EmptyActivity;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
 
 
-@JsonPropertyOrder({"id", "title", "location", "notes", "activity"})
+@JsonPropertyOrder({"id", "firestore", "userId", "title", "location", "notes", "activity"})
 public class Route {
 
     public static final String USER_ID = "userId";
@@ -26,7 +26,6 @@ public class Route {
     public static final String ROUTE = "route";
 
     private long id;
-    @JsonIgnore
     private String userId;
     private String title;
     private String location;
@@ -91,6 +90,7 @@ public class Route {
     }
 
     public Route(@JsonProperty("id") long id, @JsonProperty("firestoreId") String firestoreId,
+                 @JsonProperty("userId") String userId,
                  @JsonProperty("title") String title,
                  @JsonProperty("location") String location,
                  @JsonProperty("descriptionTags") String descriptionTags,
@@ -98,6 +98,7 @@ public class Route {
                  @JsonProperty("activity") Activity activity){
         this.id = id;
         this.firestoreId = firestoreId;
+        this.userId = userId;
         this.title = title;
         this.location = location;
         this.descriptionTags = descriptionTags;

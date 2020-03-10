@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.walkwalkrevolution.route.persistence;
 
+import android.app.Activity;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -39,21 +40,25 @@ public class RouteFirestoreService implements RouteService {
     }
 
     @Override
-    public void addRoute(Route route) {
-        routes.add(route.toMap()).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+    public void addRoute(Activity activity, Route route) {
+        routes.add(route.toMap()).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override
-            public void onSuccess(DocumentReference documentReference) {
-                route.setFirestoreId(documentReference.getId());
-                WalkWalkRevolution.getRouteDao().addRoute(route);
-                Log.d(TAG, WalkWalkRevolution.getRouteDao().getRoute(route.getId()).getFirestoreId());
-            }
-        }).addOnFailureListener(error -> {
-            Log.e(TAG, error.getLocalizedMessage());
+            public void onComplete(@NonNull Task<DocumentReference> task) {
+                if (task.isSuccessful()) {
+                    route.setFirestoreId(task.getResult().getId());
+                    WalkWalkRevolution.getRouteDao().addRoute(route);
+                    Log.d(TAG, WalkWalkRevolution.getRouteDao().getRoute(route.getId()).getFirestoreId());
+                    activity.finish();
+                } else {
+                    Log.e(TAG, task.getException().getLocalizedMessage());
+                }
+                }
         });
     }
 
     @Override
     public void updateRoute(Route route) {
+        Log.d(TAG, route.getFirestoreId());
         Map<String, String> data = route.toMap();
         routes.document(route.getFirestoreId()).set(data).addOnFailureListener(new OnFailureListener() {
             @Override

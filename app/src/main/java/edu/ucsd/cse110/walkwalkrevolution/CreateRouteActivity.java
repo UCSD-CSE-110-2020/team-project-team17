@@ -89,8 +89,7 @@ public class CreateRouteActivity extends AppCompatActivity {
                     Route route = builder.build();
 
                     WalkWalkRevolution.getRouteDao().addRoute(route);
-                    WalkWalkRevolution.getRouteService().addRoute(route);
-                    finish();
+                    WalkWalkRevolution.getRouteService().addRoute(CreateRouteActivity.this, route);
                 }
             }
         });

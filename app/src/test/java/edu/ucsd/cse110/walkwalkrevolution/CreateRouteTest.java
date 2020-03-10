@@ -75,7 +75,6 @@ public class CreateRouteTest {
                 save.performClick();
 
                 ShadowLooper.runUiThreadTasksIncludingDelayedTasks();
-                assertEquals(true, activity.isFinishing());
 
                 Route route = WalkWalkRevolution.getRouteDao().getRoute(1);
                 assertNotNull(route);
@@ -147,7 +146,6 @@ public class CreateRouteTest {
                 save.performClick();
 
                 ShadowLooper.runUiThreadTasksIncludingDelayedTasks();
-                assertEquals(true, activity.isFinishing());
 
                 Route route = WalkWalkRevolution.getRouteDao().getRoute(1);
                 assertNotNull(route);
@@ -183,7 +181,6 @@ public class CreateRouteTest {
                 save.performClick();
 
                 ShadowLooper.runUiThreadTasksIncludingDelayedTasks();
-                assertEquals(true, activity.isFinishing());
 
                 Route route = WalkWalkRevolution.getRouteDao().getRoute(1);
                 assertNotNull(route);
@@ -218,7 +215,6 @@ public class CreateRouteTest {
                 save.performClick();
 
                 ShadowLooper.runUiThreadTasksIncludingDelayedTasks();
-                assertEquals(true, activity.isFinishing());
 
                 Route route = WalkWalkRevolution.getRouteDao().getRoute(1);
                 assertNotNull(route);
@@ -242,7 +238,6 @@ public class CreateRouteTest {
                 save.performClick();
 
                 ShadowLooper.runUiThreadTasksIncludingDelayedTasks();
-                assertEquals(true, activity.isFinishing());
 
                 Route route = WalkWalkRevolution.getRouteDao().getRoute(1);
                 assertNotNull(route);
