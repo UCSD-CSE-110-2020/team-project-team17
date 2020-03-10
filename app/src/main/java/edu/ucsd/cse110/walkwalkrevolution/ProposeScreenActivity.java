@@ -40,6 +40,8 @@ public class ProposeScreenActivity extends AppCompatActivity {
     private TextView tag4;
     private TextView tag5;
 
+    private ScrollView sc;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,13 +56,21 @@ public class ProposeScreenActivity extends AppCompatActivity {
         schdWalk = findViewById(R.id.schedule_walk);
         wthdWalk = findViewById(R.id.withdraw_walk);
         afterBtn = findViewById(R.id.withdraw_walkafter);
+        title = (TextView) findViewById(R.id.title1);
+        location = (TextView) findViewById(R.id.location_text);
+        note = (TextView) findViewById(R.id.Note_view);
 
+        tag1 = (TextView) findViewById(R.id.tag1);
+        tag2 = (TextView) findViewById(R.id.tag2);
+        tag3 = (TextView) findViewById(R.id.tag3);
+        tag4 = (TextView) findViewById(R.id.tag4);
+        tag5 = (TextView) findViewById(R.id.tag5);
         one = findViewById(R.id.buttons_layout);
         two = findViewById(R.id.buttons_after);
 
 
 
-        if (!WalkWalkRevolution.getUser().getEmail().equals(userProposed)) {
+        if (WalkWalkRevolution.getUser().getEmail().equals(userProposed)) {
             one.setVisibility(View.GONE);
             two.setVisibility(View.GONE);
             title.setText("No Proposed Walk");
@@ -138,15 +148,6 @@ public class ProposeScreenActivity extends AppCompatActivity {
     }
 
     public void displayRouteDetail(Route route) {
-        title = (TextView) findViewById(R.id.title1);
-        location = (TextView) findViewById(R.id.location_text);
-        note = (TextView) findViewById(R.id.Note_view);
-
-        tag1 = (TextView) findViewById(R.id.tag1);
-        tag2 = (TextView) findViewById(R.id.tag2);
-        tag3 = (TextView) findViewById(R.id.tag3);
-        tag4 = (TextView) findViewById(R.id.tag4);
-        tag5 = (TextView) findViewById(R.id.tag5);
 
         if (route != null) {
             title.setText(route.getTitle());
