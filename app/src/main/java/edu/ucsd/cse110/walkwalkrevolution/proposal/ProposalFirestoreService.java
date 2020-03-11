@@ -35,14 +35,14 @@ public class ProposalFirestoreService implements ProposalService {
 
     private CollectionReference proposals;
     private FirebaseFirestore db;
-<<<<<<< HEAD
+
     private ProposalSubject psub;
     private ProposalObserver pob;
-=======
+
 
     String response;
 
->>>>>>> feature/respond_proposal
+
     private final String TAG = "ProposalFirestoreService";
     private final String PROPOSAL_KEY = "proposal";
     private final String ROUTE_KEY = "route";
@@ -135,7 +135,7 @@ public class ProposalFirestoreService implements ProposalService {
         data.put("userId", userId);
         data.put("scheduled", false);
         psub.listen();
-        data.putAll(route.getResponses());
+        //data.putAll(route.getResponses());
         proposals.add(data)
             .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override

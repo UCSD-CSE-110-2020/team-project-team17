@@ -13,7 +13,7 @@ public interface ProposalService {
     void addProposal(Route route, String teamId, String userId);
     void withdrawProposal(String teamId, ProposeScreenActivity act);
     void editProposal(Route route, String teamId, String userId, boolean scheduled);
-    void withdrawProposal(String teamId, );
+    //void withdrawProposal(String teamId, );
     void getProposalRoute(String teamId, ProposeScreenActivity act);
     String getResponse(String teamId, String userEmail);
    // Route getProposal(User user);
