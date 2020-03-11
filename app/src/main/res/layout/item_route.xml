@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="50dp"
@@ -12,9 +13,26 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginLeft="16dp"
-        android:layout_marginRight="72dp"
+        android:layout_marginRight="12dp"
         android:layout_weight="1"
         android:height="30sp" />
+
+    <ImageView
+        android:id="@+id/favorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        app:srcCompat="@drawable/img_yellow_star" />
+
+    <ImageView
+        android:id="@+id/walked"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginRight="12dp"
+        android:layout_weight="1"
+        app:srcCompat="@drawable/img_green_check" />
 
     <TextView
         android:id="@+id/start_location"

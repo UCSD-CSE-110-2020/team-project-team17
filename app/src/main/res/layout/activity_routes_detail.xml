@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -13,6 +14,23 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         />
+
+    <ToggleButton
+        android:id="@+id/favorite"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignBottom="@+id/title1"
+        android:layout_toEndOf="@+id/title1"
+        android:textOff=""
+        android:textOn="" />
+
+    <ImageView
+        android:id="@+id/walked"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/favorite"
+        android:layout_alignBottom="@+id/title1"
+        app:srcCompat="@drawable/img_green_check" />
 
     <TextView
         android:id="@+id/location"

@@ -2,9 +2,11 @@ package edu.ucsd.cse110.walkwalkrevolution.route.RouteRecycleView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -48,6 +50,8 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
         public TextView miles;
         public TextView duration;
         public TextView date;
+        public ImageView favorite;
+        public ImageView walked;
 
         public ViewHolder(View itemView) {
             // Stores the itemView in a public final member variable that can be used
@@ -59,6 +63,8 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
             miles = (TextView) itemView.findViewById(R.id.miles);
             duration = (TextView) itemView.findViewById(R.id.duration);
             date = (TextView) itemView.findViewById(R.id.date);
+            favorite = (ImageView) itemView.findViewById(R.id.favorite);
+            walked = (ImageView) itemView.findViewById(R.id.walked);
         }
     }
 
@@ -113,6 +119,8 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
         TextView miles = viewHolder.miles;
         TextView duration = viewHolder.duration;
         TextView date = viewHolder.date;
+        ImageView favorite = viewHolder.favorite;
+        ImageView walked = viewHolder.walked;
 
         if(route.getActivity().isExist()) {
             steps.setText(route.getActivity().getDetail(Walk.STEP_COUNT));
@@ -128,6 +136,21 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
             miles.setText("");
             duration.setText("");
             date.setText("");
+        }
+
+        if(route.getUserId().equals(WalkWalkRevolution.getUser().getEmail()) &&
+                Boolean.parseBoolean(route.getActivity().getDetail(Activity.EXIST)) ||
+                !route.getUserId().equals(WalkWalkRevolution.getUser().getEmail()) &&
+                        WalkWalkRevolution.getRouteDao().walkedTeamRoute(route)){
+            walked.setVisibility(View.VISIBLE);
+        } else {
+            walked.setVisibility(View.INVISIBLE);
+        }
+
+        if(WalkWalkRevolution.getRouteDao().isFavorite(route)) {
+            favorite.setVisibility(View.VISIBLE);
+        } else {
+            favorite.setVisibility(View.INVISIBLE);
         }
     }
 
