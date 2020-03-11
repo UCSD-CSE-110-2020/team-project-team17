@@ -29,10 +29,13 @@ import edu.ucsd.cse110.walkwalkrevolution.user.User;
 
 public class ProposalFirestoreService implements ProposalService {
     public static Route proposedRoute = null;
+    public static String userProposed = "";
+    public static Boolean scheduled = false;
 
     private CollectionReference proposals;
     private FirebaseFirestore db;
-
+    private ProposalSubject psub;
+    private ProposalObserver pob;
     private final String TAG = "ProposalFirestoreService";
     private final String PROPOSAL_KEY = "proposal";
     private final String ROUTE_KEY = "route";
@@ -40,6 +43,52 @@ public class ProposalFirestoreService implements ProposalService {
     public ProposalFirestoreService(){
         db = FirebaseFirestore.getInstance();
         proposals = db.collection(PROPOSAL_KEY);
+        psub = new ProposalSubject();
+    }
+
+    public ProposalSubject getSub() {
+        return psub;
+    }
+
+    @Override
+    public void scheduleWalk(Route route, String teamId, String userId) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("route", route.toMap());
+        data.put("teamId", teamId);
+        data.put("userId", userId);
+        data.put("scheduled", true);
+        proposals.whereEqualTo("teamId", teamId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if (document.exists()) {
+                                    proposals.document(document.getId())
+                                            .set(data)
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    Log.d(TAG, "DocumentSnapshot successfully written! Scheduled");
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Log.w(TAG, "Error writing document", e);
+                                                }
+                                            });
+                                }
+                                else {
+                                    Log.d(TAG, "No such document");
+                                }
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
     }
 
     @Override
@@ -50,11 +99,13 @@ public class ProposalFirestoreService implements ProposalService {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+                            pob = new ProposalObserver(act);
+                            psub.addObserver(pob);
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 if (document.exists()) {
                                     Log.d(TAG, document.getId() + " => " + document.getData());
-                                    act.scheduled = (Boolean) document.get("scheduled");
-                                    act.userProposed = (String) document.get("userId");
+                                    scheduled = (Boolean) document.get("scheduled");
+                                    userProposed = (String) document.get("userId");
                                     proposedRoute = new Route((Map<String, Object>) document.get("route"));
                                     act.displayRouteDetail(proposedRoute);
                                 }
@@ -76,11 +127,14 @@ public class ProposalFirestoreService implements ProposalService {
         data.put("teamId", teamId);
         data.put("userId", userId);
         data.put("scheduled", false);
+        psub.listen();
         proposals.add(data)
             .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
                 Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                psub.notifyObs();
+                psub.unListen();
             }
         })
                 .addOnFailureListener(error -> {
@@ -90,6 +144,7 @@ public class ProposalFirestoreService implements ProposalService {
 
     @Override
     public void withdrawProposal(String teamId, ProposeScreenActivity act) {
+        Log.d(TAG,  "dc");
         proposals.whereEqualTo("teamId", teamId)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -98,6 +153,7 @@ public class ProposalFirestoreService implements ProposalService {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 if (document.exists()) {
+                                    Log.d("MONKEYS", "dc");
                                     proposals.document(document.getId())
                                             .delete()
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -105,6 +161,7 @@ public class ProposalFirestoreService implements ProposalService {
                                                 public void onSuccess(Void aVoid) {
                                                     Log.d(TAG, "DocumentSnapshot successfully deleted!");
                                                     proposedRoute = null;
+                                                    userProposed = "";
                                                     act.renderPage();
                                                 }
                                             })
@@ -116,6 +173,7 @@ public class ProposalFirestoreService implements ProposalService {
                                             });
                                 }
                                 else {
+                                    Log.d("MONKEYS", "noiooo");
                                     Log.d(TAG, "No such document");
                                 }
                             }

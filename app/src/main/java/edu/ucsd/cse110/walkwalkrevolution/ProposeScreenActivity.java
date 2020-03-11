@@ -2,6 +2,7 @@ package edu.ucsd.cse110.walkwalkrevolution;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -22,9 +23,7 @@ import edu.ucsd.cse110.walkwalkrevolution.route.RouteRecycleView.RoutesAdapter;
 public class ProposeScreenActivity extends AppCompatActivity {
 
     public static Boolean scheduled = false;
-    public static String userProposed = "";
-
-    Button schdWalk, wthdWalk, afterBtn;
+    Button schdWalk, wthdWalk, wthdWalk2;
     TextView screenTitle;
     View one, two;
 
@@ -42,6 +41,7 @@ public class ProposeScreenActivity extends AppCompatActivity {
 
     private ScrollView sc;
 
+    private ProposalService ps;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,13 +49,12 @@ public class ProposeScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_propose_screen);
 
         screenTitle = findViewById(R.id.pscreen_title);
-        ProposalService ps = WalkWalkRevolution.getProposalService();
+        ps = WalkWalkRevolution.getProposalService();
         ps.getProposalRoute(WalkWalkRevolution.getUser().getTeamId(), this);
-
 
         schdWalk = findViewById(R.id.schedule_walk);
         wthdWalk = findViewById(R.id.withdraw_walk);
-        afterBtn = findViewById(R.id.withdraw_walkafter);
+        wthdWalk2 = findViewById(R.id.withdraw_walkafter);
         title = (TextView) findViewById(R.id.title1);
         location = (TextView) findViewById(R.id.location_text);
         note = (TextView) findViewById(R.id.Note_view);
@@ -72,9 +71,8 @@ public class ProposeScreenActivity extends AppCompatActivity {
 
     private ProposeScreenActivity psa = this;
     public void renderPage() {
-
-
-        if (!WalkWalkRevolution.getUser().getEmail().equals(userProposed)) {
+        Log.d("HELLOM", WalkWalkRevolution.getUser().getTeamId());
+        if (ProposalFirestoreService.userProposed.equals("")) {
             one.setVisibility(View.GONE);
             two.setVisibility(View.GONE);
             title.setText("No Proposed Walk");
@@ -86,37 +84,76 @@ public class ProposeScreenActivity extends AppCompatActivity {
             tag5.setVisibility(View.GONE);
             note.setVisibility(View.GONE);
         }
-        else {
-            schdWalk.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    screenTitle.setText("Scheduled Walk");
-                    one.setVisibility(View.GONE);
-                    two.setVisibility(View.VISIBLE);
-                }
-            });
+        else if (!WalkWalkRevolution.getUser().getEmail().equals(ProposalFirestoreService.userProposed)) {
+            one.setVisibility(View.GONE);
+            two.setVisibility(View.GONE);
 
-            wthdWalk.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    one.setVisibility(View.GONE);
-                    two.setVisibility(View.GONE);
-                    ProposalService ps = WalkWalkRevolution.getProposalService();
-                    ps.withdrawProposal(WalkWalkRevolution.getUser().getTeamId(), psa);
-
-                    userProposed = "";
-                }
-            });
-
-            afterBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    screenTitle.setText("No Proposed Walk");
-                    one.setVisibility(View.GONE);
-                    two.setVisibility(View.GONE);
-                }
-            });
+            location.setVisibility(View.VISIBLE);
+            tag1.setVisibility(View.VISIBLE);
+            tag2.setVisibility(View.VISIBLE);
+            tag3.setVisibility(View.VISIBLE);
+            tag4.setVisibility(View.VISIBLE);
+            tag5.setVisibility(View.VISIBLE);
+            note.setVisibility(View.VISIBLE);
         }
+        else {
+            location.setVisibility(View.VISIBLE);
+            tag1.setVisibility(View.VISIBLE);
+            tag2.setVisibility(View.VISIBLE);
+            tag3.setVisibility(View.VISIBLE);
+            tag4.setVisibility(View.VISIBLE);
+            tag5.setVisibility(View.VISIBLE);
+            note.setVisibility(View.VISIBLE);
+
+
+            if (ProposalFirestoreService.scheduled) {
+                one.setVisibility(View.GONE);
+                two.setVisibility(View.VISIBLE);
+            }
+            else {
+                one.setVisibility(View.VISIBLE);
+                two.setVisibility(View.GONE);
+            }
+
+
+        }
+
+        wthdWalk2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                screenTitle.setText("No Proposed Walk");
+                one.setVisibility(View.GONE);
+                two.setVisibility(View.GONE);
+                ProposalService ps = WalkWalkRevolution.getProposalService();
+                Log.d("HELLOM", WalkWalkRevolution.getUser().getTeamId());
+                ps.withdrawProposal(WalkWalkRevolution.getUser().getTeamId(), psa);
+                ProposalFirestoreService.userProposed = "";
+            }
+        });
+
+        schdWalk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                screenTitle.setText("Scheduled Walk");
+                one.setVisibility(View.GONE);
+                two.setVisibility(View.VISIBLE);
+                ProposalFirestoreService.scheduled = true;
+                ps.scheduleWalk(ProposalFirestoreService.proposedRoute, WalkWalkRevolution.getUser().getTeamId(), WalkWalkRevolution.getUser().getEmail());
+
+            }
+        });
+
+        wthdWalk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                one.setVisibility(View.GONE);
+                two.setVisibility(View.GONE);
+                ProposalService ps = WalkWalkRevolution.getProposalService();
+                Log.d("HELLOM", WalkWalkRevolution.getUser().getTeamId());
+                ps.withdrawProposal(WalkWalkRevolution.getUser().getTeamId(), psa);
+                ProposalFirestoreService.userProposed = "";
+            }
+        });
     }
 
 
@@ -153,13 +190,13 @@ public class ProposeScreenActivity extends AppCompatActivity {
     }
 
     public void displayRouteDetail(Route route) {
-
         if (route != null) {
             title.setText(route.getTitle());
             location.setText(route.getLocation());
             setTags(route.getDescriptionTags());
             note.setText(route.getNotes());
         }
+        renderPage();
     }
 
 
