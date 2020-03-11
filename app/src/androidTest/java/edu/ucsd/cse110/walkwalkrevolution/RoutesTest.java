@@ -19,6 +19,7 @@ import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
 import edu.ucsd.cse110.walkwalkrevolution.route.Route;
 import edu.ucsd.cse110.walkwalkrevolution.route.RouteRecycleView.RoutesAdapter;
 import edu.ucsd.cse110.walkwalkrevolution.route.persistence.MockRouteDao;
+import edu.ucsd.cse110.walkwalkrevolution.user.User;
 
 import static junit.framework.TestCase.assertEquals;
 
@@ -29,7 +30,7 @@ public class RoutesTest {
     @Before
     public void setup(){
         WalkWalkRevolution.setRouteDao(new MockRouteDao());
-
+        WalkWalkRevolution.setUser(new User(1, 1, "x", "x"));
     }
 
     @Test
@@ -46,7 +47,10 @@ public class RoutesTest {
     public void hasStoredRoutes(){
         Activity walk = new EmptyActivity();
         walk.setDate(LocalDateTime.of(2020, 1, 1, 0, 0));
-        WalkWalkRevolution.getRouteDao().addRoute(new Route(1, "Route 1", walk));
+        Route route = new Route(1, "Route 1", walk);
+        route.setUserId("x");
+
+        WalkWalkRevolution.getRouteDao().addRoute(route);
 
         try(ActivityScenario<RoutesActivity> scenario = ActivityScenario.launch(RoutesActivity.class)){
             scenario.onActivity(activity -> {
@@ -66,7 +70,11 @@ public class RoutesTest {
     public void hasMultipleStoredRoutes(){
         Activity walk = new EmptyActivity();
         walk.setDate(LocalDateTime.of(2020, 1, 1, 0, 0));
-        WalkWalkRevolution.getRouteDao().addRoute(new Route(1, "z", walk));
+
+        Route route = new Route(1, "z", walk);
+        route.setUserId("x");
+
+        WalkWalkRevolution.getRouteDao().addRoute(route);
 
         LocalDateTime time = LocalDateTime.of(2020, 01, 01, 0, 0);
         Map<String, String> data = new HashMap<String, String>() {{
@@ -78,7 +86,10 @@ public class RoutesTest {
         Activity walk2 = new Walk(data);
         walk2.setExist(true);
 
-        WalkWalkRevolution.getRouteDao().addRoute(new Route(2, "a", walk2));
+        Route route2 = new Route(2, "a", walk2);
+        route2.setUserId("x");
+
+        WalkWalkRevolution.getRouteDao().addRoute(route2);
 
 
         try(ActivityScenario<RoutesActivity> scenario = ActivityScenario.launch(RoutesActivity.class)){

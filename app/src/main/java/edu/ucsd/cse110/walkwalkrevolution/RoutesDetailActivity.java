@@ -4,9 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import edu.ucsd.cse110.walkwalkrevolution.activity.Activity;
 import edu.ucsd.cse110.walkwalkrevolution.activity.ActivityUtils;
@@ -37,6 +41,10 @@ public class RoutesDetailActivity extends AppCompatActivity {
 
     private Button start;
 
+    private ToggleButton favorite;
+
+    private ImageView walked;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_routes_detail);
@@ -66,6 +74,9 @@ public class RoutesDetailActivity extends AppCompatActivity {
         tag5 = (TextView) findViewById(R.id.tag5);
 
         title.setText(route.getTitle());
+
+        walked = findViewById(R.id.walked);
+        favorite = findViewById(R.id.favorite);
 
         if(route.getActivity().isExist()) {
             steps.setText(route.getActivity().getDetail(Walk.STEP_COUNT));
@@ -103,6 +114,35 @@ public class RoutesDetailActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        favorite.setChecked(WalkWalkRevolution.getRouteDao().isFavorite(route));
+        if(WalkWalkRevolution.getRouteDao().isFavorite(route)) {
+            favorite.setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.img_yellow_star));
+        } else {
+            favorite.setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.img_star_grey));
+        }
+
+        favorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    favorite.setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.img_yellow_star));
+                    WalkWalkRevolution.getRouteDao().addFavorite(route);
+                } else {
+                    favorite.setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.img_star_grey));
+                    WalkWalkRevolution.getRouteDao().removeFavorite(route);
+                }
+            }
+        });
+
+        if(route.getUserId().equals(WalkWalkRevolution.getUser().getEmail()) &&
+                Boolean.parseBoolean(route.getActivity().getDetail(Activity.EXIST)) ||
+                !route.getUserId().equals(WalkWalkRevolution.getUser().getEmail()) &&
+                        WalkWalkRevolution.getRouteDao().walkedTeamRoute(route)){
+            walked.setVisibility(View.VISIBLE);
+        } else {
+            walked.setVisibility(View.INVISIBLE);
+        }
 
     }
 

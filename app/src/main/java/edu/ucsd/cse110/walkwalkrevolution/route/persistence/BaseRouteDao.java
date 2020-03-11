@@ -10,11 +10,19 @@ public interface BaseRouteDao {
 
     void addTeamRoute(Route route);
 
+    void addFavorite(Route route);
+
     Route getRoute(long routeId);
+
+    boolean isFavorite(Route route);
+
+    void removeFavorite(Route route);
 
     Map<String, ?> getTeamRoutes();
 
     Map<String, ?> getAllRoutes();
+
+    boolean walkedTeamRoute(Route route);
 
     long getNextId();
 

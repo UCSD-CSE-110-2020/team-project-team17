@@ -1,7 +1,10 @@
 package edu.ucsd.cse110.walkwalkrevolution.route.persistence;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+
 import edu.ucsd.cse110.walkwalkrevolution.route.Route;
 import edu.ucsd.cse110.walkwalkrevolution.route.RouteUtils;
 
@@ -9,11 +12,13 @@ public class MockRouteDao implements BaseRouteDao {
 
     Map<Long, String> persisted;
     Map<String, String> team;
+    Set<String> favorite;
     long nextId;
 
     public MockRouteDao(){
         this.persisted = new HashMap<>();
         this.team = new HashMap<>();
+        favorite = new HashSet<>();
         this.nextId = 1;
     }
 
@@ -36,6 +41,12 @@ public class MockRouteDao implements BaseRouteDao {
     }
 
     @Override
+    public void addFavorite(Route route) {
+        favorite.add(route.getFirestoreId());
+    }
+
+
+    @Override
     public Route getRoute(long routeId) {
         if(persisted.containsKey(routeId)) {
             try {
@@ -50,6 +61,16 @@ public class MockRouteDao implements BaseRouteDao {
     }
 
     @Override
+    public boolean isFavorite(Route route) {
+        return favorite.contains(route.getFirestoreId());
+    }
+
+    @Override
+    public void removeFavorite(Route route) {
+        favorite.remove(route.getFirestoreId());
+    }
+
+    @Override
     public Map<String, ?> getTeamRoutes() {
         return new HashMap<>(team);
     }
@@ -61,6 +82,11 @@ public class MockRouteDao implements BaseRouteDao {
             map.put(Long.toString(e.getKey()), e.getValue());
         }
         return map;
+    }
+
+    @Override
+    public boolean walkedTeamRoute(Route route) {
+        return team.containsKey(route.getFirestoreId());
     }
 
     @Override

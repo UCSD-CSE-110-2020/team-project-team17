@@ -20,10 +20,13 @@ public class RoutesActivity extends AppCompatActivity {
 
     private Button indiv, team;
 
+    boolean isTeam;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_routes);
+        isTeam = false;
 
         recyclerView = (RecyclerView) findViewById(R.id.routes);
         recyclerView.setHasFixedSize(true);
@@ -39,6 +42,7 @@ public class RoutesActivity extends AppCompatActivity {
         this.indiv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isTeam = false;
                 adapter.updateRoute();
             }
         });
@@ -48,6 +52,7 @@ public class RoutesActivity extends AppCompatActivity {
         this.team.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isTeam = true;
                 adapter.updateTeam();
             }
         });
@@ -56,7 +61,15 @@ public class RoutesActivity extends AppCompatActivity {
     @Override
     protected void onStart(){
         super.onStart();
-        adapter.updateRoute();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(!isTeam)
+            adapter.updateRoute();
+        else
+            adapter.updateTeam();
     }
 
     @Override
