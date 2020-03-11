@@ -34,6 +34,7 @@ public class Route {
     private String firestoreId;
     private Activity activity;
     private String notes;
+    private Map<String, String> responses;
 
     public static class Builder {
         String title;
@@ -43,6 +44,7 @@ public class Route {
         String userId;
         String firestoreId;
         Activity activity;
+        Map<String, String> responses;
 
         public Builder setTitle(String title){
             this.title = title;
@@ -78,6 +80,11 @@ public class Route {
 
         public Builder setFirestoreId(String fid){
             this.firestoreId = fid;
+            return this;
+        }
+
+        public Builder setResponses(Map<String, String> responses) {
+            this.responses = responses;
             return this;
         }
 
@@ -202,6 +209,10 @@ public class Route {
         this.firestoreId = fid;
     }
 
+    public Map<String, String> getResponses() { return this.responses; }
+
+    public void setResponses(Map<String, String> responses) { this.responses = responses; }
+
     public Map<String, String> toMap(){
         Map<String, String> map = new HashMap<>();
         if(title != null)
@@ -217,4 +228,9 @@ public class Route {
         return map;
     }
 
+    public enum Response {
+        ACCEPT,
+        DECLINE_TIME,
+        DECLINE_BAD_ROUTE;
+    }
 }
