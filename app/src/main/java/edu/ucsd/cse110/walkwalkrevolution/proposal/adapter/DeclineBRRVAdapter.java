@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,48 +14,38 @@ import java.util.List;
 import java.util.Map;
 
 import edu.ucsd.cse110.walkwalkrevolution.R;
-import edu.ucsd.cse110.walkwalkrevolution.RoutesDetailActivity;
-import edu.ucsd.cse110.walkwalkrevolution.proposal.ProposalObserver;
-import edu.ucsd.cse110.walkwalkrevolution.route.Route;
-import edu.ucsd.cse110.walkwalkrevolution.user.User;
 
-public class AcceptedRVAdapter extends RecyclerView.Adapter<AcceptedRVAdapter.AcceptViewHolder> {
-
+public class DeclineBRRVAdapter extends RecyclerView.Adapter< DeclineBRRVAdapter.DBRViewHolder>{
     private List<String> uList;
 
-    public AcceptedRVAdapter() {
+    public DeclineBRRVAdapter() {
         uList = new ArrayList<>();
     }
 
-    public class AcceptViewHolder extends RecyclerView.ViewHolder {
+    public class DBRViewHolder extends RecyclerView.ViewHolder {
 
         public TextView userName;
 
-        public AcceptViewHolder(@NonNull View itemView) {
+        public DBRViewHolder(@NonNull View itemView) {
             super(itemView);
-
             userName = (TextView) itemView.findViewById(R.id.user_NAME);
-
         }
     }
-    public AcceptedRVAdapter.AcceptViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public DeclineBRRVAdapter.DBRViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
         View tile = inflater.inflate(R.layout.item_user_team, parent, false);
-
-        AcceptViewHolder viewHolder = new AcceptViewHolder(tile);
+        DeclineBRRVAdapter.DBRViewHolder viewHolder = new DeclineBRRVAdapter.DBRViewHolder(tile);
 
         return viewHolder;
 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AcceptedRVAdapter.AcceptViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull DeclineBRRVAdapter.DBRViewHolder holder, int position) {
         String userN = uList.get(position);
-
         TextView name = holder.userName;
-
         name.setText(userN);
     }
 
@@ -70,11 +59,10 @@ public class AcceptedRVAdapter extends RecyclerView.Adapter<AcceptedRVAdapter.Ac
         Map<String, String> map = responses;
 
         for (Map.Entry<String, String> entry : map.entrySet()) {
-            if(entry.getValue().equals("ACCEPTED")) {
+            if(entry.getValue().equals("DECLINE_BAD_ROUTE")) {
                 uList.add(entry.getKey());
             }
         }
-        //System.out.println("YESSSSSSS:----------------------------------------------------------------------------------------------------" + uList.get(0));
         notifyDataSetChanged();
     }
 }

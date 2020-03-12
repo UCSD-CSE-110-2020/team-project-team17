@@ -30,8 +30,8 @@ public class RoutesDetailActivity extends AppCompatActivity {
     public static final String ROUTE_ID = "edu.ucsd.cse110.walkwalkrevolution.ROUTE_ID";
 
     public static final String ACCEPT = "ACCEPTED";
-    public static final String DECLINEBT = "DECLINE (BAD TIME)";
-    public static final String DECLINEBR = "DECLINE (BAD ROUTE)";
+    public static final String DECLINEBT = "DECLINE_BAD_TIME";
+    public static final String DECLINEBR = "DECLINE_BAD_ROUTE";
 
     public Route route;
     public long id;
@@ -143,9 +143,9 @@ public class RoutesDetailActivity extends AppCompatActivity {
                     for(int i = 0; i < length; i++)
                     {
                         if(current.getUsers().get(i).getEmail().equals(WalkWalkRevolution.getUser().getEmail()))
-                        {data.put(current.getUsers().get(i).getEmail(), ACCEPT);}
+                        {data.put(current.getUsers().get(i).getName(), ACCEPT);}
                         else
-                        {data.put(current.getUsers().get(i).getEmail(), DECLINEBR);}
+                        {data.put(current.getUsers().get(i).getName(), DECLINEBR);}
                     }
 
                     route.setResponses(data);

@@ -22,6 +22,8 @@ import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
 import edu.ucsd.cse110.walkwalkrevolution.proposal.ProposalFirestoreService;
 import edu.ucsd.cse110.walkwalkrevolution.proposal.ProposalService;
 import edu.ucsd.cse110.walkwalkrevolution.proposal.adapter.AcceptedRVAdapter;
+import edu.ucsd.cse110.walkwalkrevolution.proposal.adapter.DeclineBRRVAdapter;
+import edu.ucsd.cse110.walkwalkrevolution.proposal.adapter.DeclineBTRVAdapter;
 import edu.ucsd.cse110.walkwalkrevolution.route.Route;
 import edu.ucsd.cse110.walkwalkrevolution.route.RouteRecycleView.RoutesAdapter;
 import edu.ucsd.cse110.walkwalkrevolution.team.TeamRecycleView.TeamAdapter;
@@ -52,6 +54,9 @@ public class ProposeScreenActivity extends AppCompatActivity {
     RecyclerView rvDBR;
 
     AcceptedRVAdapter adapterACC;
+    DeclineBTRVAdapter adapterDBT;
+    DeclineBRRVAdapter adapterDBR;
+
     private RecyclerView.LayoutManager layoutManagerACC;
 
     private ProposalService ps;
@@ -79,34 +84,25 @@ public class ProposeScreenActivity extends AppCompatActivity {
         tag5 = (TextView) findViewById(R.id.tag5);
         one = findViewById(R.id.buttons_layout);
         two = findViewById(R.id.buttons_after);
-        /*
-        rvACC = (RecyclerView) findViewById(R.id.ACCPTEDlist);
-        //rvACC.setHasFixedSize(true);
 
+        ///*
+        rvACC = (RecyclerView) findViewById(R.id.ACCPTEDlist);
         adapterACC = new AcceptedRVAdapter();
         rvACC.setAdapter(adapterACC);
-
         rvACC.setLayoutManager(new LinearLayoutManager(this));
-         */
-
+         //*/
         //--------------------------
 
         rvDBT = (RecyclerView) findViewById(R.id.DCLNEBTlist);
-        //rvACC.setHasFixedSize(true);
-
-        adapterACC = new AcceptedRVAdapter();
-        rvDBT.setAdapter(adapterACC);
-
+        adapterDBT = new DeclineBTRVAdapter();
+        rvDBT.setAdapter(adapterDBT);
         rvDBT.setLayoutManager(new LinearLayoutManager(this));
 
         //---------------------------
 
         rvDBR = (RecyclerView) findViewById(R.id.DCLNENAGRlist);
-        //rvACC.setHasFixedSize(true);
-
-        adapterACC = new AcceptedRVAdapter();
-        rvDBR.setAdapter(adapterACC);
-
+        adapterDBR = new DeclineBRRVAdapter();
+        rvDBR.setAdapter(adapterDBR);
         rvDBR.setLayoutManager(new LinearLayoutManager(this));
 
         renderPage();
@@ -162,13 +158,7 @@ public class ProposeScreenActivity extends AppCompatActivity {
 
         }
 
-        rvACC = (RecyclerView) findViewById(R.id.ACCPTEDlist);
-        //rvACC.setHasFixedSize(true);
 
-        adapterACC = new AcceptedRVAdapter();
-        rvACC.setAdapter(adapterACC);
-
-        rvACC.setLayoutManager(new LinearLayoutManager(this));
 
         wthdWalk2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -247,7 +237,15 @@ public class ProposeScreenActivity extends AppCompatActivity {
             location.setText(route.getLocation());
             setTags(route.getDescriptionTags());
             note.setText(route.getNotes());
+
             adapterACC.update(route.getResponses());
+            rvACC.setAdapter(adapterACC);
+
+            adapterDBT.update(route.getResponses());
+            rvDBT.setAdapter(adapterDBT);
+
+            adapterDBR.update(route.getResponses());
+            rvDBR.setAdapter(adapterDBR);
         }
         renderPage();
     }
