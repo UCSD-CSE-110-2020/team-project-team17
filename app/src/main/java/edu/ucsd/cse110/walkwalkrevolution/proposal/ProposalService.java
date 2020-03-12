@@ -12,7 +12,8 @@ public interface ProposalService {
     void scheduleWalk(Route route, String teamId, String userId);
     void addProposal(Route route, String teamId, String userId);
     void withdrawProposal(String teamId, ProposeScreenActivity act);
-    void editProposal(Route route, String teamId, String userId, boolean scheduled);
+    //void editProposal(Route route, String teamId, String userId, boolean scheduled);
+    void editProposal(Route route, String teamId, String userId, ProposeScreenActivity act);
     //void withdrawProposal(String teamId, );
     void getProposalRoute(String teamId, ProposeScreenActivity act);
     String getResponse(String teamId, String userEmail);

@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.ucsd.cse110.walkwalkrevolution.ProposeScreenActivity;
+import edu.ucsd.cse110.walkwalkrevolution.activity.Activity;
 import edu.ucsd.cse110.walkwalkrevolution.route.Route;
 import edu.ucsd.cse110.walkwalkrevolution.route.persistence.RouteFirestoreService;
 import edu.ucsd.cse110.walkwalkrevolution.user.User;
@@ -154,7 +155,46 @@ public class ProposalFirestoreService implements ProposalService {
 
 
     @Override
-    public void editProposal(Route route, String teamId, String userId, boolean scheduled) {
+    public void editProposal(Route route, String teamId, String userId, ProposeScreenActivity act) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("route", route.toMap());
+        data.put("teamId", teamId);
+        data.put("userId", userId);
+        data.put("scheduled", this.scheduled);
+        proposals.whereEqualTo("teamId", teamId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if (document.exists()) {
+                                    proposals.document(document.getId())
+                                            .set(data)
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    Log.d(TAG, "DocumentSnapshot successfully written! Scheduled");
+                                                    act.updateScreen();
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Log.w(TAG, "Error writing document", e);
+                                                }
+                                            });
+                                }
+                                else {
+                                    Log.d(TAG, "No such document");
+                                }
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+        /*
         proposals.whereEqualTo("teamId", teamId)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -188,6 +228,8 @@ public class ProposalFirestoreService implements ProposalService {
                         }
                     }
                 });
+
+         */
     }
 
 

@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.api.Distribution;
 
+import java.util.Map;
+
 import edu.ucsd.cse110.walkwalkrevolution.activity.Activity;
 import edu.ucsd.cse110.walkwalkrevolution.activity.ActivityUtils;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
@@ -35,6 +37,8 @@ public class ProposeScreenActivity extends AppCompatActivity {
     TextView screenTitle;
     View one, two;
 
+    private ProposeScreenActivity PSA = this;
+
     private String routeId;
     private TextView title;
     private TextView location;
@@ -48,6 +52,10 @@ public class ProposeScreenActivity extends AppCompatActivity {
     private TextView tag5;
 
     private ScrollView sc;
+
+    private Button Accept;
+    private Button DeclineBT;
+    private Button DeclineBR;
 
     RecyclerView rvACC;
     RecyclerView rvDBT;
@@ -84,6 +92,10 @@ public class ProposeScreenActivity extends AppCompatActivity {
         tag5 = (TextView) findViewById(R.id.tag5);
         one = findViewById(R.id.buttons_layout);
         two = findViewById(R.id.buttons_after);
+
+        Accept = findViewById(R.id.Accepted);
+        DeclineBR = findViewById(R.id.DeclineNAGR);
+        DeclineBT = findViewById(R.id.DeclineBT);
 
         sc = findViewById(R.id.scv);
 
@@ -200,6 +212,54 @@ public class ProposeScreenActivity extends AppCompatActivity {
                 ProposalFirestoreService.userProposed = "";
             }
         });
+
+        Accept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Route route = ProposalFirestoreService.proposedRoute;
+                Map<String, String> data = route.getResponses();
+                for (Map.Entry<String, String> entry : data.entrySet()) {
+                    if(entry.getKey().equals(WalkWalkRevolution.getUser().getName())) {
+                        data.replace(entry.getKey(), "ACCEPTED");
+                    }
+                }
+                route.setResponses(data);
+                ProposalService ps = WalkWalkRevolution.getProposalService();
+                ps.editProposal(route, WalkWalkRevolution.getUser().getTeamId(), WalkWalkRevolution.getUser().getEmail(), PSA);
+            }
+        });
+
+        DeclineBT.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Route route = ProposalFirestoreService.proposedRoute;
+                Map<String, String> data = route.getResponses();
+                for (Map.Entry<String, String> entry : data.entrySet()) {
+                    if(entry.getKey().equals(WalkWalkRevolution.getUser().getName())) {
+                        data.replace(entry.getKey(), "DECLINE_BAD_TIME");
+                    }
+                }
+                route.setResponses(data);
+                ProposalService ps = WalkWalkRevolution.getProposalService();
+                ps.editProposal(route, WalkWalkRevolution.getUser().getTeamId(), WalkWalkRevolution.getUser().getEmail(), PSA);
+            }
+        });
+
+        DeclineBR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Route route = ProposalFirestoreService.proposedRoute;
+                Map<String, String> data = route.getResponses();
+                for (Map.Entry<String, String> entry : data.entrySet()) {
+                    if(entry.getKey().equals(WalkWalkRevolution.getUser().getName())) {
+                        data.replace(entry.getKey(), "DECLINE_BAD_ROUTE");
+                    }
+                }
+                route.setResponses(data);
+                ProposalService ps = WalkWalkRevolution.getProposalService();
+                ps.editProposal(route, WalkWalkRevolution.getUser().getTeamId(), WalkWalkRevolution.getUser().getEmail(), PSA);
+            }
+        });
     }
 
 
@@ -254,6 +314,6 @@ public class ProposeScreenActivity extends AppCompatActivity {
         renderPage();
     }
 
-
+    public void updateScreen() {ps.getProposalRoute(WalkWalkRevolution.getUser().getTeamId(), this);}
 
 }
