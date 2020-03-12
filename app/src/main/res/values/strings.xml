@@ -9,6 +9,8 @@
     <string name="steps">Steps</string>
     <string name="default_steps">###</string>
     <string name="start_walk_btn">Start Walk</string>
+    <string name="propose_btn">Propose Walk</string>
+
     <string name="miles_hint">Miles</string>
     <string name="default_miles">###</string>
     <string name="steps_hint">Steps</string>
@@ -23,5 +25,9 @@
     <string name="individual">Individual</string>
     <string name="team">Team</string>
     <string name="no_invitation_text">No invitation was found.</string>
+
+    <string name="Start_Location"><b>Start Location:</b></string>
+    <string name="Tags"><b>Tags:</b></string>
+    <string name="Notes"><b>Notes:</b></string>
 
 </resources>

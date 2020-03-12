@@ -59,7 +59,7 @@ public class RouteFirestoreService implements RouteService {
     @Override
     public void updateRoute(Route route) {
         Log.d(TAG, route.getFirestoreId());
-        Map<String, String> data = route.toMap();
+        Map<String, Object> data = route.toMap();
         routes.document(route.getFirestoreId()).set(data).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
@@ -68,7 +68,7 @@ public class RouteFirestoreService implements RouteService {
         });
     }
 
-    private Route snapshotToRoute(DocumentSnapshot documentSnapshot){
+    public static Route snapshotToRoute(DocumentSnapshot documentSnapshot){
 //        Route.Builder builder = new Route.Builder();
 //        if(documentSnapshot.contains(Route.TITLE)){
 //            builder.setTitle(documentSnapshot.getString(Route.TITLE));

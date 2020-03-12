@@ -24,6 +24,8 @@ public class Route {
     public static final String NOTES = "notes";
     public static final String DESCRIPTION_TAGS = "descriptionTags";
     public static final String ROUTE = "route";
+    public static final String DEFAULT_ID = "not stored in cloud";
+    public static final String RESPONSES = "responses";
 
     private long id;
     private String userId;
@@ -33,6 +35,7 @@ public class Route {
     private String firestoreId;
     private Activity activity;
     private String notes;
+    private Map<String, String> responses;
 
     public static class Builder {
         String title;
@@ -42,6 +45,7 @@ public class Route {
         String userId;
         String firestoreId;
         Activity activity;
+        Map<String, String> responses;
 
         public Builder setTitle(String title){
             this.title = title;
@@ -68,15 +72,23 @@ public class Route {
             return this;
         }
 
+
         public Builder setActivity(Activity activity){
             this.activity = activity;
             return this;
         }
 
+
         public Builder setFirestoreId(String fid){
             this.firestoreId = fid;
             return this;
         }
+
+        public Builder setResponses(Map<String, String> responses) {
+            this.responses = responses;
+            return this;
+        }
+
 
         public Route build(){
             Route route = new Route(title, activity != null ? activity : new EmptyActivity());
@@ -95,7 +107,8 @@ public class Route {
                  @JsonProperty("location") String location,
                  @JsonProperty("descriptionTags") String descriptionTags,
                  @JsonProperty("notes") String notes,
-                 @JsonProperty("activity") Activity activity){
+                 @JsonProperty("activity") Activity activity,
+                 @JsonProperty("responses") Map<String, String> responses){
         this.id = id;
         this.firestoreId = firestoreId;
         this.userId = userId;
@@ -104,6 +117,16 @@ public class Route {
         this.descriptionTags = descriptionTags;
         this.notes = notes;
         this.activity = activity;
+        this.responses = responses;
+    }
+
+    public Route(Map<String, Object> map) {
+        this.title = (String) map.get(TITLE);
+        this.descriptionTags = (String) map.get(DESCRIPTION_TAGS);
+        this.location = (String) map.get(LOCATION);
+        this.notes = (String) map.get(NOTES);
+        this.responses = (Map<String, String>) map.get(RESPONSES);
+        this.activity = null;
     }
 
     //Used for testing
@@ -111,12 +134,14 @@ public class Route {
         this.id = id;
         this.title = title;
         this.activity = activity;
+        this.responses = new HashMap<>();
     }
 
     public Route(String title, Activity activity){
         this.id = WalkWalkRevolution.getRouteDao().getNextId();
         this.title = title;
         this.activity = activity;
+        this.responses = new HashMap<>();
     }
 
     public long getId(){
@@ -175,6 +200,7 @@ public class Route {
         this.notes = notes;
     }
 
+
     public String getFirestoreId(){
         return this.firestoreId;
     }
@@ -183,16 +209,25 @@ public class Route {
         this.firestoreId = fid;
     }
 
-    public Map<String, String> toMap(){
-        Map<String, String> map = new HashMap<>();
+    public Map<String, String> getResponses() { return this.responses; }
+
+    public void setResponses(Map<String, String> responses) { this.responses = responses; }
+
+    public Map<String, Object> toMap(){
+        Map<String, Object> map = new HashMap<>();
         map.put(TITLE, title);
+        map.put(USER_ID, userId);
         try {
             map.put(ROUTE, RouteUtils.serialize(this));
         } catch (Exception e) {
             throw new RuntimeException(e.getLocalizedMessage());
         }
-        map.put(USER_ID, userId);
         return map;
     }
 
+    public enum Response {
+        ACCEPT,
+        DECLINE_TIME,
+        DECLINE_BAD_ROUTE;
+    }
 }

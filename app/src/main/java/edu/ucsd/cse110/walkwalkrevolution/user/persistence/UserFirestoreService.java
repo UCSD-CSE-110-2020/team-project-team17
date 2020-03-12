@@ -50,6 +50,7 @@ public class UserFirestoreService implements UserService{
                         user.setTeamId(document.getString(user.getEmail()));
                         Log.d(TAG, "Document does not exist!");
                     }
+
                 } else {
                     Log.d(TAG, "Failed with: ", task.getException());
                 }

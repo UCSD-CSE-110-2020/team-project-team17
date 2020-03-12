@@ -90,7 +90,7 @@ public class RoutesDetailActivityTest {
         Intent intent = new Intent();
         intent.putExtra(RoutesAdapter.ROUTE, serializedRoute);
         activityRoutes = Robolectric.buildActivity(RoutesDetailActivity.class, intent).create().get();
-        TextView location = activityRoutes.findViewById(R.id.location_text);
+        TextView location = activityRoutes.findViewById(R.id.dontchagne_location_texttt);
         assertEquals(location.getText().toString(), "location test");
     }
 
@@ -144,7 +144,7 @@ public class RoutesDetailActivityTest {
         Intent intent = new Intent();
         intent.putExtra(RoutesAdapter.ROUTE, serializedRoute);
         activityRoutes = Robolectric.buildActivity(RoutesDetailActivity.class, intent).create().get();
-        TextView notes = activityRoutes.findViewById(R.id.Note_view);
+        TextView notes = activityRoutes.findViewById(R.id.dont_changeNoteView);
         assertEquals(notes.getText().toString(), "Testing the notes field to see it it actually shows");
     }
 
