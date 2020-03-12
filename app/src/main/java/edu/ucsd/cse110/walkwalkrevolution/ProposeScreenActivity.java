@@ -189,6 +189,7 @@ public class ProposeScreenActivity extends AppCompatActivity {
 
     }
 
+    // display user availability using route
     public void displayRouteDetail(Route route) {
         if (route != null) {
             title.setText(route.getTitle());

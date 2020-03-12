@@ -64,6 +64,9 @@ public class ProposalFirestoreService implements ProposalService {
         data.put("teamId", teamId);
         data.put("userId", userId);
         data.put("scheduled", true);
+        data.put("accept", String.join(",", route.getAccept()));
+        data.put("declineBadTime", String.join(",", route.getDeclineBadTime()));
+        data.put("declineBadRoute", String.join(",", route.getDeclineBadRoute()));
         proposals.whereEqualTo("teamId", teamId)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -113,7 +116,11 @@ public class ProposalFirestoreService implements ProposalService {
                                     Log.d(TAG, document.getId() + " => " + document.getData());
                                     scheduled = (Boolean) document.get("scheduled");
                                     userProposed = (String) document.get("userId");
-                                    proposedRoute = new Route((Map<String, Object>) document.get("route"));
+                                    Map<String, Object> data = (Map<String, Object>) document.get("route");
+                                    data.put("accept", document.get("accept"));
+                                    data.put("declineBadTime", document.get("declineBadTime"));
+                                    data.put("declineBadRoute", document.get("declineBadRoute"));
+                                    proposedRoute = new Route(data);
                                     act.displayRouteDetail(proposedRoute);
                                 }
                                 else {
@@ -134,6 +141,9 @@ public class ProposalFirestoreService implements ProposalService {
         data.put("teamId", teamId);
         data.put("userId", userId);
         data.put("scheduled", false);
+        data.put("accept", String.join(",", route.getAccept()));
+        data.put("declineBadTime", String.join(",", route.getDeclineBadTime()));
+        data.put("declineBadRoute", String.join(",", route.getDeclineBadRoute()));
         psub.listen();
         //data.putAll(route.getResponses());
         proposals.add(data)
@@ -153,7 +163,7 @@ public class ProposalFirestoreService implements ProposalService {
 
 
     @Override
-    public void editProposal(Route route, String teamId, String userId, boolean scheduled) {
+    public void setAvailability(Route route, Route.Availability response, String teamId, String userId) {
         proposals.whereEqualTo("teamId", teamId)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -163,8 +173,10 @@ public class ProposalFirestoreService implements ProposalService {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 if (document.exists()) {
                                     Map<String, Object> data = new HashMap<>();
-                                    data.putAll(route.getResponses());
-                                    data.put("scheduled", scheduled);
+                                    route.setAvailability(userId, response);
+                                    data.put("accept", String.join(",", route.getAccept()));
+                                    data.put("declineBadTime", String.join(",", route.getDeclineBadTime()));
+                                    data.put("declineBadRoute", String.join(",", route.getDeclineBadRoute()));
                                     proposals.document(document.getId()).set(data, SetOptions.merge())
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
@@ -231,9 +243,9 @@ public class ProposalFirestoreService implements ProposalService {
                     }
                 });
     }
-
+/*
     @Override
-    public String getResponse(String teamId, String userEmail) {
+    public void getAvailability(Route route, String teamId, String userEmail) {
         proposals.whereEqualTo("teamId", teamId)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -242,7 +254,9 @@ public class ProposalFirestoreService implements ProposalService {
                         if(task.isSuccessful()) {
                             for(QueryDocumentSnapshot document: task.getResult()) {
                                 if (document.exists()) {
-                                    response = document.getString(userEmail);
+                                    document.get("accept");
+                                    document.get("declineBadTime");
+                                    document.get("declineBadRoute");
                                 }
                                 else {
                                     Log.d(TAG, "No such document");
@@ -254,7 +268,8 @@ public class ProposalFirestoreService implements ProposalService {
                         }
                     }
                 });
-        return response;
     }
+
+ */
 
 }

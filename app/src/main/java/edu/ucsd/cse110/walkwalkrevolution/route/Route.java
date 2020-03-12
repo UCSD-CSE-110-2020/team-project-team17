@@ -1,12 +1,13 @@
 package edu.ucsd.cse110.walkwalkrevolution.route;
 
-import android.util.Log;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import edu.ucsd.cse110.walkwalkrevolution.WalkWalkRevolution;
@@ -23,6 +24,9 @@ public class Route {
     public static final String NOTES = "notes";
     public static final String DESCRIPTION_TAGS = "descriptionTags";
     public static final String DEFAULT_ID = "not stored in cloud";
+    public static final String ACCEPT = "accept";
+    public static final String DECLINE_BAD_TIME = "declineBadTime";
+    public static final String DECLINE_BAD_ROUTE = "declineBadRoute";
 
     private String routeId;
     private long id;
@@ -34,7 +38,10 @@ public class Route {
     private String firestoreId;
     private Activity activity;
     private String notes;
-    private Map<String, String> responses;
+    private List<String> accept;
+    private List<String> declineBadTime;
+    private List<String> declineBadRoute;
+
 
     public static class Builder {
         String title;
@@ -44,7 +51,9 @@ public class Route {
         String userId;
         String firestoreId;
         Activity activity;
-        Map<String, String> responses;
+        List<String> accept = new ArrayList();
+        List<String> declineBadTime = new ArrayList();
+        List<String> declineBadRoute = new ArrayList();
 
         public Builder setTitle(String title){
             this.title = title;
@@ -83,8 +92,18 @@ public class Route {
             return this;
         }
 
-        public Builder setResponses(Map<String, String> responses) {
-            this.responses = responses;
+        public Builder setAccept(List<String> accept) {
+            this.accept = accept;
+            return this;
+        }
+
+        public Builder setDeclineBadTime(List<String> declineBadTime) {
+            this.declineBadTime = declineBadTime;
+            return this;
+        }
+
+        public Builder setDeclineBadRoute(List<String> declineBadRoute) {
+            this.declineBadRoute = declineBadRoute;
             return this;
         }
 
@@ -96,6 +115,9 @@ public class Route {
             if(description != null) route.setDescriptionTags(description);
             if(userId != null) route.setUserId(userId);
             if(firestoreId != null) route.setFirestoreId(firestoreId);
+            if(accept != null) route.setAccept(accept);
+            if(declineBadTime != null) route.setDeclineBadTime(declineBadTime);
+            if(declineBadRoute != null) route.setDeclineBadRoute(declineBadRoute);
             return route;
         }
     }
@@ -122,6 +144,15 @@ public class Route {
         this.location = (String) map.get(LOCATION);
         this.notes = (String) map.get(NOTES);
         this.activity = null;
+        if (map.get(ACCEPT) != null) {
+            this.accept = new ArrayList<String>(Arrays.asList(((String)(map.get(ACCEPT))).split(",")));
+        }
+        if (map.get(DECLINE_BAD_TIME) != null) {
+            this.declineBadTime = new ArrayList<String>(Arrays.asList(((String)(map.get(DECLINE_BAD_TIME))).split(",")));
+        }
+        if (map.get(DECLINE_BAD_ROUTE) != null) {
+            this.declineBadRoute = new ArrayList<String>(Arrays.asList(((String)(map.get(DECLINE_BAD_ROUTE))).split(",")));
+        }
     }
 
     //Used for testing
@@ -140,6 +171,7 @@ public class Route {
     }
 
     public String getRouteId() { return routeId; }
+
     public void setRouteId(String routeId) {
         this.routeId =  routeId;
     }
@@ -209,9 +241,18 @@ public class Route {
         this.firestoreId = fid;
     }
 
-    public Map<String, String> getResponses() { return this.responses; }
+    public List<String> getAccept() { return accept; }
 
-    public void setResponses(Map<String, String> responses) { this.responses = responses; }
+    public void setAccept(List<String> accept) { this.accept = accept; }
+
+    public List<String> getDeclineBadTime() { return declineBadTime; }
+
+    public void setDeclineBadTime(List<String> declineBadTime) { this.declineBadTime = declineBadTime; }
+
+    public List<String> getDeclineBadRoute() { return declineBadRoute; }
+
+    public void setDeclineBadRoute(List<String> declineBadRoute) { this.declineBadRoute = declineBadRoute; }
+
 
     public Map<String, String> toMap(){
         Map<String, String> map = new HashMap<>();
@@ -228,9 +269,24 @@ public class Route {
         return map;
     }
 
-    public enum Response {
+    public void setAvailability(String userId, Availability availability) {
+        accept.remove(userId);
+        declineBadTime.remove(userId);
+        declineBadRoute.remove(userId);
+
+        if (availability == Availability.ACCEPT) {
+            accept.add(userId);
+        } else if (availability == Availability.DECLINE_BAD_TIME) {
+            declineBadTime.add(userId);
+        } else if (availability == Availability.DECLINE_BAD_ROUTE) {
+            declineBadRoute.add(userId);
+        }
+    }
+
+    public enum Availability {
         ACCEPT,
-        DECLINE_TIME,
+        DECLINE_BAD_TIME,
         DECLINE_BAD_ROUTE;
     }
+
 }
