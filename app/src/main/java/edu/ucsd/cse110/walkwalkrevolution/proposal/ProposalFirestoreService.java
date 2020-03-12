@@ -64,6 +64,7 @@ public class ProposalFirestoreService implements ProposalService {
         data.put("teamId", teamId);
         data.put("userId", userId);
         data.put("scheduled", true);
+        data.putAll(route.getResponses());
         proposals.whereEqualTo("teamId", teamId)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -135,7 +136,7 @@ public class ProposalFirestoreService implements ProposalService {
         data.put("userId", userId);
         data.put("scheduled", false);
         psub.listen();
-        //data.putAll(route.getResponses());
+        data.putAll(route.getResponses());
         proposals.add(data)
             .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
@@ -233,7 +234,7 @@ public class ProposalFirestoreService implements ProposalService {
     }
 
     @Override
-    public String getResponse(String teamId, String userEmail) {
+    public String getResponse(String teamId, String userId) {
         proposals.whereEqualTo("teamId", teamId)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -242,7 +243,7 @@ public class ProposalFirestoreService implements ProposalService {
                         if(task.isSuccessful()) {
                             for(QueryDocumentSnapshot document: task.getResult()) {
                                 if (document.exists()) {
-                                    response = document.getString(userEmail);
+                                    response = document.getString(userId);
                                 }
                                 else {
                                     Log.d(TAG, "No such document");

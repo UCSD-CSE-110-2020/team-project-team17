@@ -10,6 +10,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import edu.ucsd.cse110.walkwalkrevolution.activity.Activity;
 import edu.ucsd.cse110.walkwalkrevolution.activity.ActivityUtils;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
@@ -19,15 +22,21 @@ import edu.ucsd.cse110.walkwalkrevolution.route.Route;
 import edu.ucsd.cse110.walkwalkrevolution.route.RouteRecycleView.RoutesAdapter;
 
 import edu.ucsd.cse110.walkwalkrevolution.route.RouteUtils;
+import edu.ucsd.cse110.walkwalkrevolution.team.Team;
 
 public class RoutesDetailActivity extends AppCompatActivity {
 
     public static final String ROUTE = "edu.ucsd.cse110.walkwalkrevolution.ROUTE";
     public static final String ROUTE_ID = "edu.ucsd.cse110.walkwalkrevolution.ROUTE_ID";
 
+    public static final String ACCEPT = "ACCEPTED";
+    public static final String DECLINEBT = "DECLINE (BAD TIME)";
+    public static final String DECLINEBR = "DECLINE (BAD ROUTE)";
+
     public Route route;
     public long id;
     public boolean isTeam;
+    public Team current;
 
     private TextView title;
     private TextView steps;
@@ -60,6 +69,8 @@ public class RoutesDetailActivity extends AppCompatActivity {
         } catch (Exception e){
             throw new RuntimeException(e.getLocalizedMessage());
         }
+
+        current = new Team();
 
         title = (TextView) findViewById(R.id.title1);
         steps = (TextView) findViewById(R.id.numOfSteps);
@@ -121,9 +132,27 @@ public class RoutesDetailActivity extends AppCompatActivity {
             public void onClick(View v)
             {
                 if ( ProposalFirestoreService.proposedRoute == null ) {
-                    Toast.makeText(RoutesDetailActivity.this, "Proposed route", Toast.LENGTH_SHORT).show();
+
                     ProposalService ps = WalkWalkRevolution.getProposalService();
                     String teamId = WalkWalkRevolution.getUser().getTeamId();
+
+                    int length = current.getUsers().size();
+
+                    Map<String, String> data = new HashMap<String, String>(){{ }};
+
+                    for(int i = 0; i < length; i++)
+                    {
+                        if(current.getUsers().get(i).getEmail().equals(WalkWalkRevolution.getUser().getEmail()))
+                        {data.put(current.getUsers().get(i).getEmail(), ACCEPT);}
+                        else
+                        {data.put(current.getUsers().get(i).getEmail(), DECLINEBR);}
+                    }
+
+                    route.setResponses(data);
+
+                    WalkWalkRevolution.getRouteService().addRoute(route);
+                    WalkWalkRevolution.getRouteDao().addRoute(route);
+
                     ps.addProposal(route, teamId, WalkWalkRevolution.getUser().getEmail());
 
                     Intent intent = new Intent(v.getContext(), ProposeScreenActivity.class);
