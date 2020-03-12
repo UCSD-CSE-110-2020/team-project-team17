@@ -34,29 +34,21 @@ public class AcceptedRVAdapter extends RecyclerView.Adapter<AcceptedRVAdapter.Ac
 
         public AcceptViewHolder(@NonNull View itemView) {
             super(itemView);
-
             userName = (TextView) itemView.findViewById(R.id.user_NAME);
-
         }
     }
     public AcceptedRVAdapter.AcceptViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-
         View tile = inflater.inflate(R.layout.item_user_team, parent, false);
-
         AcceptViewHolder viewHolder = new AcceptViewHolder(tile);
-
         return viewHolder;
-
     }
 
     @Override
     public void onBindViewHolder(@NonNull AcceptedRVAdapter.AcceptViewHolder holder, int position) {
         String userN = uList.get(position);
-
         TextView name = holder.userName;
-
         name.setText(userN);
     }
 
@@ -68,13 +60,11 @@ public class AcceptedRVAdapter extends RecyclerView.Adapter<AcceptedRVAdapter.Ac
     public void update(Map<String, String> responses) {
         uList = new ArrayList<>();
         Map<String, String> map = responses;
-
         for (Map.Entry<String, String> entry : map.entrySet()) {
             if(entry.getValue().equals("ACCEPTED")) {
                 uList.add(entry.getKey());
             }
         }
-        //System.out.println("YESSSSSSS:----------------------------------------------------------------------------------------------------" + uList.get(0));
         notifyDataSetChanged();
     }
 }

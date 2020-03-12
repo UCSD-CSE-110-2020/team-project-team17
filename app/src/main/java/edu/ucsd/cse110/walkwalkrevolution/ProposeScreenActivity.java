@@ -85,6 +85,8 @@ public class ProposeScreenActivity extends AppCompatActivity {
         one = findViewById(R.id.buttons_layout);
         two = findViewById(R.id.buttons_after);
 
+        sc = findViewById(R.id.scv);
+
         ///*
         rvACC = (RecyclerView) findViewById(R.id.ACCPTEDlist);
         adapterACC = new AcceptedRVAdapter();
@@ -123,6 +125,7 @@ public class ProposeScreenActivity extends AppCompatActivity {
             tag4.setVisibility(View.GONE);
             tag5.setVisibility(View.GONE);
             note.setVisibility(View.GONE);
+            sc.setVisibility(View.GONE);
         }
         else if (!WalkWalkRevolution.getUser().getEmail().equals(ProposalFirestoreService.userProposed)) {
             one.setVisibility(View.GONE);
@@ -135,6 +138,7 @@ public class ProposeScreenActivity extends AppCompatActivity {
             tag4.setVisibility(View.VISIBLE);
             tag5.setVisibility(View.VISIBLE);
             note.setVisibility(View.VISIBLE);
+            sc.setVisibility(View.VISIBLE);
         }
         else {
             location.setVisibility(View.VISIBLE);
@@ -144,7 +148,7 @@ public class ProposeScreenActivity extends AppCompatActivity {
             tag4.setVisibility(View.VISIBLE);
             tag5.setVisibility(View.VISIBLE);
             note.setVisibility(View.VISIBLE);
-
+            sc.setVisibility(View.VISIBLE);
 
             if (ProposalFirestoreService.scheduled) {
                 one.setVisibility(View.GONE);

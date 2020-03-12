@@ -45,6 +45,12 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <LinearLayout
+                android:id="@+id/blah"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/location"
                 android:layout_width="wrap_content"
@@ -52,7 +58,7 @@
                 android:layout_below="@+id/field1"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="14dp"
-                android:text="Start Location:"
+                android:text="@string/Start_Location"
                 android:textSize="20dp" />
 
             <TextView
@@ -65,6 +71,13 @@
                 android:layout_toEndOf="@+id/location"
                 android:textSize="20dp" />
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/blah1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tags"
@@ -73,7 +86,7 @@
                 android:layout_below="@+id/location_text"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="14dp"
-                android:text="Tags:"
+                android:text="@string/Tags"
                 android:textSize="20dp" />
 
             <TextView
@@ -97,6 +110,16 @@
                 android:layout_toEndOf="@+id/tag1"
                 android:text=""
                 android:textSize="20dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/blah2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp">
 
             <TextView
                 android:id="@+id/tag3"
@@ -131,6 +154,8 @@
                 android:text=""
                 android:textSize="20dp" />
 
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/Note"
                 android:layout_width="wrap_content"
@@ -138,7 +163,7 @@
                 android:layout_below="@+id/tag4"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="14dp"
-                android:text="Notes:"
+                android:text="@string/Notes"
                 android:textSize="20dp" />
 
             <TextView
@@ -153,6 +178,44 @@
                 android:text="test"
                 android:textSize="20dp" />
 
+            <!--
+            <RelativeLayout
+                android:id="@+id/AccptDeclnLayoutTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/field1"
+                android:layout_marginTop="14dp"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="0dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <Button
+                    android:id="@+id/Accepted"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+
+                    android:text="ACCEPTED" />
+
+                <Button
+                    android:id="@+id/DeclineBT"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="DECLINE                (Bad Time)" />
+
+                <Button
+                    android:id="@+id/DeclineNAGR"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:text="DECLINE                (BAD Route)" />
+            </RelativeLayout>
+            -->
+
             <LinearLayout
                 android:id="@+id/AccptDeclnLayoutTitle"
                 android:layout_width="match_parent"
@@ -164,31 +227,32 @@
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent">
 
-                <TextView
+                <Button
                     android:id="@+id/Accepted"
-                    android:gravity="center"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="ACCEPTED" />
+                    android:gravity="center"
+                    android:text="ACCEPTED         ☺" />
 
-                <TextView
+                <Button
                     android:id="@+id/DeclineBT"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:layout_weight="1"
+                    android:gravity="center"
                     android:text="DECLINE                (Bad Time)" />
 
-                <TextView
+                <Button
                     android:id="@+id/DeclineNAGR"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:layout_weight="1"
-                    android:text="DECLINE                (Not A Good Route)" />
+                    android:text="DECLINE                (BAD Route)" />
 
             </LinearLayout>
+
 
 
             <LinearLayout

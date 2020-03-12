@@ -26,4 +26,8 @@
     <string name="team">Team</string>
     <string name="no_invitation_text">No invitation was found.</string>
 
+    <string name="Start_Location"><b>Start Location:</b></string>
+    <string name="Tags"><b>Tags:</b></string>
+    <string name="Notes"><b>Notes:</b></string>
+
 </resources>
