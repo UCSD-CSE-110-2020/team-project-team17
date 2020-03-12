@@ -36,7 +36,7 @@ public class RoutesDetailActivity extends AppCompatActivity {
     public Route route;
     public long id;
     public boolean isTeam;
-    public Team current;
+    private Team current;
 
     private TextView title;
     private TextView steps;

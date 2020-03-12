@@ -11,14 +11,20 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.api.Distribution;
 
 import edu.ucsd.cse110.walkwalkrevolution.activity.Activity;
 import edu.ucsd.cse110.walkwalkrevolution.activity.ActivityUtils;
 import edu.ucsd.cse110.walkwalkrevolution.activity.Walk;
 import edu.ucsd.cse110.walkwalkrevolution.proposal.ProposalFirestoreService;
 import edu.ucsd.cse110.walkwalkrevolution.proposal.ProposalService;
+import edu.ucsd.cse110.walkwalkrevolution.proposal.adapter.AcceptedRVAdapter;
 import edu.ucsd.cse110.walkwalkrevolution.route.Route;
 import edu.ucsd.cse110.walkwalkrevolution.route.RouteRecycleView.RoutesAdapter;
+import edu.ucsd.cse110.walkwalkrevolution.team.TeamRecycleView.TeamAdapter;
 
 public class ProposeScreenActivity extends AppCompatActivity {
 
@@ -40,6 +46,13 @@ public class ProposeScreenActivity extends AppCompatActivity {
     private TextView tag5;
 
     private ScrollView sc;
+
+    RecyclerView rvACC;
+    RecyclerView rvDBT;
+    RecyclerView rvDBR;
+
+    AcceptedRVAdapter adapterACC;
+    private RecyclerView.LayoutManager layoutManagerACC;
 
     private ProposalService ps;
 
@@ -66,12 +79,43 @@ public class ProposeScreenActivity extends AppCompatActivity {
         tag5 = (TextView) findViewById(R.id.tag5);
         one = findViewById(R.id.buttons_layout);
         two = findViewById(R.id.buttons_after);
+        /*
+        rvACC = (RecyclerView) findViewById(R.id.ACCPTEDlist);
+        //rvACC.setHasFixedSize(true);
+
+        adapterACC = new AcceptedRVAdapter();
+        rvACC.setAdapter(adapterACC);
+
+        rvACC.setLayoutManager(new LinearLayoutManager(this));
+         */
+
+        //--------------------------
+
+        rvDBT = (RecyclerView) findViewById(R.id.DCLNEBTlist);
+        //rvACC.setHasFixedSize(true);
+
+        adapterACC = new AcceptedRVAdapter();
+        rvDBT.setAdapter(adapterACC);
+
+        rvDBT.setLayoutManager(new LinearLayoutManager(this));
+
+        //---------------------------
+
+        rvDBR = (RecyclerView) findViewById(R.id.DCLNENAGRlist);
+        //rvACC.setHasFixedSize(true);
+
+        adapterACC = new AcceptedRVAdapter();
+        rvDBR.setAdapter(adapterACC);
+
+        rvDBR.setLayoutManager(new LinearLayoutManager(this));
+
         renderPage();
     }
 
     private ProposeScreenActivity psa = this;
     public void renderPage() {
         Log.d("HELLOM", WalkWalkRevolution.getUser().getTeamId());
+
         if (ProposalFirestoreService.userProposed.equals("")) {
             one.setVisibility(View.GONE);
             two.setVisibility(View.GONE);
@@ -117,6 +161,14 @@ public class ProposeScreenActivity extends AppCompatActivity {
 
 
         }
+
+        rvACC = (RecyclerView) findViewById(R.id.ACCPTEDlist);
+        //rvACC.setHasFixedSize(true);
+
+        adapterACC = new AcceptedRVAdapter();
+        rvACC.setAdapter(adapterACC);
+
+        rvACC.setLayoutManager(new LinearLayoutManager(this));
 
         wthdWalk2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -195,6 +247,7 @@ public class ProposeScreenActivity extends AppCompatActivity {
             location.setText(route.getLocation());
             setTags(route.getDescriptionTags());
             note.setText(route.getNotes());
+            adapterACC.update(route.getResponses());
         }
         renderPage();
     }
