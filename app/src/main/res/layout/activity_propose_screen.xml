@@ -178,44 +178,6 @@
                 android:text="test"
                 android:textSize="20dp" />
 
-            <!--
-            <RelativeLayout
-                android:id="@+id/AccptDeclnLayoutTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/field1"
-                android:layout_marginTop="14dp"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="0dp"
-                android:orientation="horizontal"
-                app:layout_constraintBottom_toBottomOf="parent">
-
-                <Button
-                    android:id="@+id/Accepted"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-
-                    android:text="ACCEPTED" />
-
-                <Button
-                    android:id="@+id/DeclineBT"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="DECLINE                (Bad Time)" />
-
-                <Button
-                    android:id="@+id/DeclineNAGR"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_weight="1"
-                    android:text="DECLINE                (BAD Route)" />
-            </RelativeLayout>
-            -->
-
             <LinearLayout
                 android:id="@+id/AccptDeclnLayoutTitle"
                 android:layout_width="match_parent"

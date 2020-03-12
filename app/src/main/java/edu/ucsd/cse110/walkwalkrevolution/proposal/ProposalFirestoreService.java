@@ -194,42 +194,6 @@ public class ProposalFirestoreService implements ProposalService {
                         }
                     }
                 });
-        /*
-        proposals.whereEqualTo("teamId", teamId)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                if (document.exists()) {
-                                    Map<String, Object> data = new HashMap<>();
-                                    data.putAll(route.getResponses());
-                                    data.put("scheduled", scheduled);
-                                    proposals.document(document.getId()).set(data, SetOptions.merge())
-                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void aVoid) {
-                                                    Log.d(TAG, "DocumentSnapshot successfully edited!");
-                                                }
-                                            })
-                                            .addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    Log.w(TAG, "Error editing document", e);
-                                                }
-                                            });
-                                } else {
-                                    Log.d(TAG, "No such document");
-                                }
-                            }
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
-
-         */
     }
 
 
