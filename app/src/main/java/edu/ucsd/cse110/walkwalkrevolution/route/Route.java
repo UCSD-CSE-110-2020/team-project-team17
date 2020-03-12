@@ -23,6 +23,7 @@ public class Route {
     public static final String NOTES = "notes";
     public static final String DESCRIPTION_TAGS = "descriptionTags";
     public static final String DEFAULT_ID = "not stored in cloud";
+    public static final String RESPONSES = "responses";
 
     private String routeId;
     private long id;
@@ -121,6 +122,7 @@ public class Route {
         this.descriptionTags = (String) map.get(DESCRIPTION_TAGS);
         this.location = (String) map.get(LOCATION);
         this.notes = (String) map.get(NOTES);
+        this.responses = (Map<String, String>) map.get(RESPONSES);
         this.activity = null;
     }
 
@@ -213,8 +215,8 @@ public class Route {
 
     public void setResponses(Map<String, String> responses) { this.responses = responses; }
 
-    public Map<String, String> toMap(){
-        Map<String, String> map = new HashMap<>();
+    public Map<String, Object> toMap(){
+        Map<String, Object> map = new HashMap<>();
         if(title != null)
             map.put(TITLE, title);
         if(location != null)
@@ -225,6 +227,8 @@ public class Route {
             map.put(NOTES, notes);
         if(userId != null)
             map.put(USER_ID, userId);
+        if(responses != null)
+            map.put(RESPONSES, getResponses());
         return map;
     }
 

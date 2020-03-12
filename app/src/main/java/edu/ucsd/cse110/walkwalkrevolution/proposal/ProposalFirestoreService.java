@@ -64,7 +64,7 @@ public class ProposalFirestoreService implements ProposalService {
         data.put("teamId", teamId);
         data.put("userId", userId);
         data.put("scheduled", true);
-        data.putAll(route.getResponses());
+        //data.putAll(route.getResponses());
         proposals.whereEqualTo("teamId", teamId)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -136,7 +136,7 @@ public class ProposalFirestoreService implements ProposalService {
         data.put("userId", userId);
         data.put("scheduled", false);
         psub.listen();
-        data.putAll(route.getResponses());
+        //data.putAll(route.getResponses());
         proposals.add(data)
             .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
