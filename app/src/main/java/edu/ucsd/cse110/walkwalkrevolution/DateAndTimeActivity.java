@@ -15,7 +15,6 @@ import android.widget.DatePicker;
 import android.widget.TimePicker;
 
 import java.util.Calendar;
-import java.util.Date;
 
 public class DateAndTimeActivity extends AppCompatActivity {
     private static final String TAG = "DateAndTimeActivity";
@@ -31,9 +30,9 @@ public class DateAndTimeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_date_and_time);
 
-        Button btnDate = findViewById(R.id.Date);
-        Button btnTime = findViewById(R.id.Time);
-        Button btnDone = findViewById(R.id.DONE);
+        Button btnDate = findViewById(R.id.btn_date);
+        Button btnTime = findViewById(R.id.btn_time);
+        Button btnDone = findViewById(R.id.btn_done);
 
         btnDate.setOnClickListener(new View.OnClickListener() {
             @Override

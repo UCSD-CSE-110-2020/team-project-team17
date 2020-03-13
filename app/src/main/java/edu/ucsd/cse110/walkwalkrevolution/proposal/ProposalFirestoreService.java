@@ -17,7 +17,10 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -143,7 +146,7 @@ public class ProposalFirestoreService implements ProposalService {
     }
 
     @Override
-    public void addProposal(Route route, String teamId, String userId) {
+    public void addProposal(Route route, String teamId, String userId, Date date) {
         String serialized;
         try {
             serialized = RouteUtils.serialize(route);
@@ -156,6 +159,8 @@ public class ProposalFirestoreService implements ProposalService {
         data.put("teamId", teamId);
         data.put("userId", userId);
         data.put("scheduled", false);
+        data.put("data", new SimpleDateFormat("yyyy-MM-dd HH:mm").format(date));
+
         psub.listen();
         //data.putAll(route.getResponses());
         proposals.add(data)

@@ -220,7 +220,8 @@ public class RoutesDetailActivity extends AppCompatActivity {
             WalkWalkRevolution.getRouteService().updateRoute(route);
             WalkWalkRevolution.getRouteDao().addRoute(route);
 
-            ps.addProposal(route, teamId, WalkWalkRevolution.getUser().getEmail());
+            cal.set(year, month, dayOfMonth, hour, minute);
+            ps.addProposal(route, teamId, WalkWalkRevolution.getUser().getEmail(), cal.getTime());
 
             Intent newIntent = new Intent(this, ProposeScreenActivity.class);
             finish();

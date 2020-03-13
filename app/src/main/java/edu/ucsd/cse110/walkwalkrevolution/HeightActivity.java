@@ -1,6 +1,7 @@
 package edu.ucsd.cse110.walkwalkrevolution;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 
 import android.content.Intent;
@@ -64,7 +65,7 @@ public class HeightActivity extends AppCompatActivity {
     }
 
     private void setBackgroundTint(EditText field, int color){
-        DrawableCompat.setTint(field.getBackground(), getResources().getColor(color));
+        DrawableCompat.setTint(field.getBackground(), ContextCompat.getColor(this, color));
     }
 
     private void createUserDataFromFields(EditText feet, EditText inches){
