@@ -1,6 +1,7 @@
 package edu.ucsd.cse110.walkwalkrevolution;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -44,6 +45,7 @@ public class ProposeScreenActivity extends AppCompatActivity {
     private TextView title;
     private TextView location;
     private TextView note;
+    private TextView text_date;
     //private Route route;
 
     private TextView tag1;
@@ -85,6 +87,7 @@ public class ProposeScreenActivity extends AppCompatActivity {
         title = (TextView) findViewById(R.id.title1);
         location = (TextView) findViewById(R.id.location_text);
         note = (TextView) findViewById(R.id.Note_view);
+        text_date = findViewById(R.id.text_date_proposal);
 
         tag1 = (TextView) findViewById(R.id.tag1);
         tag2 = (TextView) findViewById(R.id.tag2);
@@ -120,7 +123,28 @@ public class ProposeScreenActivity extends AppCompatActivity {
         rvDBR.setAdapter(adapterDBR);
         rvDBR.setLayoutManager(new LinearLayoutManager(this));
 
+        mapButton();
         renderPage();
+    }
+
+    public void mapButton(){
+
+        TextView location_text = findViewById(R.id.location_text);
+
+        location_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(location_text.getText().length() != 0) {
+                    Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + Uri.encode(location_text.getText().toString()));
+
+                    //  Uri gmmIntentUri = Uri.parse("google.navigation:q=" + Uri.encode("UCSD Price Center")); Directions to query location
+
+                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                    mapIntent.setPackage("com.google.android.apps.maps");
+                    startActivity(mapIntent);
+                }
+            }
+        });
     }
 
     private ProposeScreenActivity psa = this;
@@ -295,6 +319,27 @@ public class ProposeScreenActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    public void displayRouteDetail(Route route, String date) {
+        if (route != null) {
+            text_date.setText(date);
+
+            title.setText(route.getTitle());
+            location.setText(route.getLocation());
+            setTags(route.getDescriptionTags());
+            note.setText(route.getNotes());
+
+            adapterACC.update(route.getResponses());
+            rvACC.setAdapter(adapterACC);
+
+            adapterDBT.update(route.getResponses());
+            rvDBT.setAdapter(adapterDBT);
+
+            adapterDBR.update(route.getResponses());
+            rvDBR.setAdapter(adapterDBR);
+        }
+        renderPage();
     }
 
     public void displayRouteDetail(Route route) {

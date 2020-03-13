@@ -61,15 +61,17 @@
                 android:text="@string/Start_Location"
                 android:textSize="20dp" />
 
-            <TextView
-                android:id="@+id/location_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/field1"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="14dp"
-                android:layout_toEndOf="@+id/location"
-                android:textSize="20dp" />
+                <TextView
+                    android:id="@+id/location_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/field1"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="14dp"
+                    android:layout_toEndOf="@+id/location"
+                    android:clickable="true"
+                    android:textColor="#2196F3"
+                    android:textSize="20dp" />
 
             </LinearLayout>
 
@@ -304,7 +306,15 @@
 
     </LinearLayout>
 
-
+    <TextView
+        android:id="@+id/text_date_proposal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pscreen_title"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="17dp"
+        android:layout_toEndOf="@+id/title1"
+        android:textSize="22sp" />
 
 
 </RelativeLayout>

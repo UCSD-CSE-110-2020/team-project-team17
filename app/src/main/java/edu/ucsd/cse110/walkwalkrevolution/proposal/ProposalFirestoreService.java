@@ -126,13 +126,14 @@ public class ProposalFirestoreService implements ProposalService {
                                     Log.d(TAG, document.getId() + " => " + document.getData());
                                     scheduled = (Boolean) document.get("scheduled");
                                     userProposed = (String) document.get("userId");
+                                    String date = (String) document.get("date");
                                     try {
                                         Log.d(TAG, ""+document.get("route"));
                                         proposedRoute = RouteUtils.deserialize((String) document.get("route"));
                                     } catch (Exception e) {
                                         throw new RuntimeException(e.getLocalizedMessage());
                                     }
-                                    act.displayRouteDetail(proposedRoute);
+                                    act.displayRouteDetail(proposedRoute, date);
                                 }
                                 else {
                                     Log.d(TAG, "No such document");
@@ -159,7 +160,7 @@ public class ProposalFirestoreService implements ProposalService {
         data.put("teamId", teamId);
         data.put("userId", userId);
         data.put("scheduled", false);
-        data.put("data", new SimpleDateFormat("yyyy/MM/dd hh:mm a").format(date));
+        data.put("date", new SimpleDateFormat("yyyy/MM/dd hh:mm a").format(date));
 
         psub.listen();
         //data.putAll(route.getResponses());
@@ -294,5 +295,4 @@ public class ProposalFirestoreService implements ProposalService {
                 });
         return response;
     }
-
 }
