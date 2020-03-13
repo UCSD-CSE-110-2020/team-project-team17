@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,6 +30,7 @@ import edu.ucsd.cse110.walkwalkrevolution.route.RouteUtils;
 import edu.ucsd.cse110.walkwalkrevolution.team.Team;
 
 public class RoutesDetailActivity extends AppCompatActivity {
+    private static final String TAG = "RoutesDetailActivity";
 
     public static final String ROUTE = "edu.ucsd.cse110.walkwalkrevolution.ROUTE";
     public static final String ROUTE_ID = "edu.ucsd.cse110.walkwalkrevolution.ROUTE_ID";
@@ -36,6 +38,8 @@ public class RoutesDetailActivity extends AppCompatActivity {
     public static final String ACCEPT = "ACCEPTED";
     public static final String DECLINEBT = "DECLINE_BAD_TIME";
     public static final String DECLINEBR = "DECLINE_BAD_ROUTE";
+
+    private static final int GET_DATE = 1337;
 
     public Route route;
     public long id;
@@ -160,32 +164,8 @@ public class RoutesDetailActivity extends AppCompatActivity {
             public void onClick(View v)
             {
                 if ( ProposalFirestoreService.proposedRoute == null ) {
-
-                    ProposalService ps = WalkWalkRevolution.getProposalService();
-                    String teamId = WalkWalkRevolution.getUser().getTeamId();
-
-                    int length = current.getUsers().size();
-
-                    Map<String, String> data = new HashMap<String, String>(){{ }};
-
-                    for(int i = 0; i < length; i++)
-                    {
-                        if(current.getUsers().get(i).getEmail().equals(WalkWalkRevolution.getUser().getEmail()))
-                        {data.put(current.getUsers().get(i).getName(), ACCEPT);}
-                        else
-                        {data.put(current.getUsers().get(i).getName(), DECLINEBR);}
-                    }
-
-                    route.setResponses(data);
-
-                    WalkWalkRevolution.getRouteService().updateRoute(route);
-                    WalkWalkRevolution.getRouteDao().addRoute(route);
-
-                    ps.addProposal(route, teamId, WalkWalkRevolution.getUser().getEmail());
-
-                    Intent intent = new Intent(v.getContext(), ProposeScreenActivity.class);
-                    finish();
-                    v.getContext().startActivity(intent);
+                    Intent intent = new Intent(RoutesDetailActivity.this, DateAndTimeActivity.class);
+                    startActivityForResult(intent, GET_DATE);
                 }
                 else {
                     Toast.makeText(RoutesDetailActivity.this, "A route is already proposed", Toast.LENGTH_SHORT).show();
@@ -202,6 +182,52 @@ public class RoutesDetailActivity extends AppCompatActivity {
             walked.setVisibility(View.INVISIBLE);
         }
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent){
+        super.onActivityResult(requestCode, resultCode, intent);
+        int year, month, dayOfMonth, hour, minute;
+        Calendar cal = Calendar.getInstance();
+
+        year = intent.getIntExtra(DateAndTimeActivity.YEAR, cal.get(Calendar.YEAR));
+        month = intent.getIntExtra(DateAndTimeActivity.MONTH, cal.get(Calendar.MONTH));
+        dayOfMonth = intent.getIntExtra(DateAndTimeActivity.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH));
+        hour = intent.getIntExtra(DateAndTimeActivity.HOUR, cal.get(Calendar.HOUR));
+        minute = intent.getIntExtra(DateAndTimeActivity.MINUTE, cal.get(Calendar.MINUTE));
+
+        Log.d(TAG, "onClick: " + year + " " + dayOfMonth + " " + month + " " + hour + " " + minute);
+
+        if(requestCode == GET_DATE && resultCode == RESULT_OK) {
+            ProposalService ps = WalkWalkRevolution.getProposalService();
+            String teamId = WalkWalkRevolution.getUser().getTeamId();
+
+            int length = current.getUsers().size();
+
+            Map<String, String> data = new HashMap<String, String>() {{
+            }};
+
+            for (int i = 0; i < length; i++) {
+                if (current.getUsers().get(i).getEmail().equals(WalkWalkRevolution.getUser().getEmail())) {
+                    data.put(current.getUsers().get(i).getName(), ACCEPT);
+                } else {
+                    data.put(current.getUsers().get(i).getName(), DECLINEBR);
+                }
+            }
+
+            route.setResponses(data);
+
+            WalkWalkRevolution.getRouteService().updateRoute(route);
+            WalkWalkRevolution.getRouteDao().addRoute(route);
+
+            ps.addProposal(route, teamId, WalkWalkRevolution.getUser().getEmail());
+
+            Intent newIntent = new Intent(this, ProposeScreenActivity.class);
+            finish();
+            startActivity(newIntent);
+        } else {
+            finish();
+        }
     }
 
 
