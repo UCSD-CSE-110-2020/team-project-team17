@@ -205,6 +205,7 @@ public class ProposeScreenActivity extends AppCompatActivity {
         wthdWalk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                screenTitle.setText("No Proposed Walk");
                 one.setVisibility(View.GONE);
                 two.setVisibility(View.GONE);
                 ProposalService ps = WalkWalkRevolution.getProposalService();

@@ -198,6 +198,9 @@ public class WalkWalkRevolution extends Application {
         return WalkWalkRevolution.routeService;
     }
 
+    public static void setProposalServiceFactory(ProposalServiceFactory psf) {
+        WalkWalkRevolution.proposalServiceFactory = psf;
+    }
 
     public static void createProposalService(){
         WalkWalkRevolution.proposalService = WalkWalkRevolution.proposalServiceFactory.createProposalService();
