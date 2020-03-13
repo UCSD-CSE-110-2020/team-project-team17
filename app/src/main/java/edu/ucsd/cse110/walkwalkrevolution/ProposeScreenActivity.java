@@ -31,6 +31,7 @@ import edu.ucsd.cse110.walkwalkrevolution.route.RouteRecycleView.RoutesAdapter;
 import edu.ucsd.cse110.walkwalkrevolution.team.TeamRecycleView.TeamAdapter;
 
 public class ProposeScreenActivity extends AppCompatActivity {
+    private static final String TAG = "ProposeScreenActivity";
 
     public static Boolean scheduled = false;
     Button schdWalk, wthdWalk, wthdWalk2;
