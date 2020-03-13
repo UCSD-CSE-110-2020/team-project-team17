@@ -11,6 +11,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.robolectric.Robolectric;
 import org.robolectric.annotation.Config;
 
@@ -25,12 +26,17 @@ import edu.ucsd.cse110.walkwalkrevolution.route.Route;
 import edu.ucsd.cse110.walkwalkrevolution.route.RouteRecycleView.RoutesAdapter;
 import edu.ucsd.cse110.walkwalkrevolution.route.RouteUtils;
 import edu.ucsd.cse110.walkwalkrevolution.route.persistence.MockRouteDao;
+import edu.ucsd.cse110.walkwalkrevolution.route.persistence.RouteService;
+import edu.ucsd.cse110.walkwalkrevolution.route.persistence.RouteServiceFactory;
 import edu.ucsd.cse110.walkwalkrevolution.user.User;
 import edu.ucsd.cse110.walkwalkrevolution.user.persistence.MockUserDao;
+import edu.ucsd.cse110.walkwalkrevolution.user.persistence.UserService;
+import edu.ucsd.cse110.walkwalkrevolution.user.persistence.UserServiceFactory;
 
 import static com.google.common.truth.Truth.assertThat;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
+import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 @Config(sdk=28)
@@ -41,8 +47,30 @@ public class RoutesDetailActivityTest {
     private String serializedRoute;
     private Route route;
 
+    RouteService routeService;
+    RouteServiceFactory routeServiceFactory;
+    UserService userService;
+    UserServiceFactory userServiceFactory;
+
     @Before
     public void setUp() {
+        routeService = Mockito.mock(RouteService.class);
+        routeServiceFactory = Mockito.mock(RouteServiceFactory.class);
+        userService = Mockito.mock(UserService.class);
+        userServiceFactory = Mockito.mock(UserServiceFactory.class);
+
+        when(userServiceFactory.createUserService())
+                .thenReturn(userService);
+
+        when(routeServiceFactory.createRouteService())
+                .thenReturn(routeService);
+
+        WalkWalkRevolution.setRouteServiceFactory(routeServiceFactory);
+        WalkWalkRevolution.setUserServiceFactory(userServiceFactory);
+
+        WalkWalkRevolution.createUserService();
+        WalkWalkRevolution.createRouteService();
+
         WalkWalkRevolution.setUserDao(new MockUserDao());
         WalkWalkRevolution.setRouteDao(new MockRouteDao());
         WalkWalkRevolution.setUser(new User(1, 528*12, "", "xxx"));
