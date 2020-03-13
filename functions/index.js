@@ -87,3 +87,105 @@ exports.sendTeamNotifications = functions.firestore
      return "document was null or empty";
    });
 
+exports.sendProposalChange = functions.firestore
+   .document('proposal/{proposalId}')
+   .onUpdate((snap, context) => {
+     // Get an object with the current document value.
+     // If the document does not exist, it has been deleted.
+     const before = snap.before.exists ? snap.before.data() : null;
+     const after = snap.after.exists ? snap.after.data() : null;
+
+     console.log("Checking if document exists")
+
+
+     if (after) {
+
+       var t = after.teamId.replace('@', '')
+
+       var message;
+
+       if (!before.scheduled && after.scheduled) {
+         message = {
+           notification: {
+              title: 'Group Walk has been Scheduled',
+              body: ':)'
+            },
+            topic: t
+          };
+       } else {
+         var beforeR = JSON.parse(before.route)
+         var afterR = JSON.parse(after.route)
+
+         console.log(beforeR.responses)
+         console.log(afterR.responses)
+
+         for(var key in afterR.responses){
+           if(afterR.responses[key] !== beforeR.responses[key]){
+             console.log(key)
+             message = {
+                        notification: {
+                          title: 'Group Walk: Status Update',
+                          body: key + ' has changed their status to ' + afterR.responses[key]
+                        },
+                        topic: t
+                      };
+             break;
+           }
+         }
+       }
+
+       console.log("Sending message " + message)
+       return admin.messaging().send(message)
+         .then((response) => {
+           // Response is a message ID string.
+           console.log('Successfully sent message:', response);
+           return response;
+         })
+         .catch((error) => {
+           console.log('Error sending message:', error);
+           return error;
+         });
+     }
+
+     console.log("No document found")
+     return "document was null or empty";
+   });
+
+exports.sendProposalDelete = functions.firestore
+  .document('proposal/{proposalId}')
+  .onDelete((snap, context) => {
+    // Get an object with the current document value.
+    // If the document does not exist, it has been deleted.
+    const document = snap.exists ? snap.data() : null;
+
+    console.log("Checking if document exists")
+
+
+    if (document) {
+
+      var t = document.teamId.replace('@', '')
+
+      var message = {
+        notification: {
+          title: 'Group Walk Withdrawn',
+          body: ':('
+        },
+        topic: t
+      };
+
+      console.log("Sending message " + message)
+      return admin.messaging().send(message)
+        .then((response) => {
+          // Response is a message ID string.
+          console.log('Successfully sent message:', response);
+          return response;
+        })
+        .catch((error) => {
+          console.log('Error sending message:', error);
+          return error;
+        });
+    }
+
+    console.log("No document found")
+    return "document was null or empty";
+  });
