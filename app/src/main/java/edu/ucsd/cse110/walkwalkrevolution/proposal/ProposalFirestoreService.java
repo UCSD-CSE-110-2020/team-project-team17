@@ -63,7 +63,7 @@ public class ProposalFirestoreService implements ProposalService {
     }
 
     @Override
-    public void scheduleWalk(Route route, String teamId, String userId) {
+    public void scheduleWalk(Route route, String teamId, String userId, String date) {
         String serialized;
         try {
             serialized = RouteUtils.serialize(route);
@@ -76,6 +76,8 @@ public class ProposalFirestoreService implements ProposalService {
         data.put("teamId", teamId);
         data.put("userId", userId);
         data.put("scheduled", true);
+        data.put("date", date);
+
         //data.putAll(route.getResponses());
         proposals.whereEqualTo("teamId", teamId)
                 .get()
@@ -181,7 +183,7 @@ public class ProposalFirestoreService implements ProposalService {
 
 
     @Override
-    public void editProposal(Route route, String teamId, String userId, ProposeScreenActivity act) {
+    public void editProposal(Route route, String teamId, String userId, String date, ProposeScreenActivity act) {
         String serialized;
         try {
             serialized = RouteUtils.serialize(route);
@@ -193,6 +195,8 @@ public class ProposalFirestoreService implements ProposalService {
         data.put("teamId", teamId);
         data.put("userId", userId);
         data.put("scheduled", this.scheduled);
+        data.put("date", date);
+
         proposals.whereEqualTo("teamId", teamId)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

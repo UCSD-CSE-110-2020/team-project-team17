@@ -155,6 +155,7 @@ public class ProposeScreenActivity extends AppCompatActivity {
             one.setVisibility(View.GONE);
             two.setVisibility(View.GONE);
             title.setText("No Proposed Walk");
+            text_date.setVisibility(View.GONE);
             location.setVisibility(View.GONE);
             tag1.setVisibility(View.GONE);
             tag2.setVisibility(View.GONE);
@@ -168,6 +169,7 @@ public class ProposeScreenActivity extends AppCompatActivity {
             one.setVisibility(View.GONE);
             two.setVisibility(View.GONE);
 
+            text_date.setVisibility(View.VISIBLE);
             location.setVisibility(View.VISIBLE);
             tag1.setVisibility(View.VISIBLE);
             tag2.setVisibility(View.VISIBLE);
@@ -178,6 +180,7 @@ public class ProposeScreenActivity extends AppCompatActivity {
             sc.setVisibility(View.VISIBLE);
         }
         else {
+            text_date.setVisibility(View.VISIBLE);
             location.setVisibility(View.VISIBLE);
             tag1.setVisibility(View.VISIBLE);
             tag2.setVisibility(View.VISIBLE);
@@ -221,7 +224,8 @@ public class ProposeScreenActivity extends AppCompatActivity {
                 one.setVisibility(View.GONE);
                 two.setVisibility(View.VISIBLE);
                 ProposalFirestoreService.scheduled = true;
-                ps.scheduleWalk(ProposalFirestoreService.proposedRoute, WalkWalkRevolution.getUser().getTeamId(), WalkWalkRevolution.getUser().getEmail());
+                ps.scheduleWalk(ProposalFirestoreService.proposedRoute, WalkWalkRevolution.getUser().getTeamId(), WalkWalkRevolution.getUser().getEmail(),
+                        text_date.getText().toString());
 
             }
         });
@@ -251,7 +255,7 @@ public class ProposeScreenActivity extends AppCompatActivity {
                 }
                 route.setResponses(data);
                 ProposalService ps = WalkWalkRevolution.getProposalService();
-                ps.editProposal(route, WalkWalkRevolution.getUser().getTeamId(), WalkWalkRevolution.getUser().getEmail(), PSA);
+                ps.editProposal(route, WalkWalkRevolution.getUser().getTeamId(), WalkWalkRevolution.getUser().getEmail(), text_date.getText().toString(), PSA);
             }
         });
 
@@ -267,7 +271,7 @@ public class ProposeScreenActivity extends AppCompatActivity {
                 }
                 route.setResponses(data);
                 ProposalService ps = WalkWalkRevolution.getProposalService();
-                ps.editProposal(route, WalkWalkRevolution.getUser().getTeamId(), WalkWalkRevolution.getUser().getEmail(), PSA);
+                ps.editProposal(route, WalkWalkRevolution.getUser().getTeamId(), WalkWalkRevolution.getUser().getEmail(), text_date.getText().toString(), PSA);
             }
         });
 
@@ -283,7 +287,7 @@ public class ProposeScreenActivity extends AppCompatActivity {
                 }
                 route.setResponses(data);
                 ProposalService ps = WalkWalkRevolution.getProposalService();
-                ps.editProposal(route, WalkWalkRevolution.getUser().getTeamId(), WalkWalkRevolution.getUser().getEmail(), PSA);
+                ps.editProposal(route, WalkWalkRevolution.getUser().getTeamId(), WalkWalkRevolution.getUser().getEmail(), text_date.getText().toString(), PSA);
             }
         });
     }
