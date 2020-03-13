@@ -101,7 +101,6 @@ public class HomeActivity extends AppCompatActivity implements Observer {
                     WalkWalkRevolution.getGoogleSignInAccount().getFamilyName());
             user.setEmail(WalkWalkRevolution.getGoogleSignInAccount().getEmail());
             WalkWalkRevolution.getUserService().addUser(user);
-            WalkWalkRevolution.getUserService().refresh();
         }
 
     }

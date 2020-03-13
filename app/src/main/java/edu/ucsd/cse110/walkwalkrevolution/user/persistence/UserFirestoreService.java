@@ -41,29 +41,20 @@ public class UserFirestoreService implements UserService{
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         Log.d(TAG, "Document exists!");
-                        User temp = snapshotToUser(document);
-                        user.setTeamId(document.getString(User.TEAM));
-
-                        String teamTopic = user.getTeamId().replace("@", "");
-                        WalkWalkRevolution.subscribeToNotificationsTopic(teamTopic);
-
-                        String inviteTopic = user.getTeamId().replace("@", "");
-                        WalkWalkRevolution.subscribeToNotificationsTopic(inviteTopic);
+                        refresh();
                     } else {
-                        users.document(user.getEmail()).set(user.toMap()).addOnSuccessListener(v -> {
-                            user.setTeamId(document.getString(user.getEmail()));
-
-                            String teamTopic = user.getTeamId().replace("@", "");
-                            WalkWalkRevolution.subscribeToNotificationsTopic(teamTopic);
-
-                            String inviteTopic = user.getTeamId().replace("@", "");
-                            WalkWalkRevolution.subscribeToNotificationsTopic(inviteTopic);
-                        }).addOnFailureListener(error -> {
-                            Log.e(TAG, error.getLocalizedMessage());
+                        user.setTeamId(user.getEmail());
+                        users.document(user.getEmail()).set(user.toMap()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    refresh();
+                                } else {
+                                    Log.e(TAG, task.getException().getLocalizedMessage());
+                                }
+                            }
                         });
-                        Log.d(TAG, "Document does not exist!");
                     }
-
                 } else {
                     Log.d(TAG, "Failed with: ", task.getException());
                 }
