@@ -190,15 +190,15 @@ public class RoutesDetailActivity extends AppCompatActivity {
         int year, month, dayOfMonth, hour, minute;
         Calendar cal = Calendar.getInstance();
 
-        year = intent.getIntExtra(DateAndTimeActivity.YEAR, cal.get(Calendar.YEAR));
-        month = intent.getIntExtra(DateAndTimeActivity.MONTH, cal.get(Calendar.MONTH));
-        dayOfMonth = intent.getIntExtra(DateAndTimeActivity.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH));
-        hour = intent.getIntExtra(DateAndTimeActivity.HOUR, cal.get(Calendar.HOUR));
-        minute = intent.getIntExtra(DateAndTimeActivity.MINUTE, cal.get(Calendar.MINUTE));
-
-        Log.d(TAG, "onClick: " + year + " " + dayOfMonth + " " + month + " " + hour + " " + minute);
-
         if(requestCode == GET_DATE && resultCode == RESULT_OK) {
+            year = intent.getIntExtra(DateAndTimeActivity.YEAR, cal.get(Calendar.YEAR));
+            month = intent.getIntExtra(DateAndTimeActivity.MONTH, cal.get(Calendar.MONTH));
+            dayOfMonth = intent.getIntExtra(DateAndTimeActivity.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH));
+            hour = intent.getIntExtra(DateAndTimeActivity.HOUR, cal.get(Calendar.HOUR));
+            minute = intent.getIntExtra(DateAndTimeActivity.MINUTE, cal.get(Calendar.MINUTE));
+
+            Log.d(TAG, "onClick: " + year + " " + dayOfMonth + " " + month + " " + hour + " " + minute);
+
             ProposalService ps = WalkWalkRevolution.getProposalService();
             String teamId = WalkWalkRevolution.getUser().getTeamId();
 

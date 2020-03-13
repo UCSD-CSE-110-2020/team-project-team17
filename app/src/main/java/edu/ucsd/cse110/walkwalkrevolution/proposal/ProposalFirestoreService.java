@@ -159,7 +159,7 @@ public class ProposalFirestoreService implements ProposalService {
         data.put("teamId", teamId);
         data.put("userId", userId);
         data.put("scheduled", false);
-        data.put("data", new SimpleDateFormat("yyyy-MM-dd HH:mm").format(date));
+        data.put("data", new SimpleDateFormat("yyyy/MM/dd hh:mm a").format(date));
 
         psub.listen();
         //data.putAll(route.getResponses());
