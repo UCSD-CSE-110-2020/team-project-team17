@@ -224,7 +224,7 @@ public class ProposeScreenActivity extends AppCompatActivity {
                 one.setVisibility(View.GONE);
                 two.setVisibility(View.VISIBLE);
                 ProposalFirestoreService.scheduled = true;
-                ps.scheduleWalk(ProposalFirestoreService.proposedRoute, WalkWalkRevolution.getUser().getTeamId(), WalkWalkRevolution.getUser().getEmail(),
+                ps.scheduleWalk(ProposalFirestoreService.proposedRoute, WalkWalkRevolution.getUser().getTeamId(), ProposalFirestoreService.userProposed,
                         text_date.getText().toString());
 
             }
@@ -255,7 +255,7 @@ public class ProposeScreenActivity extends AppCompatActivity {
                 }
                 route.setResponses(data);
                 ProposalService ps = WalkWalkRevolution.getProposalService();
-                ps.editProposal(route, WalkWalkRevolution.getUser().getTeamId(), WalkWalkRevolution.getUser().getEmail(), text_date.getText().toString(), PSA);
+                ps.editProposal(route, WalkWalkRevolution.getUser().getTeamId(), ProposalFirestoreService.userProposed, text_date.getText().toString(), PSA);
             }
         });
 
@@ -271,7 +271,7 @@ public class ProposeScreenActivity extends AppCompatActivity {
                 }
                 route.setResponses(data);
                 ProposalService ps = WalkWalkRevolution.getProposalService();
-                ps.editProposal(route, WalkWalkRevolution.getUser().getTeamId(), WalkWalkRevolution.getUser().getEmail(), text_date.getText().toString(), PSA);
+                ps.editProposal(route, WalkWalkRevolution.getUser().getTeamId(), ProposalFirestoreService.userProposed, text_date.getText().toString(), PSA);
             }
         });
 
@@ -287,7 +287,7 @@ public class ProposeScreenActivity extends AppCompatActivity {
                 }
                 route.setResponses(data);
                 ProposalService ps = WalkWalkRevolution.getProposalService();
-                ps.editProposal(route, WalkWalkRevolution.getUser().getTeamId(), WalkWalkRevolution.getUser().getEmail(), text_date.getText().toString(), PSA);
+                ps.editProposal(route, WalkWalkRevolution.getUser().getTeamId(), ProposalFirestoreService.userProposed, text_date.getText().toString(), PSA);
             }
         });
     }
