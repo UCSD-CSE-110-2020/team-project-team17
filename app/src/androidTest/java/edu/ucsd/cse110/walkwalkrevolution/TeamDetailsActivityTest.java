@@ -40,7 +40,7 @@ public class TeamDetailsActivityTest {
             scenario.onActivity(activity -> {
                 RecyclerView currentRecyclerView = ((RecyclerView) activity.findViewById(R.id.rvUsers));
                 TeamAdapter.ViewHolder holder = (TeamAdapter.ViewHolder) currentRecyclerView.findViewHolderForLayoutPosition(0);
-                assertEquals("0", holder.nameField.getText().toString());
+                assertEquals("a 0", holder.nameField.getText().toString());
                 assertEquals("0@email.com", holder.emailField.getText().toString());
             });
         }
