@@ -43,11 +43,24 @@ public class UserFirestoreService implements UserService{
                         Log.d(TAG, "Document exists!");
                         User temp = snapshotToUser(document);
                         user.setTeamId(document.getString(User.TEAM));
+
+                        String teamTopic = user.getTeamId().replace("@", "");
+                        WalkWalkRevolution.subscribeToNotificationsTopic(teamTopic);
+
+                        String inviteTopic = user.getTeamId().replace("@", "");
+                        WalkWalkRevolution.subscribeToNotificationsTopic(inviteTopic);
                     } else {
-                        users.document(user.getEmail()).set(user.toMap()).addOnFailureListener(error -> {
+                        users.document(user.getEmail()).set(user.toMap()).addOnSuccessListener(v -> {
+                            user.setTeamId(document.getString(user.getEmail()));
+
+                            String teamTopic = user.getTeamId().replace("@", "");
+                            WalkWalkRevolution.subscribeToNotificationsTopic(teamTopic);
+
+                            String inviteTopic = user.getTeamId().replace("@", "");
+                            WalkWalkRevolution.subscribeToNotificationsTopic(inviteTopic);
+                        }).addOnFailureListener(error -> {
                             Log.e(TAG, error.getLocalizedMessage());
                         });
-                        user.setTeamId(document.getString(user.getEmail()));
                         Log.d(TAG, "Document does not exist!");
                     }
 

@@ -138,6 +138,7 @@ public class ProposalFirestoreService implements ProposalService {
                                     act.displayRouteDetail(proposedRoute, date);
                                 }
                                 else {
+                                    userProposed = "";
                                     Log.d(TAG, "No such document");
                                 }
                             }
