@@ -50,7 +50,7 @@ public class Team implements TeamSubject{
 
         for(int i = 0; i < num; i++){
             User newUser = new User(i, 1, 1);
-            newUser.setName(String.valueOf(i));
+            newUser.setName("a "+String.valueOf(i));
             newUser.setEmail(i + "@email.com");
             users.add(newUser);
         }

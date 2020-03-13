@@ -41,14 +41,19 @@ public class UserFirestoreService implements UserService{
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         Log.d(TAG, "Document exists!");
-                        User temp = snapshotToUser(document);
-                        user.setTeamId(document.getString(User.TEAM));
+                        refresh();
                     } else {
-                        users.document(user.getEmail()).set(user.toMap()).addOnFailureListener(error -> {
-                            Log.e(TAG, error.getLocalizedMessage());
+                        user.setTeamId(user.getEmail());
+                        users.document(user.getEmail()).set(user.toMap()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    refresh();
+                                } else {
+                                    Log.e(TAG, task.getException().getLocalizedMessage());
+                                }
+                            }
                         });
-                        user.setTeamId(document.getString(user.getEmail()));
-                        Log.d(TAG, "Document does not exist!");
                     }
                 } else {
                     Log.d(TAG, "Failed with: ", task.getException());

@@ -87,6 +87,11 @@ public class CreateRouteActivity extends AppCompatActivity {
                     builder.setUserId(WalkWalkRevolution.getUser().getEmail());
 
                     Route route = builder.build();
+                    if(!TextUtils.isEmpty(startLocation.getText()))
+                    {route.setLocation(startLocation.getText().toString());}
+
+                    if(!TextUtils.isEmpty(notes.getText()))
+                    {route.setNotes(notes.getText().toString());}
 
                     WalkWalkRevolution.getRouteDao().addRoute(route);
                     WalkWalkRevolution.getRouteService().addRoute(CreateRouteActivity.this, route);

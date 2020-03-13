@@ -47,9 +47,14 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.ViewHolder> im
 
         TextView nameView = viewHolder.nameField;
         TextView emailView = viewHolder.emailField;
+        TextView initials = viewHolder.initials;
 
         nameView.setText(user.getName());
         emailView.setText(user.getEmail());
+
+        String[] in = user.getName().split(" ");
+        String initial = "" + in[0].charAt(0) + in[1].charAt(0);
+        initials.setText(initial);
     }
 
     @Override
@@ -61,12 +66,14 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.ViewHolder> im
 
         public TextView nameField;
         public TextView emailField;
+        public TextView initials;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             nameField = itemView.findViewById(R.id.user_name);
             emailField = itemView.findViewById(R.id.user_email);
+            initials = itemView.findViewById(R.id.initials);
         }
     }
 

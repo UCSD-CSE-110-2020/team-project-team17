@@ -43,7 +43,7 @@
         android:textSize="20dp" />
 
     <TextView
-        android:id="@+id/location_text"
+        android:id="@+id/dontchagne_location_texttt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/title1"
@@ -192,17 +192,6 @@
         android:text=""
         android:textSize="20dp" />
 
-    <Button
-        android:id="@+id/start_preroute"
-        android:layout_width="211sp"
-        android:layout_height="75sp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
-        android:fontFamily="sans-serif-light"
-        android:text="@string/start_walk_btn"
-        android:textSize="30sp" />
-
     <TextView
         android:id="@+id/Note"
         android:layout_width="wrap_content"
@@ -214,17 +203,44 @@
         android:textSize="20dp" />
 
     <TextView
-        android:id="@+id/Note_view"
+        android:id="@+id/dont_changeNoteView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/Note"
-        android:layout_above="@id/start_preroute"
+        android:layout_above="@+id/btn_ll"
         android:layout_marginTop="14dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="15dp"
         android:text="test"
         android:textSize="20dp" />
+
+
+    <LinearLayout
+        android:id="@+id/btn_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <Button
+            android:id="@+id/propose_walk"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/propose_btn" />
+
+        <Button
+            android:id="@+id/start_preroute"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/start_walk_btn" />
+
+    </LinearLayout>
 
 
 </RelativeLayout>
