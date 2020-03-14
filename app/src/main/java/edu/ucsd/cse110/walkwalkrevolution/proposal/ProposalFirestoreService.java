@@ -123,25 +123,26 @@ public class ProposalFirestoreService implements ProposalService {
                         if (task.isSuccessful()) {
                             pob = new ProposalObserver(act);
                             psub.addObserver(pob);
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                if (document.exists()) {
-                                    Log.d(TAG, document.getId() + " => " + document.getData());
-                                    scheduled = (Boolean) document.get("scheduled");
-                                    userProposed = (String) document.get("userId");
-                                    String date = (String) document.get("date");
-                                    try {
-                                        Log.d(TAG, ""+document.get("route"));
-                                        proposedRoute = RouteUtils.deserialize((String) document.get("route"));
-                                    } catch (Exception e) {
-                                        throw new RuntimeException(e.getLocalizedMessage());
+                            if(task.getResult().size() > 0) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    if (document.exists()) {
+                                        Log.d(TAG, document.getId() + " => " + document.getData());
+                                        scheduled = (Boolean) document.get("scheduled");
+                                        userProposed = (String) document.get("userId");
+                                        String date = (String) document.get("date");
+                                        try {
+                                            Log.d(TAG, "" + document.get("route"));
+                                            proposedRoute = RouteUtils.deserialize((String) document.get("route"));
+                                        } catch (Exception e) {
+                                            throw new RuntimeException(e.getLocalizedMessage());
+                                        }
+                                        act.displayRouteDetail(proposedRoute, date);
                                     }
-                                    act.displayRouteDetail(proposedRoute, date);
                                 }
-                                else {
-                                    userProposed = "";
-                                    proposedRoute = null;
-                                    Log.d(TAG, "No such document");
-                                }
+                            } else {
+                                userProposed = "";
+                                proposedRoute = null;
+                                Log.d(TAG, "No such document");
                             }
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
