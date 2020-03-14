@@ -8,14 +8,22 @@
     android:paddingBottom="10dp">
 
     <TextView
+        android:id="@+id/initials"
+        android:layout_marginLeft="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:text="" />
+
+    <TextView
         android:id="@+id/route_title"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="12dp"
+        android:layout_marginLeft="8dp"
         android:layout_weight="1"
-        android:height="30sp" />
+        android:textSize="18dp"/>
 
     <ImageView
         android:id="@+id/favorite"

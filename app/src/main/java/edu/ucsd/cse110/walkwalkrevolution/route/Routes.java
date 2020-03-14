@@ -24,6 +24,7 @@ public class Routes implements RoutesSubject, TeamObserver {
     public Routes() {
         routes = new ArrayList<>();
         observers = new ArrayList<>();
+        overrideTeamRoutes = new HashMap<>();
     }
 
     public void subscribe(RoutesObserver obs) {
@@ -45,9 +46,6 @@ public class Routes implements RoutesSubject, TeamObserver {
     }
 
     public void add(Route route){
-        if(overrideTeamRoutes.containsKey(route.getFirestoreId())){
-            route.setActivity(overrideTeamRoutes.get(route.getFirestoreId()).getActivity());
-        }
         this.routes.add(route);
     }
 

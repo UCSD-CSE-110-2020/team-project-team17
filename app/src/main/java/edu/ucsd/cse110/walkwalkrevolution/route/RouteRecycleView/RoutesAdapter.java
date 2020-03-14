@@ -32,6 +32,7 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
     private List<Route> rList;
     private Routes routes;
     public static final String ROUTE = "ROUTE";
+    public static final String OVER = "OVERRIDE";
     public static final String TEAM = "TEAM";
     //private Context context;
 
@@ -50,6 +51,7 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
         public TextView miles;
         public TextView duration;
         public TextView date;
+        public TextView initials;
         public ImageView favorite;
         public ImageView walked;
 
@@ -63,6 +65,7 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
             miles = (TextView) itemView.findViewById(R.id.miles);
             duration = (TextView) itemView.findViewById(R.id.duration);
             date = (TextView) itemView.findViewById(R.id.date);
+            initials = (TextView) itemView.findViewById(R.id.initials);
             favorite = (ImageView) itemView.findViewById(R.id.favorite);
             walked = (ImageView) itemView.findViewById(R.id.walked);
         }
@@ -99,9 +102,15 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
     }
 
     public void openRoutesDetailActivity(View view, Route item) throws Exception{
+        Route overriden = routes.getOverridenRoutes().getOrDefault(item.getFirestoreId(), null);
+
         Intent intent = new Intent(view.getContext(), RoutesDetailActivity.class);
         String serialized = RouteUtils.serialize(item);
         intent.putExtra(ROUTE, serialized);
+        if(overriden != null){
+            String serializedO = RouteUtils.serialize(overriden);
+            intent.putExtra(OVER, serializedO);
+        }
         view.getContext().startActivity(intent);
     }
 
@@ -110,6 +119,7 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
     public void onBindViewHolder(RoutesAdapter.ViewHolder viewHolder, int position) {
         // Get the data model based on position
         Route route = rList.get(position);
+        Route overriden = routes.getOverridenRoutes().getOrDefault(route.getFirestoreId(), null);
 
         // Set item views based on your views and data model
         TextView routeTitle = viewHolder.routeTitle;
@@ -119,18 +129,31 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
         TextView miles = viewHolder.miles;
         TextView duration = viewHolder.duration;
         TextView date = viewHolder.date;
+        TextView initials = viewHolder.initials;
         ImageView favorite = viewHolder.favorite;
         ImageView walked = viewHolder.walked;
 
-        if(route.getActivity().isExist()) {
-            steps.setText(route.getActivity().getDetail(Walk.STEP_COUNT));
+        if((overriden != null && overriden.getActivity().isExist()) || route.getActivity().isExist()) {
+            if(overriden != null) {
+                steps.setText(overriden.getActivity().getDetail(Walk.STEP_COUNT));
 
-            miles.setText(route.getActivity().getDetail(Walk.MILES));
+                miles.setText(overriden.getActivity().getDetail(Walk.MILES));
 
-            duration.setText(route.getActivity().getDetail(Walk.DURATION));
+                duration.setText(overriden.getActivity().getDetail(Walk.DURATION));
 
-            date.setText(ActivityUtils.timeToMonthDay(
-                    ActivityUtils.stringToTime(route.getActivity().getDetail(Activity.DATE))));
+                date.setText(ActivityUtils.timeToMonthDay(
+                        ActivityUtils.stringToTime(
+                                overriden.getActivity().getDetail(Activity.DATE))));
+            } else {
+                steps.setText(route.getActivity().getDetail(Walk.STEP_COUNT));
+
+                miles.setText(route.getActivity().getDetail(Walk.MILES));
+
+                duration.setText(route.getActivity().getDetail(Walk.DURATION));
+
+                date.setText(ActivityUtils.timeToMonthDay(
+                        ActivityUtils.stringToTime(route.getActivity().getDetail(Activity.DATE))));
+            }
         } else {
             steps.setText("");
             miles.setText("");
@@ -151,6 +174,13 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
             favorite.setVisibility(View.VISIBLE);
         } else {
             favorite.setVisibility(View.INVISIBLE);
+        }
+
+        if(route.getUserIn() != null && route.getUserIn().length() > 0) {
+            initials.setText(route.getUserIn());
+            initials.setVisibility(View.VISIBLE);
+        } else {
+            initials.setVisibility(View.GONE);
         }
     }
 
