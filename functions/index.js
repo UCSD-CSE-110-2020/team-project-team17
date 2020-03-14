@@ -120,7 +120,7 @@ exports.sendProposalChange = functions.firestore
          console.log(afterR.responses)
 
          for(var key in afterR.responses){
-           if(afterR.responses[key] !== beforeR.responses[key]){
+           if(!beforeR.responses.hasOwnProperty(key) || afterR.responses[key] !== beforeR.responses[key]){
              console.log(key)
              message = {
                         notification: {
