@@ -142,6 +142,7 @@ public class ProposalFirestoreService implements ProposalService {
                             } else {
                                 userProposed = "";
                                 proposedRoute = null;
+                                act.renderPage();
                                 Log.d(TAG, "No such document");
                             }
                         } else {
