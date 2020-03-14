@@ -56,8 +56,14 @@ public class Routes implements RoutesSubject, TeamObserver {
     // Returns a list of "actual" activities in order of datetime
     public List<Activity> getActivities() {
         getRoutesFromDao();
+        updateOverridenRoutes();
         List<Activity> activities = new ArrayList<>();
         for(Route route: routes){
+            if(route.getActivity().isExist()){
+                activities.add(route.getActivity());
+            }
+        }
+        for(Route route: overrideTeamRoutes.values()){
             if(route.getActivity().isExist()){
                 activities.add(route.getActivity());
             }
