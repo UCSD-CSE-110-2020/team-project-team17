@@ -42,6 +42,7 @@ public class RoutesDetailActivity extends AppCompatActivity {
     private static final int GET_DATE = 1337;
 
     public Route route;
+    public Route override;
     public long id;
     public boolean isTeam;
     private Team current;
@@ -80,6 +81,15 @@ public class RoutesDetailActivity extends AppCompatActivity {
             throw new RuntimeException(e.getLocalizedMessage());
         }
 
+        if(intent.hasExtra(RoutesAdapter.OVER)){
+            String serializedO = intent.getStringExtra(RoutesAdapter.OVER);
+            try {
+                override = RouteUtils.deserialize(serializedO);
+            } catch (Exception e){
+                throw new RuntimeException(e.getLocalizedMessage());
+            }
+        }
+
         current = new Team();
 
         title = (TextView) findViewById(R.id.title1);
@@ -103,13 +113,20 @@ public class RoutesDetailActivity extends AppCompatActivity {
         walked = findViewById(R.id.walked);
         favorite = findViewById(R.id.favorite);
 
-        if(route.getActivity().isExist()) {
-            steps.setText(route.getActivity().getDetail(Walk.STEP_COUNT));
-            miles.setText(route.getActivity().getDetail(Walk.MILES));
-            duration.setText(route.getActivity().getDetail(Walk.DURATION));
-            date.setText(ActivityUtils.timeToMonthDay(
-                    ActivityUtils.stringToTime(route.getActivity().getDetail(Activity.DATE))));
-
+        if((override != null && override.getActivity().isExist()) || route.getActivity().isExist()) {
+            if(override != null){
+                steps.setText(override.getActivity().getDetail(Walk.STEP_COUNT));
+                miles.setText(override.getActivity().getDetail(Walk.MILES));
+                duration.setText(override.getActivity().getDetail(Walk.DURATION));
+                date.setText(ActivityUtils.timeToMonthDay(
+                        ActivityUtils.stringToTime(override.getActivity().getDetail(Activity.DATE))));
+            } else {
+                steps.setText(route.getActivity().getDetail(Walk.STEP_COUNT));
+                miles.setText(route.getActivity().getDetail(Walk.MILES));
+                duration.setText(route.getActivity().getDetail(Walk.DURATION));
+                date.setText(ActivityUtils.timeToMonthDay(
+                        ActivityUtils.stringToTime(route.getActivity().getDetail(Activity.DATE))));
+            }
         } else {
             TextView stepTitle = findViewById(R.id.Steps);
             TextView milesTitle = findViewById(R.id.Miles);
@@ -204,21 +221,16 @@ public class RoutesDetailActivity extends AppCompatActivity {
 
             int length = current.getUsers().size();
 
-            Map<String, String> data = new HashMap<String, String>() {{
-            }};
+            Map<String, String> data = new HashMap<>();
 
-            for (int i = 0; i < length; i++) {
-                if (current.getUsers().get(i).getEmail().equals(WalkWalkRevolution.getUser().getEmail())) {
-                    data.put(current.getUsers().get(i).getName(), ACCEPT);
-                } else {
-                    data.put(current.getUsers().get(i).getName(), DECLINEBR);
-                }
-            }
+            data.put(WalkWalkRevolution.getUser().getName(), ACCEPT);
 
             route.setResponses(data);
 
             WalkWalkRevolution.getRouteService().updateRoute(route);
-            WalkWalkRevolution.getRouteDao().addRoute(route);
+
+            if(route.getUserId().equals(WalkWalkRevolution.getUser().getEmail()))
+                WalkWalkRevolution.getRouteDao().addRoute(route);
 
             cal.set(year, month, dayOfMonth, hour, minute);
             ps.addProposal(route, teamId, WalkWalkRevolution.getUser().getEmail(), cal.getTime());

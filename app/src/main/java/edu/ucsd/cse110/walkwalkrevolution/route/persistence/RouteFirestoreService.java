@@ -110,6 +110,11 @@ public class RouteFirestoreService implements RouteService {
                         Log.d(TAG, document.getId() + "=>" + data);
                         Route route = snapshotToRoute(document);
                         Log.d(TAG, document.getId() + "=>" + route.toMap());
+
+                        String[] arr = user.getName().split(" ");
+                        String initials = "" + arr[0].charAt(0) + arr[1].charAt(0);
+                        route.setUserIn(initials);
+
                         rList.add(route);
                     }
                     rList.notifyObservers();

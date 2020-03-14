@@ -28,6 +28,8 @@ public class Route {
     public static final String RESPONSES = "responses";
 
     private long id;
+    @JsonIgnore
+    private String userIn;
     private String userId;
     private String title;
     private String location;
@@ -212,6 +214,14 @@ public class Route {
     public Map<String, String> getResponses() { return this.responses; }
 
     public void setResponses(Map<String, String> responses) { this.responses = responses; }
+
+    public void setUserIn(String initials) {
+        this.userIn = initials;
+    }
+
+    public String getUserIn() {
+        return userIn;
+    }
 
     public Map<String, Object> toMap(){
         Map<String, Object> map = new HashMap<>();

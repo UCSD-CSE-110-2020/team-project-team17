@@ -248,11 +248,7 @@ public class ProposeScreenActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Route route = ProposalFirestoreService.proposedRoute;
                 Map<String, String> data = route.getResponses();
-                for (Map.Entry<String, String> entry : data.entrySet()) {
-                    if(entry.getKey().equals(WalkWalkRevolution.getUser().getName())) {
-                        data.replace(entry.getKey(), "ACCEPTED");
-                    }
-                }
+                data.put(WalkWalkRevolution.getUser().getName(), "ACCEPTED");
                 route.setResponses(data);
                 ProposalService ps = WalkWalkRevolution.getProposalService();
                 ps.editProposal(route, WalkWalkRevolution.getUser().getTeamId(), ProposalFirestoreService.userProposed, text_date.getText().toString(), PSA);
@@ -264,11 +260,7 @@ public class ProposeScreenActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Route route = ProposalFirestoreService.proposedRoute;
                 Map<String, String> data = route.getResponses();
-                for (Map.Entry<String, String> entry : data.entrySet()) {
-                    if(entry.getKey().equals(WalkWalkRevolution.getUser().getName())) {
-                        data.replace(entry.getKey(), "DECLINE_BAD_TIME");
-                    }
-                }
+                data.put(WalkWalkRevolution.getUser().getName(), "DECLINE_BAD_TIME");
                 route.setResponses(data);
                 ProposalService ps = WalkWalkRevolution.getProposalService();
                 ps.editProposal(route, WalkWalkRevolution.getUser().getTeamId(), ProposalFirestoreService.userProposed, text_date.getText().toString(), PSA);
@@ -280,11 +272,7 @@ public class ProposeScreenActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Route route = ProposalFirestoreService.proposedRoute;
                 Map<String, String> data = route.getResponses();
-                for (Map.Entry<String, String> entry : data.entrySet()) {
-                    if(entry.getKey().equals(WalkWalkRevolution.getUser().getName())) {
-                        data.replace(entry.getKey(), "DECLINE_BAD_ROUTE");
-                    }
-                }
+                data.put(WalkWalkRevolution.getUser().getName(), "DECLINE_BAD_ROUTE");
                 route.setResponses(data);
                 ProposalService ps = WalkWalkRevolution.getProposalService();
                 ps.editProposal(route, WalkWalkRevolution.getUser().getTeamId(), ProposalFirestoreService.userProposed, text_date.getText().toString(), PSA);
